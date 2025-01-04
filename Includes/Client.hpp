@@ -6,7 +6,7 @@
 class Client
 {
 private:
-	int			_Fd;
+	int			_fd;
 	std::string	_IPadd;
 public:
 	Client();
