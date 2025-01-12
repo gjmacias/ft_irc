@@ -1,14 +1,51 @@
 #include "Colors.h"
+#include "AllFunctions.h"
 #include "Server.hpp"
-#include "Client.hpp"
 
 bool Server::_signal = false;
 	
+/*
+###############################################################################
+#									CONSTRUCTOR								  #
+###############################################################################
+*/
 Server::Server()
 {
 	_mainSocketFd = -1;
 }
 
+Server::~Server(){}
+
+Server::Server(Server const &src){*this = src;}
+
+Server &Server::operator=(Server const &src)
+{
+	if (this != &src)
+	{
+		this->_port = src._port;
+		this->_mainSocketFd = src._mainSocketFd;
+		this->_password = src._password;
+		this->clients = src.clients;
+		this->_clients = src._clients;
+		this->_pollSocketFds = src._pollSocketFds;
+	}
+	return *this;
+}
+/*
+###############################################################################
+#									SETTERS									  #
+###############################################################################
+*/
+/*
+###############################################################################
+#									GETTERS									  #
+###############################################################################
+*/
+/*
+###############################################################################
+#								FUNCTIONS									  #
+###############################################################################
+*/
 void Server::SignalHandler(int signum)
 {
 	(void)signum;
@@ -48,9 +85,7 @@ void Server::ServerInit()
 
 	std::cout << GREEN << "Server <" << _mainSocketFd << "> Connected" << WHITE << std::endl;
 	std::cout << "Waiting to accept a connection...\n";
-
-	ServerLoop()
-}
+ }
 
 void Server::ServerLoop()
 {
@@ -100,12 +135,13 @@ void Server::AcceptNewClient()
 
 void Server::ReceiveNewData(int fd)
 {
-	char	buffer[1024];
-	ssize_t	bytes;
+	char						buffer[1024];
+	std::vector<std::string>	cmd;
+	ssize_t						bytes;
+	Client						*client = GetClient(fd);
 
 	memset(buffer, 0, sizeof(buffer));
 	bytes = recv(fd, buffer, sizeof(buffer) - 1 , 0);
-
 	if(bytes <= 0)
 	{
 		if (bytes == 0) 
@@ -120,10 +156,15 @@ void Server::ReceiveNewData(int fd)
 	}
 	else
 	{
-		buffer[bytes] = '\0';
-		std::cout << YELLOW << "Client <" << fd << "> Data: " << WHITE << buffer;
-		//here you can add your code to process the received data: parse, check, authenticate, handle the command, etc...
-	}
+ 		cli->setBuffer(buff);
+		if (cli->getBuffer().find_first_of("\r\n") == std::string::npos)
+			return;
+		cmd = split_recivedBuffer(cli->getBuffer());
+		for(size_t i = 0; i < cmd.size(); i++)
+			parse_and_exec_cmd(cmd[i], fd);
+		if (GetClient(fd)) 
+        	GetClient(fd)->ClearUsedBuffer();
+ 	}
 }
 
 void Server::CloseFds()
