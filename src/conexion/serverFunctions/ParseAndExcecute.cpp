@@ -2,22 +2,10 @@
 
 /*
 ###############################################################################
-#								VALIUDATION PARSE							  #
-###############################################################################
-*/
-bool	Server::isRegistered(int fd)
-{
-	if (!GetClient(fd) || GetClient(fd)->GetNickName().empty() || GetClient(fd)->GetUserName().empty() || GetClient(fd)->GetNickName() == "*"  || !GetClient(fd)->GetLogedIn())
-		return false;
-	return true;
-}
-
-/*
-###############################################################################
 #									PARSE									  #
 ###############################################################################
 */
-void	Server::parse_and_exec_cmd(std::string &cmd, int fd)
+void	Server::ParseAndExcecute(std::string &cmd, int fd)
 {
 	if(cmd.empty())
 		return ;

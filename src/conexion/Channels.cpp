@@ -7,19 +7,19 @@
 */
 Channel::Channel()
 {
-	this->_invit_only = 0;
-	this->_topic = 0;
-	this->_key = 0;
-	this->_limit = 0;
-	this->_topic_restriction = false;
-	this->_name = "";
-	this->_topic_name = "";
-	char charaters[5] = {'i', 't', 'k', 'o', 'l'};
+	revisar// this->_invit_only = 0;
+	// this->_topic = 0;
+	// this->_key = 0;
+	// this->_limit = 0;
+	// this->_topic_restriction = false;
+	// this->_name = "";
+	// this->_topic_name = "";
+	// char charaters[5] = {'i', 't', 'k', 'o', 'l'};
 
-	for(int i = 0; i < 5; i++)
-		modes.push_back(std::make_pair(charaters[i],false));
+	// for(int i = 0; i < 5; i++)
+	// 	modes.push_back(std::make_pair(charaters[i],false));
 
-	this->_created_at = "";
+	// this->_created_at = "";
 }
 Channel::~Channel(){}
 

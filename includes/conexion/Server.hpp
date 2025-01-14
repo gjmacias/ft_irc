@@ -54,21 +54,37 @@ public:
 	void		AcceptNewClient();
 	void		ReceiveNewData(int fd); 
 	void		CloseFds();
-	void		ClearClients(int fd);
 //	##########################################################
 
 
-//	##################	SERVER FUNCTIONS	##################
-		//		Parse and execute
-	bool		isRegistered(int fd);
-	void		parse_and_exec_cmd(std::string &cmd, int fd);
-	
+
+//	##################	SERVER_FUNCTIONS	##################
 		//		Authentificiation
 	void		ClientAuthentification(int fd, std::string cmd);
+
+		//		Parse and execute
+	void		ParseAndExcecute(std::string &cmd, int fd);
+
+		//		Removers Server
+	void		RemoveFd(int fd);
+	void		RemoveClient(int fd);
+	void		RemoveClientFromChannels(int fd);
+	void		RemoveChannel(std::string name);
+
+		//		Sender Server
+	void		SendResponse(std::string response, int fd);
+	void		SendError(int fd, int code, std::string clientname, std::string msg);
+	void		SendError(int fd, int code, std::string clientname, std::string channelname, std::string msg);
+
+		//		Validations Server
+	bool		IsRegistered(int fd);
+	bool		IsValidNickname(std::string& nickname);
+	bool		IsNickNameInUse(std::string& nickname);
 //	##########################################################
 
 
-//	##################	SERVER FUNCTIONS/COMMANDS	##################
+
+//	##################	SERVER_FUNCTIONS/COMMANDS	##################
 		//		INVITE
 	void		InviteCommand(std::string &cmd, int &fd);
 

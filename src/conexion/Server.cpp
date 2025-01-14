@@ -73,7 +73,7 @@ bool Server::_signal = false;
 void Server::SignalHandler(int signum)
 {
 	(void)signum;
-	std::cout << std::endl << "_signal Received!" << std::endl;
+	std::cout << std::endl << "Signal Received!" << std::endl;
 	Server::_signal = true;
 }
 
@@ -176,15 +176,13 @@ void Server::ReceiveNewData(int fd)
 	bytes = recv(fd, buffer, sizeof(buffer) - 1 , 0);
 	if(bytes <= 0)
 	{
-		if (bytes == 0) 
-			std::cout << RED << "Client <" << fd << "> Disconnected" << WHITE << std::endl;
-		else 
-		{
-			if (errno == EAGAIN || errno == EWOULDBLOCK)
-				return;
-			std::cout << RED << "Error receiving data from client <" << fd << ">: " << std::strerror(errno) << WHITE << std::endl;
-		}
-		ClearClients(fd); 
+		if (bytes < 0)
+			std::cout << RED << "Error receiving data from: <" << fd << ">" << WHITE << std::endl;
+		std::cout << RED << "Client <" << fd << "> Disconnected" << WHITE << std::endl;
+		RemoveClientFromChannels(int fd);
+		RemoveClient(int fd);
+		RemoveFd(int fd);
+		close(fd);
 	}
 	else
 	{
@@ -193,7 +191,7 @@ void Server::ReceiveNewData(int fd)
 			return;
 		cmd = split_recivedBuffer(client->getBuffer());
 		for(size_t i = 0; i < cmd.size(); i++)
-			parse_and_exec_cmd(cmd[i], fd);
+			ParseAndExcecute(cmd[i], fd);
 		if (GetClient(fd)) 
         	GetClient(fd)->ClearUsedBuffer();
  	}

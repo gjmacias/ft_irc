@@ -35,12 +35,3 @@ std::vector<std::string>	split_cmd(std::string& cmd)
 	}
 	return splited_cmd;
 }
-
-bool	notregistered(int fd)
-{
-	if (!GetClient(fd) || GetClient(fd)->GetNickName().empty() 
-		|| GetClient(fd)->GetUserName().empty() || GetClient(fd)->GetNickName() == "*"
-		|| !GetClient(fd)->GetLogedIn())
-		return false;
-	return true;
-}

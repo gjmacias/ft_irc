@@ -16,13 +16,19 @@ F_SANITIZERS	=	-fsanitize=address
 
 SRC			=	main.cpp \
 				\
-				conexion/Server.cpp \
+				conexion/Channels.cpp \
 				conexion/Client.cpp \
+				conexion/Server.cpp \
 				\
-				conexion/serverFunctions/Authentifications.cpp \
+				conexion/channelFunctions/AddChannel.cpp \
+				conexion/channelFunctions/ChangeChannel.cpp \
+				conexion/channelFunctions/RemoveChannel.cpp \
+				\
+				conexion/serverFunctions/Authentification.cpp \
 				conexion/serverFunctions/ParseAndExecute.cpp \
-				conexion/serverFunctions/Remover.cpp \
-				conexion/serverFunctions/Sender.cpp \
+				conexion/serverFunctions/RemoverServer.cpp \
+				conexion/serverFunctions/SenderServer.cpp \
+				conexion/serverFunctions/ValidationServer.cpp \
 				\
 				conexion/serverFunctions/commands/Invite.cpp \
 				conexion/serverFunctions/commands/Join.cpp \
