@@ -1,20 +1,40 @@
 
+OS				:=	$(shell uname)
+NAME 			=	ircserv
+CC				= 	c++
+FLAGS			=	$(F_STANDARDS) $(F_WARNINGS) $(F_DEBUG) $(F_DEPENDENCY) $(F_SANITIZERS)
 
-NAME 		=	IRC
-CC			= 	c++
-FLAGS		= 	-std=c++98 -Wall -Wextra -Werror -pedantic -g3 -MMD -MP $(FLEAKS)
-FLEAKS		=	-fsanitize=address
-OS		:=	$(shell uname)
+F_STANDARDS		=	-std=c++98
+F_WARNINGS		=	-Wall -Wextra -Werror -pedantic
+F_DEBUG			=	-g3
+F_DEPENDENCY	=	-MMD -MP
+F_SANITIZERS	=	-fsanitize=address
 
 ###############################################################################
 #									SRC										  #
 ###############################################################################
 
 SRC			=	src/main.cpp \
-				src/commands/Invite.cpp \
-				src/conexion/Server.cpp src/conexion/Client.cpp\
+				\
+				src/conexion/Server.cpp \
+				src/conexion/Client.cpp \
+				\
+				src/conexion/serverFunctions/Authentifications.cpp \
+				src/conexion/serverFunctions/Remover.cpp \
+				src/conexion/serverFunctions/Sender.cpp \
+				\
+				src/conexion/serverFunctions/commands/Invite.cpp \
+				src/conexion/serverFunctions/commands/Join.cpp \
+				src/conexion/serverFunctions/commands/Kick.cpp \
+				src/conexion/serverFunctions/commands/Mode.cpp \
+				src/conexion/serverFunctions/commands/Quit.cpp \
+				src/conexion/serverFunctions/commands/Topic.cpp \
+				\
+				src/functions/ParseAndExecute.cpp \
+				src/functions/Splits.cpp \
+				src/functions/Validations.cpp \
 
-OBJ		= $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
+OBJ			= $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 DEPS		= $(addprefix $(DPS_DIR), $(notdir $(SRC:.c=.d)))
 
 ###############################################################################

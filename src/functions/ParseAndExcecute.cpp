@@ -18,8 +18,8 @@ void	parse_and_exec_cmd(std::string &cmd, int fd)
 		cmd = cmd.substr(found);
 	if(splited_cmd.size() && (splited_cmd[0] == "BONG" || splited_cmd[0] == "bong"))
 		return;
-    if(splited_cmd.size() && (splited_cmd[0] == "PASS" || splited_cmd[0] == "pass"))
-        ClientAuthentification(fd, cmd);
+	if(splited_cmd.size() && (splited_cmd[0] == "PASS" || splited_cmd[0] == "pass"))
+		ClientAuthentification(fd, cmd);
 	else if (splited_cmd.size() && (splited_cmd[0] == "NICK" || splited_cmd[0] == "nick"))
 		set_nickname(cmd,fd);
 	else if(splited_cmd.size() && (splited_cmd[0] == "USER" || splited_cmd[0] == "user"))
@@ -47,48 +47,4 @@ void	parse_and_exec_cmd(std::string &cmd, int fd)
 	}
 	else if (!notregistered(fd))
 		_sendResponse(ERR_NOTREGISTERED(std::string("*")),fd);
-}
-/*
-###############################################################################
-#									UTILS									  #
-###############################################################################
-*/
-
-std::vector<std::string>	split_recivedBuffer(std::string str)
-{
-	std::vector<std::string>	cmd;
-	std::istringstream			stm(str);
-	std::string					line;
-
-	while(std::getline(stm, line))
-	{
-		size_t pos = line.find_first_of("\r\n");
-		if(pos != std::string::npos)
-			line = line.substr(0, pos);
-		cmd.push_back(line);
-	}
-	return cmd;
-}
-
-std::vector<std::string>	split_cmd(std::string& cmd)
-{
-	std::vector<std::string>	splited_cmd;
-	std::istringstream			stm(cmd);
-	std::string					temp;
-
-	while(stm >> temp)
-	{
-		splited_cmd.push_back(temp);
-		temp.clear();
-	}
-	return splited_cmd;
-}
-
-bool	notregistered(int fd)
-{
-	if (!GetClient(fd) || GetClient(fd)->GetNickName().empty() 
-		|| GetClient(fd)->GetUserName().empty() || GetClient(fd)->GetNickName() == "*"
-		|| !GetClient(fd)->GetLogedIn())
-		return false;
-	return true;
 }

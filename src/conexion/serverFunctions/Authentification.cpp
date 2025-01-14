@@ -1,7 +1,9 @@
 #include "Server.hpp"
 
-/* 
-*   PASS COMMAND
+/*
+###############################################################################
+#							AUTHENTIFICATION								  #
+###############################################################################
 */
 
 void Server::ClientAuthentification(int fd, std::string cmd)
@@ -23,39 +25,10 @@ void Server::ClientAuthentification(int fd, std::string cmd)
 		if(pass == password)
 			cli->setRegistered(true);
 		else
-            _sendResponse(ERR_INCORPASS(std::string("*")), fd);
+			_sendResponse(ERR_INCORPASS(std::string("*")), fd);
 	}
 	else
-        _sendResponse(ERR_ALREADYREGISTERED(GetClient(fd)->GetNickName()), fd);
-}
-
-
-/* 
-*    NICK COMMAND
-*/
-
-bool Server::is_validNickname(std::string& nickname)
-{
-		
-	if(!nickname.empty() && (nickname[0] == '&' || nickname[0] == '#' || nickname[0] == ':'))
-		return false;
-	for(size_t i = 1; i < nickname.size(); i++)
-	{
-		if(!std::isalnum(nickname[i]) && nickname[i] != '_')
-			return false;
-	}
-	return true;
-}
-
-
-bool Server::nickNameInUse(std::string& nickname)
-{
-	for (size_t i = 0; i < this->clients.size(); i++)
-	{
-		if (this->clients[i].GetNickName() == nickname)
-			return true;
-	}
-	return false;
+		_sendResponse(ERR_ALREADYREGISTERED(GetClient(fd)->GetNickName()), fd);
 }
 
 
@@ -77,7 +50,7 @@ void Server::set_nickname(std::string cmd, int fd)
 		inuse = "*";
 		if(cli->GetNickName().empty())
 			cli->SetNickname(inuse);
-	    _sendResponse(ERR_NICKINUSE(std::string(cmd)), fd); 
+		_sendResponse(ERR_NICKINUSE(std::string(cmd)), fd); 
 		return;
 	}
 	if(!is_validNickname(cmd)) {
@@ -119,10 +92,6 @@ void Server::set_nickname(std::string cmd, int fd)
 	}
 }
 
-/* 
-    USER COMMAND
-*/
-
 void	Server::set_username(std::string& cmd, int fd)
 {
 	std::vector<std::string> splited_cmd = split_cmd(cmd);
@@ -141,4 +110,33 @@ void	Server::set_username(std::string& cmd, int fd)
 		cli->setLogedin(true);
 		_sendResponse(RPL_CONNECTED(cli->GetNickName()), fd);
 	}
+}
+
+/*
+###############################################################################
+#								FT_AUTHEN									  #
+###############################################################################
+*/
+
+bool Server::is_validNickname(std::string& nickname)
+{
+		
+	if(!nickname.empty() && (nickname[0] == '&' || nickname[0] == '#' || nickname[0] == ':'))
+		return false;
+	for(size_t i = 1; i < nickname.size(); i++)
+	{
+		if(!std::isalnum(nickname[i]) && nickname[i] != '_')
+			return false;
+	}
+	return true;
+}
+
+bool Server::nickNameInUse(std::string& nickname)
+{
+	for (size_t i = 0; i < this->clients.size(); i++)
+	{
+		if (this->clients[i].GetNickName() == nickname)
+			return true;
+	}
+	return false;
 }
