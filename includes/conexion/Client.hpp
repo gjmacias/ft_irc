@@ -1,7 +1,8 @@
 #ifndef CLIENT_HPP_
 # define CLIENT_HPP_
 
-#include "irc.h"
+#include "Server.hpp"
+#include "Channel.hpp"
 
 class Client
 {
@@ -20,7 +21,7 @@ public:
 
 		//		SETTERS
 	void		SetFd(int fd);
-	void		setIpAdd(std::string ipadd)ipadd;
+	void		setIpAdd(std::string ipadd);
 	void		SetNickname(std::string& nickName);
 	void		SetUsername(std::string& username);
 	void		setBuffer(std::string recived);

@@ -1,5 +1,5 @@
-#include "Colors.h"
-#include "Functions.h"
+#include "ColorsDefinitions.h"
+#include "AllFunctions.h"
 #include "Server.hpp"
 
 int	main(int words, char **arguments)
@@ -22,7 +22,7 @@ int	main(int words, char **arguments)
 			std::cerr << "invalid Port number / Password!" << std::endl;
 			return (1);
 		}
-		myServer.ServerInit();
+		myServer.ServerInit(std::atoi(arguments[1]), arguments[2]);
 		myServer.ServerLoop();
 	}
 	catch(const std::exception& e)

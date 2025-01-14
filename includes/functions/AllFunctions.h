@@ -5,17 +5,10 @@
 # include <string>
 # include <sstream>
 
-
 //		Validations
 bool 						isPortValid(std::string port);
 
-//		ServerUtils
-//		- Parse:
-void						parse_and_exec_cmd(std::string &cmd, int fd)
-//		- Utils:
+//		Split
 std::vector<std::string>	split_recivedBuffer(std::string str);
-std::vector<std::string>	split_cmd(std::string& cmd)
-bool						notregistered(int fd)
-
-
+std::vector<std::string>	split_cmd(std::string& cmd);
 #endif

@@ -7,35 +7,35 @@ FLAGS			=	$(F_STANDARDS) $(F_WARNINGS) $(F_DEBUG) $(F_DEPENDENCY) $(F_SANITIZERS
 F_STANDARDS		=	-std=c++98
 F_WARNINGS		=	-Wall -Wextra -Werror -pedantic
 F_DEBUG			=	-g3
-F_DEPENDENCY	=	-MMD -MP
+F_DEPENDENCY	=	-MMD
 F_SANITIZERS	=	-fsanitize=address
 
 ###############################################################################
 #									SRC										  #
 ###############################################################################
 
-SRC			=	src/main.cpp \
+SRC			=	main.cpp \
 				\
-				src/conexion/Server.cpp \
-				src/conexion/Client.cpp \
+				conexion/Server.cpp \
+				conexion/Client.cpp \
 				\
-				src/conexion/serverFunctions/Authentifications.cpp \
-				src/conexion/serverFunctions/Remover.cpp \
-				src/conexion/serverFunctions/Sender.cpp \
+				conexion/serverFunctions/Authentifications.cpp \
+				conexion/serverFunctions/ParseAndExecute.cpp \
+				conexion/serverFunctions/Remover.cpp \
+				conexion/serverFunctions/Sender.cpp \
 				\
-				src/conexion/serverFunctions/commands/Invite.cpp \
-				src/conexion/serverFunctions/commands/Join.cpp \
-				src/conexion/serverFunctions/commands/Kick.cpp \
-				src/conexion/serverFunctions/commands/Mode.cpp \
-				src/conexion/serverFunctions/commands/Quit.cpp \
-				src/conexion/serverFunctions/commands/Topic.cpp \
+				conexion/serverFunctions/commands/Invite.cpp \
+				conexion/serverFunctions/commands/Join.cpp \
+				conexion/serverFunctions/commands/Kick.cpp \
+				conexion/serverFunctions/commands/Mode.cpp \
+				conexion/serverFunctions/commands/Quit.cpp \
+				conexion/serverFunctions/commands/Topic.cpp \
 				\
-				src/functions/ParseAndExecute.cpp \
-				src/functions/Splits.cpp \
-				src/functions/Validations.cpp \
+				functions/Splits.cpp \
+				functions/Validations.cpp \
 
-OBJ			= $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
-DEPS		= $(addprefix $(DPS_DIR), $(notdir $(SRC:.c=.d)))
+OBJ			=	$(addprefix $(OBJ_DIR), $(SRC:.cpp=.o))
+DEPS		=	$(addprefix $(DPS_DIR), notdir($(SRC:.cpp=.d)))
 
 ###############################################################################
 #									DIR_PATH								  #
@@ -63,7 +63,8 @@ endif
 #									INLUDES									  #
 ###############################################################################
 
-INCS	= -I includes/
+INCS	=	-I 	includes/functions \
+			-I	includes/conexion
 
 ifeq ($(OS), Linux)
 	INCS	+=
@@ -90,7 +91,7 @@ all: make_dir $(NAME)
 	@echo "" && echo "$(YELLOW)$(NAME) ready to use:$(DEF_COLOR)"
 
 make_dir:
-	@mkdir -p $(OBJ_DIR) $(DPS_DIR) $(UPL_DIR)
+	@mkdir -p $(OBJ_DIR) $(DPS_DIR)
 	@echo "$(GREEN)Compiling OBJECTS:$(DEF_COLOR)"
 
 
@@ -98,7 +99,7 @@ make_dir:
 $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp | make_dir
 	@mkdir -p $(dir $@)
 	@echo "$(GRAY)Compiling $< to $@ $(DEF_COLOR)"
-	@$(CC) $(CFLAGS) $(INCS) -c $< -o $@
+	@$(CC) $(FLAGS) $(INCS) -c $< -o $@
 	@mv $(basename $@).d $(DPS_DIR)
 
 #					--------	MAKE LIBRARIES	--------						  #
@@ -106,9 +107,9 @@ $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp | make_dir
 
 #					--------	RULES PROGRAM	--------						  #
 
-$(NAME):  Makefile $(LIB) $(OBJ)
+$(NAME): $(LIB) $(OBJ) Makefile
 	@echo "$(MAGENTA)Compiling $(NAME)$(DEF_COLOR)"
-	@$(CC) $(CFLAGS) $(INCS) $(OBJ) -o $(NAME) 
+	@$(CC) $(FLAGS) $(INCS) $(OBJ) -o $(NAME) 
 	@echo "$(BLUE)webserv ready to launch, use 80 as argument and connect in a browther as localhost.$(DEF_COLOR)"
 
 clean:

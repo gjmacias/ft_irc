@@ -1,8 +1,6 @@
-#include "Colors.h"
+#include "ColorsDefinitions.h"
 #include "AllFunctions.h"
 #include "Server.hpp"
-
-bool Server::_signal = false;
 	
 /*
 ###############################################################################
@@ -25,7 +23,7 @@ Server &Server::operator=(Server const &src)
 		this->_port = src._port;
 		this->_mainSocketFd = src._mainSocketFd;
 		this->_password = src._password;
-		this->clients = src.clients;
+		this->_clients = src._clients;
 		this->_clients = src._clients;
 		this->_pollSocketFds = src._pollSocketFds;
 	}
@@ -41,11 +39,37 @@ Server &Server::operator=(Server const &src)
 #									GETTERS									  #
 ###############################################################################
 */
+int			Server::GetPort(){return this->_port;}
+int			Server::GetMainFd(){return this->_mainSocketFd;}
+std::string	Server::GetPassword(){return this->_password;}
+
+Client	*Server::GetClient(int fd)
+{
+	for (size_t i = 0; i < this->_clients.size(); i++)
+	{
+		if (this->_clients[i].GetFd() == fd)
+			return &this->clients[i];
+	}
+	return NULL;
+}
+
+Client	*Server::GetClient_Nickame(std::string nickname)
+{
+	for (size_t i = 0; i < this->_clients.size(); i++)
+	{
+		if (this->clients[i].GetNickName() == nickname)
+			return &this->clients[i];
+	}
+	return NULL;
+}
+
 /*
 ###############################################################################
 #								FUNCTIONS									  #
 ###############################################################################
 */
+bool Server::_signal = false;
+
 void Server::SignalHandler(int signum)
 {
 	(void)signum;
@@ -53,15 +77,16 @@ void Server::SignalHandler(int signum)
 	Server::_signal = true;
 }
 
-void Server::ServerInit()
+void Server::ServerInit(int port, std::string password)
 {
 	struct sockaddr_in	socketAddress;
 	struct pollfd		newPoll;
 
-	this->Port = 4444;
+	this->_port = port;
+	this->_password = password;
 
 	socketAddress.sin_family = AF_INET; 
-	socketAddress.sin_port = htons(this->Port);
+	socketAddress.sin_port = htons(this->_port);
 	socketAddress.sin_addr.s_addr = INADDR_ANY;
 
 	_mainSocketFd = socket(AF_INET, SOCK_STREAM, 0);
@@ -113,14 +138,21 @@ void Server::AcceptNewClient()
 	Client 				newClient;
 	struct sockaddr_in	clientAddress;
 	struct pollfd		NewPoll;
+    socklen_t			clientAddressLenght;
+	int					clientFd;
 
-
-	int clientFd = accept(_mainSocketFd, (struct sockaddr *)&(clientAddress), sizeof(clientAddress));
+	clientAddressLenght = sizeof(clientAddress);
+	clientFd = accept(_mainSocketFd, (struct sockaddr *)&(clientAddress), &clientAddressLenght);
 	if (clientFd == -1)
-		std::cout << "accept() failed" << std::endl; return;
+	{
+		std::cerr << "accept() failed" << std::endl;
+		return;
+	}
 	if (fcntl(clientFd, F_SETFL, O_NONBLOCK) == -1)
-		std::cout << "fcntl() failed" << std::endl; return;
-
+	{
+		std::cerr << "fcntl() failed" << std::endl;
+		return;
+	}
 	NewPoll.fd = clientFd;
 	NewPoll.events = POLLIN;
 	NewPoll.revents = 0;
@@ -150,16 +182,16 @@ void Server::ReceiveNewData(int fd)
 		{
 			if (errno == EAGAIN || errno == EWOULDBLOCK)
 				return;
-			std::cout << RED << "Error receiving data from client <" << fd << ">: " << strerror(errno) << WHITE << std::endl;
+			std::cout << RED << "Error receiving data from client <" << fd << ">: " << std::strerror(errno) << WHITE << std::endl;
 		}
 		ClearClients(fd); 
 	}
 	else
 	{
- 		cli->setBuffer(buff);
-		if (cli->getBuffer().find_first_of("\r\n") == std::string::npos)
+ 		client->setBuffer(buffer);
+		if (client->getBuffer().find_first_of("\r\n") == std::string::npos)
 			return;
-		cmd = split_recivedBuffer(cli->getBuffer());
+		cmd = split_recivedBuffer(client->getBuffer());
 		for(size_t i = 0; i < cmd.size(); i++)
 			parse_and_exec_cmd(cmd[i], fd);
 		if (GetClient(fd)) 
