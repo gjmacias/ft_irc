@@ -13,11 +13,10 @@ private:
 	int									_invit_only;
 	int 								_topic;
 	int									_key;
+	int									_limit;
 	bool								_topic_restriction;
 	std::string							_name;
-	std::string							_time_creation;
 	std::string							_password;
-	std::string 						_created_at;
 	std::string 						_topic_name;
 	std::vector<Client>					_clients;
 	std::vector<Client>					_admins;
@@ -38,9 +37,8 @@ public:
 	void		SetPassword(std::string password);
 	void		SetName(std::string name);
 	void		SetTime(std::string time);
-	void		set_topicRestriction(bool value);
-	void		setModeAtindex(size_t index, bool mode);
-	void		set_createiontime();
+	void		SetTopicRestriction(bool value);
+	void		SetModeAtindex(size_t index, bool mode);
 
 		//		GETTERS
 	int			GetInvitOnly();

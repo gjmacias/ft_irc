@@ -24,7 +24,7 @@ SRC			=	main.cpp \
 				conexion/channelFunctions/ChangeChannel.cpp \
 				conexion/channelFunctions/RemoveChannel.cpp \
 				\
-				conexion/serverFunctions/Authentification.cpp \
+				conexion/serverFunctions/ClientModifier.cpp \
 				conexion/serverFunctions/ParseAndExecute.cpp \
 				conexion/serverFunctions/RemoverServer.cpp \
 				conexion/serverFunctions/SenderServer.cpp \
@@ -66,11 +66,12 @@ else
 endif
 
 ###############################################################################
-#									INLUDES									  #
+#									INCLUDES								  #
 ###############################################################################
 
-INCS	=	-I 	includes/functions \
-			-I	includes/conexion
+INCS	=	-I 	includes/comunication \
+			-I	includes/conexion \
+			-I	includes/functions
 
 ifeq ($(OS), Linux)
 	INCS	+=
@@ -116,7 +117,7 @@ $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp | make_dir
 $(NAME): $(LIB) $(OBJ) Makefile
 	@echo "$(MAGENTA)Compiling $(NAME)$(DEF_COLOR)"
 	@$(CC) $(FLAGS) $(INCS) $(OBJ) -o $(NAME) 
-	@echo "$(BLUE)webserv ready to launch, use 80 as argument and connect in a browther as localhost.$(DEF_COLOR)"
+	@echo "$(BLUE)IRCSERV ready to launch! $(DEF_COLOR)"
 
 clean:
 	@echo "$(RED)Removing ON $(NAME); OBJs and DEPs... $(DEF_COLOR)"

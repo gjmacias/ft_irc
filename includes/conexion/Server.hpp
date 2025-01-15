@@ -59,8 +59,10 @@ public:
 
 
 //	##################	SERVER_FUNCTIONS	##################
-		//		Authentificiation
-	void		ClientAuthentification(int fd, std::string cmd);
+		//		Client Involved
+	void		ClientAuthentification(std::string cmd, int fd);
+	void		ClientNickname(std::string cmd, int fd);
+	void		ClientUsername(std::string cmd, int fd);
 
 		//		Parse and execute
 	void		ParseAndExcecute(std::string &cmd, int fd);

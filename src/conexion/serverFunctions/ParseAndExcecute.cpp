@@ -18,11 +18,11 @@ void	Server::ParseAndExcecute(std::string &cmd, int fd)
 	if(splited_cmd.size() && (splited_cmd[0] == "BONG" || splited_cmd[0] == "bong"))
 		return;
 	if(splited_cmd.size() && (splited_cmd[0] == "PASS" || splited_cmd[0] == "pass"))
-		ClientAuthentification(fd, cmd);
+		ClientAuthentification(cmd, fd);
 	else if (splited_cmd.size() && (splited_cmd[0] == "NICK" || splited_cmd[0] == "nick"))
-		SetNickname(cmd, fd);
+		ClientNickname(cmd, fd);
 	else if(splited_cmd.size() && (splited_cmd[0] == "USER" || splited_cmd[0] == "user"))
-		SetUsername(cmd, fd);
+		ClientUsername(cmd, fd);
 	else if (splited_cmd.size() && (splited_cmd[0] == "QUIT" || splited_cmd[0] == "quit"))
 		QuitCommand(cmd, fd);
 	else if(isRegistered(fd))
@@ -42,8 +42,8 @@ void	Server::ParseAndExcecute(std::string &cmd, int fd)
 		else if (splited_cmd.size() && (splited_cmd[0] == "TOPIC" || splited_cmd[0] == "topic"))
 			TopicCommand(cmd, fd);
 		else if (splited_cmd.size())
-			_sendResponse(ERR_CMDNOTFOUND(GetClient(fd)->GetNickName(), splited_cmd[0]), fd);
+			SendResponse(ERR_CMDNOTFOUND(GetClient(fd)->GetNickName(), splited_cmd[0]), fd);
 	}
 	else if (!isRegistered(fd))
-		_sendResponse(ERR_NOTREGISTERED(std::string("*")),fd);
+		SendResponse(ERR_NOTREGISTERED(std::string("*")),fd);
 }

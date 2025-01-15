@@ -138,7 +138,7 @@ void Server::AcceptNewClient()
 	Client 				newClient;
 	struct sockaddr_in	clientAddress;
 	struct pollfd		NewPoll;
-    socklen_t			clientAddressLenght;
+	socklen_t			clientAddressLenght;
 	int					clientFd;
 
 	clientAddressLenght = sizeof(clientAddress);

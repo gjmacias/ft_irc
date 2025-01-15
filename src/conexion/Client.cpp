@@ -67,7 +67,7 @@ void Client::ClearUsedBuffer()
 {
     size_t	last_pos = this->_buffer.find_last_of("\r\n");
 
-    if (last_pos != std::string::npos)
+	if (last_pos != std::string::npos)
         this->_buffer.erase(0, last_pos + 1); 
 	else
 		this->_buffer.clear();
