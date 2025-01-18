@@ -22,11 +22,11 @@ void Server::ClientAuthentification(std::string cmd, int fd)
 	}
 	if(cmd.empty() || position == std::string::npos) 
 		SendResponse(ERR_NOTENOUGHPARAM(std::string("*")), fd);
-	else if(!client->getRegistered())
+	else if(!client->GetRegistered())
 	{
 		password = cmd;
 		if(password == this->_password)
-			client->setRegistered(true);
+			client->SetRegistered(true);
 		else
 			SendResponse(ERR_INCORPASS(std::string("*")), fd);
 	}
@@ -66,7 +66,7 @@ void Server::ClientNickname(std::string cmd, int fd)
 	}
 	else
 	{
-		if(cli && cli->getRegistered())
+		if(cli && cli->GetRegistered())
 		{
 			std::string oldnick = cli->GetNickName();
 			cli->SetNickname(cmd);
@@ -79,7 +79,7 @@ void Server::ClientNickname(std::string cmd, int fd)
 			{
 				if(oldnick == "*" && !cli->GetUserName().empty())
 				{
-					cli->setLogedin(true);
+					cli->SetLogedin(true);
 					SendResponse(RPL_CONNECTED(cli->GetNickName()), fd);
 					SendResponse(RPL_NICKCHANGE(cli->GetNickName(), cmd), fd);
 				}
@@ -89,32 +89,32 @@ void Server::ClientNickname(std::string cmd, int fd)
 			}
 			
 		}
-		else if (cli && !cli->getRegistered())
+		else if (cli && !cli->GetRegistered())
 			SendResponse(ERR_NOTREGISTERED(cmd), fd);
 	}
-	if(cli && cli->getRegistered() && !cli->GetUserName().empty() && !cli->GetNickName().empty() && cli->GetNickName() != "*" && !cli->GetLogedIn())
+	if(cli && cli->GetRegistered() && !cli->GetUserName().empty() && !cli->GetNickName().empty() && cli->GetNickName() != "*" && !cli->GetLogedIn())
 	{
 		cli->setLogedin(true);
 		SendResponse(RPL_CONNECTED(cli->GetNickName()), fd);
 	}
 }
 
-void	Server::ClientUsername(std::string& cmd, int fd)
+void	Server::ClientUsername(std::string cmd, int fd)
 {
 	std::vector<std::string> splited_cmd = split_cmd(cmd);
 
 	Client *cli = GetClient(fd); 
 	if((cli && splited_cmd.size() < 5))
 		{SendResponse(ERR_NOTENOUGHPARAM(cli->GetNickName()), fd); return; }
-	if(!cli  || !cli->getRegistered())
+	if(!cli  || !cli->GetRegistered())
 		SendResponse(ERR_NOTREGISTERED(std::string("*")), fd);
 	else if (cli && !cli->GetUserName().empty())
 		{SendResponse(ERR_ALREADYREGISTERED(cli->GetNickName()), fd); return;}
 	else
 		cli->SetUsername(splited_cmd[1]);
-	if(cli && cli->getRegistered() && !cli->GetUserName().empty() && !cli->GetNickName().empty() && cli->GetNickName() != "*"  && !cli->GetLogedIn())
+	if(cli && cli->GetRegistered() && !cli->GetUserName().empty() && !cli->GetNickName().empty() && cli->GetNickName() != "*"  && !cli->GetLogedIn())
 	{
-		cli->setLogedin(true);
+		cli->SetLogedin(true);
 		SendResponse(RPL_CONNECTED(cli->GetNickName()), fd);
 	}
 }

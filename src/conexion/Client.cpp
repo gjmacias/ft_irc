@@ -27,7 +27,7 @@ Client &Client::operator=(Client const &src)
 	if (this != &src)
 	{
 		this->_fd = src._fd;
-		this->ip_IPaddadd = src._IPadd;
+		this->_IPadd = src._IPadd;
 		this->_nickname = src._nickname;
 		this->_username = src._username;
 		this->_buffer = src._buffer;
@@ -61,7 +61,7 @@ std::string Client::GetBuffer(){return this->_buffer;}
 #								FUNCTIONS									  #
 ###############################################################################
 */
-void Client::ClearBuffer(){this->_buffer.clear()}
+void Client::ClearBuffer(){this->_buffer.clear();}
 
 void Client::ClearUsedBuffer()
 {

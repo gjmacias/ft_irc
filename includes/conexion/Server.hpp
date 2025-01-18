@@ -14,11 +14,14 @@
 # include <arpa/inet.h>
 # include <poll.h>
 # include <csignal>
+# include <cstdlib>
 # include <cstring>
 # include <cerrno>
 
 // Proyect Libraries
 #include "Client.hpp"
+
+class Client;
 
 class Server
 {

@@ -48,7 +48,7 @@ Client	*Server::GetClient(int fd)
 	for (size_t i = 0; i < this->_clients.size(); i++)
 	{
 		if (this->_clients[i].GetFd() == fd)
-			return &this->clients[i];
+			return &this->_clients[i];
 	}
 	return NULL;
 }
@@ -57,8 +57,8 @@ Client	*Server::GetClient_Nickame(std::string nickname)
 {
 	for (size_t i = 0; i < this->_clients.size(); i++)
 	{
-		if (this->clients[i].GetNickName() == nickname)
-			return &this->clients[i];
+		if (this->_clients[i].GetNickName() == nickname)
+			return &this->_clients[i];
 	}
 	return NULL;
 }
@@ -158,7 +158,7 @@ void Server::AcceptNewClient()
 	NewPoll.revents = 0;
 
 	newClient.SetFd(clientFd);
-	newClient.setIpAdd(inet_ntoa(clientAddress.sin_addr));
+	newClient.SetIpAdd(inet_ntoa(clientAddress.sin_addr));
 	_clients.push_back(newClient);
 	_pollSocketFds.push_back(NewPoll);
 
@@ -179,17 +179,17 @@ void Server::ReceiveNewData(int fd)
 		if (bytes < 0)
 			std::cout << RED << "Error receiving data from: <" << fd << ">" << WHITE << std::endl;
 		std::cout << RED << "Client <" << fd << "> Disconnected" << WHITE << std::endl;
-		RemoveClientFromChannels(int fd);
-		RemoveClient(int fd);
-		RemoveFd(int fd);
+		RemoveClientFromChannels(fd);
+		RemoveClient(fd);
+		RemoveFd(fd);
 		close(fd);
 	}
 	else
 	{
- 		client->setBuffer(buffer);
-		if (client->getBuffer().find_first_of("\r\n") == std::string::npos)
+ 		client->SetBuffer(buffer);
+		if (client->GetBuffer().find_first_of("\r\n") == std::string::npos)
 			return;
-		cmd = split_recivedBuffer(client->getBuffer());
+		cmd = split_recivedBuffer(client->GetBuffer());
 		for(size_t i = 0; i < cmd.size(); i++)
 			ParseAndExcecute(cmd[i], fd);
 		if (GetClient(fd)) 

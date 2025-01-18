@@ -15,6 +15,7 @@ private:
 	int									_key;
 	int									_limit;
 	bool								_topic_restriction;
+	std::string							_created_at;
 	std::string							_name;
 	std::string							_password;
 	std::string 						_topic_name;

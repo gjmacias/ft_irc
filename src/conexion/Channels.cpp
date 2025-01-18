@@ -7,7 +7,7 @@
 */
 Channel::Channel()
 {
-	revisar// this->_invit_only = 0;
+	//revisar// this->_invit_only = 0;
 	// this->_topic = 0;
 	// this->_key = 0;
 	// this->_limit = 0;
