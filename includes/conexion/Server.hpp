@@ -17,6 +17,7 @@
 
 // C Libraries
 # include <csignal>
+# include <cstdlib>
 # include <cstring>
 # include <cerrno>
 # include <cstdlib>
@@ -30,6 +31,8 @@
 
 class Client;
 class Channel;
+
+class Client;
 
 class Server
 {

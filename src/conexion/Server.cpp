@@ -49,6 +49,7 @@ Client	*Server::GetClient(int fd)
 	{
 		if (this->_clients[i].GetFd() == fd)
 			return &this->_clients[i];
+			return &this->_clients[i];
 	}
 	return NULL;
 }
@@ -57,6 +58,8 @@ Client	*Server::GetClient_Nickame(std::string nickname)
 {
 	for (size_t i = 0; i < this->_clients.size(); i++)
 	{
+		if (this->_clients[i].GetNickName() == nickname)
+			return &this->_clients[i];
 		if (this->_clients[i].GetNickName() == nickname)
 			return &this->_clients[i];
 	}
@@ -159,6 +162,7 @@ void Server::AcceptNewClient()
 
 	newClient.SetFd(clientFd);
 	newClient.SetIpAdd(inet_ntoa(clientAddress.sin_addr));
+	newClient.SetIpAdd(inet_ntoa(clientAddress.sin_addr));
 	_clients.push_back(newClient);
 	_pollSocketFds.push_back(NewPoll);
 
@@ -182,13 +186,19 @@ void Server::ReceiveNewData(int fd)
 		RemoveClientFromChannels(fd);
 		RemoveClient(fd);
 		RemoveFd(fd);
+		RemoveClientFromChannels(fd);
+		RemoveClient(fd);
+		RemoveFd(fd);
 		close(fd);
 	}
 	else
 	{
 		client->SetBuffer(buffer);
 		if (client->GetBuffer().find_first_of("\r\n") == std::string::npos)
+ 		client->SetBuffer(buffer);
+		if (client->GetBuffer().find_first_of("\r\n") == std::string::npos)
 			return;
+		cmd = split_recivedBuffer(client->GetBuffer());
 		cmd = split_recivedBuffer(client->GetBuffer());
 		for(size_t i = 0; i < cmd.size(); i++)
 			ParseAndExecute(cmd[i], fd);
