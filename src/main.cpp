@@ -25,7 +25,7 @@ int	main(int words, char **arguments)
 		myServer.ServerInit(atoi(arguments[1]), arguments[2]);
 		myServer.ServerLoop();
 	}
-	catch(const std::exception& e)
+	catch(const std::exception &e)
 	{
 		myServer.CloseFds();
 		std::cerr << e.what() << std::endl;
