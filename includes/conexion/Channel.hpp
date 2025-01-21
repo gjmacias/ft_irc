@@ -75,8 +75,8 @@ public:
 	bool		ChangeClientToAdmin(std::string nickname);
 	bool		ChangeAdminToClient(std::string nickname);
 
-	revisar// void		SendToAll(std::string rpl1);
-	// void		SendToAll(std::string rpl1, int fd);
+	void		SendEveryone(std::string message);
+	void		SendMeToAll(int fd, std::string message);
 //	##########################################################
 };
 

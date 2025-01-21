@@ -5,27 +5,36 @@
 #									SENDERS									  #
 ###############################################################################
 */
+void Channel::SendEveryone(std::string message)
+{
+	for(size_t i = 0; i < this->_admins.size(); i++)
+	{
+		if(send(this->_admins[i].GetFd(), message.c_str(), message.size(), 0) == -1)
+			std::cerr << "send() faild" << std::endl;
+	}
+	for(size_t i = 0; i < this->_clients.size(); i++)
+	{
+		if(send(this->_clients[i].GetFd(), message.c_str(), message.size(), 0) == -1)
+			std::cerr << "send() faild" << std::endl;
+	}
+}
 
-revisar// void Channel::SendToAll(std::string rpl1)
-// {
-// 	for(size_t i = 0; i < admins.size(); i++)
-// 		if(send(admins[i].GetFd(), rpl1.c_str(), rpl1.size(),0) == -1)
-// 			std::cerr << "send() faild" << std::endl;
-// 	for(size_t i = 0; i < clients.size(); i++)
-// 		if(send(clients[i].GetFd(), rpl1.c_str(), rpl1.size(),0) == -1)
-// 			std::cerr << "send() faild" << std::endl;
-// }
-
-// void Channel::SendToAll(std::string rpl1, int fd)
-// {
-// 	for(size_t i = 0; i < admins.size(); i++){
-// 		if(admins[i].GetFd() != fd)
-// 			if(send(admins[i].GetFd(), rpl1.c_str(), rpl1.size(),0) == -1)
-// 				std::cerr << "send() faild" << std::endl;
-// 	}
-// 	for(size_t i = 0; i < clients.size(); i++){
-// 		if(clients[i].GetFd() != fd)
-// 			if(send(clients[i].GetFd(), rpl1.c_str(), rpl1.size(),0) == -1)
-// 				std::cerr << "send() faild" << std::endl;
-// 	}
-// }
+void Channel::SendMeToAll(int fd, std::string message)
+{
+	for(size_t i = 0; i < this->_admins.size(); i++)
+	{
+		if(this->_admins[i].GetFd() != fd)
+		{
+			if(send(this->_admins[i].GetFd(), message.c_str(), message.size(),0) == -1)
+				std::cerr << "send() faild" << std::endl;
+		}
+	}
+	for(size_t i = 0; i < this->_clients.size(); i++)
+	{
+		if(this->_clients[i].GetFd() != fd)
+		{
+			if(send(this->_clients[i].GetFd(), message.c_str(), message.size(),0) == -1)
+				std::cerr << "send() faild" << std::endl;
+		}
+	}
+}
