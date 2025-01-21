@@ -13,12 +13,23 @@
 # include <unistd.h>
 # include <arpa/inet.h>
 # include <poll.h>
+# include <sstream>
+
+// C Libraries
 # include <csignal>
 # include <cstring>
 # include <cerrno>
+# include <cstdlib>
 
 // Proyect Libraries
-#include "Client.hpp"
+# include "Client.hpp"
+# include "Channel.hpp"
+# include "Errors.hpp"
+# include "Information.hpp"
+# include "AllFunctions.h"
+
+class Client;
+class Channel;
 
 class Server
 {
@@ -28,6 +39,7 @@ private:
 	int							_mainSocketFd;
 	std::string					_password;
 	std::vector<Client>			_clients;
+	std::vector<Channel>			_channels;
 	std::vector<struct pollfd>	_pollSocketFds;
 public:
 //	##################		SERVER.CPP		##################
@@ -65,7 +77,7 @@ public:
 	void		ClientUsername(std::string cmd, int fd);
 
 		//		Parse and execute
-	void		ParseAndExcecute(std::string &cmd, int fd);
+	void		ParseAndExecute(std::string &cmd, int fd);
 
 		//		Removers Server
 	void		RemoveFd(int fd);

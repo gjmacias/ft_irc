@@ -27,7 +27,7 @@ Client &Client::operator=(Client const &src)
 	if (this != &src)
 	{
 		this->_fd = src._fd;
-		this->ip_IPaddadd = src._IPadd;
+		this->_IPadd = src._IPadd;
 		this->_nickname = src._nickname;
 		this->_username = src._username;
 		this->_buffer = src._buffer;
@@ -40,28 +40,28 @@ Client &Client::operator=(Client const &src)
 ###############################################################################
 */
 void Client::SetFd(int fd){this->_fd = fd;}
-void Client::setIpAdd(std::string ipadd){this->_IPadd = ipadd;}
+void Client::SetIpAdd(std::string ipadd){this->_IPadd = ipadd;}
 void Client::SetNickname(std::string& nickName){this->_nickname = nickName;}
 void Client::SetUsername(std::string& username){this->_username = username;}
-void Client::setBuffer(std::string recived){this->_buffer += recived;}
+void Client::SetBuffer(std::string recived){this->_buffer += recived;}
 
 /*
 ###############################################################################
 #									GETTERS									  #
 ###############################################################################
 */
-int Client::GetFd(){return this->_fd;}
-std::string Client::getIpAdd(){return _IPadd;}
+int			Client::GetFd(){return this->_fd;}
+std::string Client::GetIpAdd(){return this->_IPadd;}
 std::string Client::GetNickName(){return this->_nickname;}
 std::string Client::GetUserName(){return this->_username;}
-std::string Client::getBuffer(){return this->_buffer;}
+std::string Client::GetBuffer(){return this->_buffer;}
 
 /*
 ###############################################################################
 #								FUNCTIONS									  #
 ###############################################################################
 */
-void Client::ClearBuffer(){this->_buffer.clear()}
+void Client::ClearBuffer(){this->_buffer.clear();}
 
 void Client::ClearUsedBuffer()
 {

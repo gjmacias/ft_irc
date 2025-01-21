@@ -56,7 +56,7 @@ public:
 	Client		*GetClientByNickname(std::string nickname);
 
 		// MAIN FUNCTIONS
-	bool		IsModeIndexActive(size_t index);
+	bool		IsModeCharActive(char character);
 	bool		IsClientInChannel(std::string nickname);
 	int			CountAllClients();
 	std::string ListOfClients();

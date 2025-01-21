@@ -21,16 +21,17 @@ public:
 
 		//		SETTERS
 	void		SetFd(int fd);
-	void		setIpAdd(std::string ipadd);
+	void		SetIpAdd(std::string ipadd);
 	void		SetNickname(std::string& nickName);
 	void		SetUsername(std::string& username);
-	void		setBuffer(std::string recived);
+	void		SetBuffer(std::string recived);
 
 		//		GETTERS
 	int			GetFd();
+	std::string GetIpAdd();
 	std::string	GetNickName();
 	std::string	GetUserName();
-	std::string	getBuffer();
+	std::string	GetBuffer();
 
 
 		//		FUNCTIONS

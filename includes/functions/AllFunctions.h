@@ -4,6 +4,7 @@
 # include <vector>
 # include <string>
 # include <sstream>
+# include <cstdlib>
 
 //		Validations
 bool 						isPortValid(std::string port);

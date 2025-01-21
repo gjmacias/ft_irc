@@ -8,22 +8,22 @@
 
 void Channel::RemoveClient(int fd)
 {
-	for (std::vector<Client>::iterator it = clients.begin(); it != clients.end(); ++it)
+	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
 	{
 		if (it->GetFd() == fd)
 		{
-				clients.erase(it); 
+				this->_clients.erase(it); 
 				break;
 		}
 	}
 }
 void Channel::RemoveAdmin(int fd)
 {
-	for (std::vector<Client>::iterator it = admins.begin(); it != admins.end(); ++it)
+	for (std::vector<Client>::iterator it = this->_admins.begin(); it != this->_admins.end(); ++it)
 	{
 		if (it->GetFd() == fd)
 		{
-			admins.erase(it);
+			this->_admins.erase(it);
 			break;
 		}
 	}

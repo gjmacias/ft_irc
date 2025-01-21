@@ -6,4 +6,8 @@
 ###############################################################################
 */
 
-void	Server::JoinCommand(std::string &cmd, int &fd){}
+void	Server::JoinCommand(std::string &cmd, int &fd)
+{
+	(void)cmd;
+	(void)fd;
+}

@@ -6,6 +6,6 @@
 ###############################################################################
 */
 
-void Channel::add_client(Client newClient){clients.push_back(newClient);}
+void Channel::AddClient(Client newClient){this->_clients.push_back(newClient);}
 
-void Channel::add_admin(Client newClient){admins.push_back(newClient);}
+void Channel::AddAdmin(Client newClient){this->_admins.push_back(newClient);}

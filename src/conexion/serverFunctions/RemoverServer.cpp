@@ -8,11 +8,11 @@
 
 void Server::RemoveFd(int fd)
 {
-	for (size_t i = 0; i < this->_fds.size(); i++)
+	for (size_t i = 0; i < this->_pollSocketFds.size(); i++)
 	{
-		if (this->_fds[i].fd == fd)
+		if (this->_pollSocketFds[i].fd == fd)
 		{
-			this->_fds.erase(this->_fds.begin() + i); 
+			this->_pollSocketFds.erase(this->_pollSocketFds.begin() + i); 
 			return;
 		}
 	}
@@ -35,14 +35,14 @@ void	Server::RemoveClientFromChannels(int fd)
 	for (size_t i = 0; i < this->_channels.size(); i++)
 	{
 		int flag = 0;
-		if (this->_channels[i].get_client(fd))
+		if (this->_channels[i].GetClient(fd))
 		{
-			this->_channels[i].remove_client(fd);
+			this->_channels[i].RemoveClient(fd);
 			flag = 1;
 		}
-		else if (this->_channels[i].get_admin(fd))
+		else if (this->_channels[i].GetAdmin(fd))
 		{
-			this->_channels[i].remove_admin(fd);
+			this->_channels[i].RemoveAdmin(fd);
 			flag = 1;
 		}
 		if (this->_channels[i].GetClientsNumber() == 0)

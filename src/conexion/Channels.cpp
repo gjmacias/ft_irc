@@ -23,12 +23,6 @@ Channel &Channel::operator=(Channel const &src)
 {
 	if (this != &src)
 	{
-		this->_invit_only = src._invit_only;
-		this->_topic = src._topic;
-		this->_key = src._key;
-		this->_limit = src._limit;
-		this->_topic_restriction = src._topic_restriction;
-
 		this->_name = src._name;
 		this->_password = src._password;		
 		this->_topic_name = src._topic_name;
@@ -36,6 +30,9 @@ Channel &Channel::operator=(Channel const &src)
 		this->_modes = src._modes;
 		this->_clients = src._clients;
 		this->_admins = src._admins;
+
+		for(size_t i = 0; i < this->_modes.size(); i++)
+			this->_modes[i].second = src._modes[i].second;
 	}
 	return (*this);
 }
@@ -62,15 +59,15 @@ void	Channel::SetModeAtindex(size_t index, bool mode){this->_modes[index].second
 #									GETTERS									  #
 ###############################################################################
 */
-bool	Channel::GetModesInvitOnly(){return this->_modes[0];}
-bool	Channel::GetModesTopic(){return this->_modes[1];}
-bool	Channel::GetModesKey(){return this->_modes[2];}
-bool	Channel::GetModesLimit(){return this->_modes[3];}
-bool	Channel::GetModesTopicRestriction(){return this->_modes[4];}
+bool	Channel::GetModesInvitOnly(){return this->_modes[0].second;}
+bool	Channel::GetModesTopic(){return this->_modes[1].second;}
+bool	Channel::GetModesKey(){return this->_modes[2].second;}
+bool	Channel::GetModesLimit(){return this->_modes[3].second;}
+bool	Channel::GetModesTopicRestriction(){return this->_modes[4].second;}
 
-std::string	Channel::GetName(){return this->name;}
-std::string	Channel::GetPassword(){return this->password;}
-std::string	Channel::GetTopicName(){return this->topic_name;}
+std::string	Channel::GetName(){return this->_name;}
+std::string	Channel::GetPassword(){return this->_password;}
+std::string	Channel::GetTopicName(){return this->_topic_name;}
 
 std::string	Channel::GetModes()
 {
@@ -128,7 +125,7 @@ bool	Channel::IsModeCharActive(char character)
 		if(this->_modes[i].first == character)
 			return this->_modes[i].second;
 	}
-	return false
+	return false;
 }
 
 bool	Channel::IsClientInChannel(std::string nickname)

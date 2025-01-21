@@ -6,4 +6,8 @@
 ###############################################################################
 */
 
-void	Server::InviteCommand(std::string &cmd, int &fd){}
+void	Server::InviteCommand(std::string &cmd, int &fd)
+{
+	(void)cmd;
+	(void)fd;
+}

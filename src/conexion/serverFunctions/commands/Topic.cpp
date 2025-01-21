@@ -6,4 +6,8 @@
 ###############################################################################
 */
 
-void	Server::TopicCommand(std::string &cmd, int &fd){}
+void	Server::TopicCommand(std::string &cmd, int &fd)
+{
+	(void)cmd;
+	(void)fd;
+}

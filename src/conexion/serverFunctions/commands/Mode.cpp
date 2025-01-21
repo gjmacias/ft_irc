@@ -6,4 +6,8 @@
 ###############################################################################
 */
 
-void	Server::ModeCommand(std::string &cmd, int &fd){}
+void	Server::ModeCommand(std::string &cmd, int &fd)
+{
+	(void)cmd;
+	(void)fd;
+}

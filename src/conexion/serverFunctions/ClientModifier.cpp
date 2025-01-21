@@ -1,5 +1,6 @@
 #include "Server.hpp"
 
+
 /*
 ###############################################################################
 #								CLIENT INVOLVED								  #
@@ -22,11 +23,11 @@ void Server::ClientAuthentification(std::string cmd, int fd)
 	}
 	if(cmd.empty() || position == std::string::npos) 
 		SendResponse(ERR_NOTENOUGHPARAM(std::string("*")), fd);
-	else if(!client->getRegistered())
+	else if(!client->GetRegistered())
 	{
 		password = cmd;
 		if(password == this->_password)
-			client->setRegistered(true);
+			client->SetRegistered(true);
 		else
 			SendResponse(ERR_INCORPASS(std::string("*")), fd);
 	}
@@ -66,12 +67,12 @@ void Server::ClientNickname(std::string cmd, int fd)
 	}
 	else
 	{
-		if(cli && cli->getRegistered())
+		if(cli && cli->GetRegistered())
 		{
 			std::string oldnick = cli->GetNickName();
 			cli->SetNickname(cmd);
-			for(size_t i = 0; i < channels.size(); i++){
-				Client *cl = channels[i].GetClientInChannel(oldnick);
+			for(size_t i = 0; i < this->_channels.size(); i++){
+				Client *cl = this->_channels[i].GetClientByNickname(oldnick);
 				if(cl)
 					cl->SetNickname(cmd);
 			}
@@ -99,7 +100,7 @@ void Server::ClientNickname(std::string cmd, int fd)
 	}
 }
 
-void	Server::ClientUsername(std::string& cmd, int fd)
+void	Server::ClientUsername(std::string cmd, int fd)
 {
 	std::vector<std::string> splited_cmd = split_cmd(cmd);
 
