@@ -5,13 +5,22 @@
 #								VALIDATION									  #
 ###############################################################################
 */
-bool	Server::IsRegistered(int fd)
+bool	Server::IsRegisteredAndLoged(int fd)
 {
-	revisar//if (!GetClient(fd) || GetClient(fd)->GetNickName().empty() || GetClient(fd)->GetUserName().empty() || GetClient(fd)->GetNickName() == "*"  || !GetClient(fd)->GetLogedIn())
-		return false;
-	return true;
+	if (GetClient(fd) && GetClient(fd)->GetIsRegistered() && !(GetClient(fd)->GetNickName().empty()) 
+		&& !(GetClient(fd)->GetUserName().empty()) && GetClient(fd)->GetNickName() != "*"
+		&& GetClient(fd)->GetIsLogedInServer())
+		return true;
+	return false;
 }
 
+bool	Server::IsOnlyRegistered(Client *client)
+{
+	if (client && client->GetIsRegistered() && !(client->GetUserName().empty()) && 
+		!(client->GetNickName().empty()) && client->GetNickName() != "*" && !(client->GetIsLogedInServer()))
+		return true;
+	return false;
+}
 
 bool Server::IsValidNickname(std::string& nickname)
 {
@@ -20,7 +29,7 @@ bool Server::IsValidNickname(std::string& nickname)
 		return false;
 	for(size_t i = 1; i < nickname.size(); i++)
 	{
-		if(!std::isalnum(nickname[i]) && nickname[i] != '_')
+		if(!(std::isalnum(nickname[i])) && nickname[i] != '_')
 			return false;
 	}
 	return true;

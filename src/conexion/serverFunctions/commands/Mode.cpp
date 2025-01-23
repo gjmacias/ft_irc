@@ -6,8 +6,8 @@
 ###############################################################################
 */
 
-void	Server::ModeCommand(std::string &cmd, int &fd)
+void	Server::ModeCommand(std::vector<std::string> &splited_cmd, int &fd)
 {
-	(void)cmd;
+	(void)splited_cmd;
 	(void)fd;
 }

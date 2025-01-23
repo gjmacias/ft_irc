@@ -35,10 +35,13 @@ SRC			=	main.cpp \
 				conexion/serverFunctions/commands/Join.cpp \
 				conexion/serverFunctions/commands/Kick.cpp \
 				conexion/serverFunctions/commands/Mode.cpp \
+				conexion/serverFunctions/commands/Part.cpp \
+				conexion/serverFunctions/commands/PrivateMessage.cpp \
 				conexion/serverFunctions/commands/Quit.cpp \
 				conexion/serverFunctions/commands/Topic.cpp \
 				\
 				functions/Splits.cpp \
+				functions/UpperCase.cpp \
 				functions/Validations.cpp \
 
 OBJ			=	$(addprefix $(OBJ_DIR), $(SRC:.cpp=.o))

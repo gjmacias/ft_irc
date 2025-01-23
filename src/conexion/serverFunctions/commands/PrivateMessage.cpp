@@ -2,11 +2,11 @@
 
 /*
 ###############################################################################
-#									INVITE									  #
+#								PRIVATE_MESSAGE								  #
 ###############################################################################
 */
 
-void	Server::InviteCommand(std::vector<std::string> &splited_cmd, int &fd)
+void	Server::PrivateMessageCommand(std::vector<std::string> &splited_cmd, int &fd)
 {
 	(void)splited_cmd;
 	(void)fd;

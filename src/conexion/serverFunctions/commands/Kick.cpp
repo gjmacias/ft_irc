@@ -5,8 +5,8 @@
 #									KICK									  #
 ###############################################################################
 */
-void	Server::KickCommand(std::string &cmd, int &fd)
+void	Server::KickCommand(std::vector<std::string> &splited_cmd, int &fd)
 {
-	(void)cmd;
+	(void)splited_cmd;
 	(void)fd;
 }

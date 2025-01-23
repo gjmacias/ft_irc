@@ -15,8 +15,8 @@ private:
 	std::string							_password;
 	std::string 						_topic_name;
 
-	std::vector<Client>					_clients;
-	std::vector<Client>					_admins;
+	std::vector<Client *>				_clients;
+	std::vector<Client *>				_admins;
 
 public:
 //	##################		CHANNEL.CPP		##################
@@ -64,8 +64,8 @@ public:
 
 //	##################	CHANNEL_FUNCTIONS	##################
 		//		Add Channel
-	void		AddClient(Client newClient);
-	void		AddAdmin(Client newClient);
+	void		AddClient(Client *newClient);
+	void		AddAdmin(Client *newClient);
 
 		//		Removers Channel
 	void		RemoveClient(int fd);

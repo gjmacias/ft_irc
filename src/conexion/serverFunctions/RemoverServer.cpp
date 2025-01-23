@@ -45,16 +45,16 @@ void	Server::RemoveClientFromChannels(int fd)
 			this->_channels[i].RemoveAdmin(fd);
 			flag = 1;
 		}
-		if (this->_channels[i].GetClientsNumber() == 0)
+		if (this->_channels[i].CountAllClients() == 0)
 		{
-			revisar//this->_channels.erase(this->_channels.begin() + i);
-			revisar//i--;
-			revisar//continue;
+			this->_channels.erase(this->_channels.begin() + i);
+			i--;
+			continue;
 		}
 		if (flag)
 		{
-			revisar// std::string rpl = ":" + GetClient(fd)->GetNickName() + "!~" + GetClient(fd)->GetUserName() + "@localhost QUIT Quit\r\n";
-			revisar// this->_channels[i].sendTo_all(rpl);
+			// revisar// std::string rpl = ":" + GetClient(fd)->GetNickName() + "!~" + GetClient(fd)->GetUserName() + "@localhost QUIT Quit\r\n";
+			// revisar// this->_channels[i].sendTo_all(rpl);
 		}
 	}
 }

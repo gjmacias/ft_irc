@@ -7,6 +7,8 @@
 class Client
 {
 private:
+	bool		_isRegistered;		//When the password is correct
+	bool		_isLogedInServer;	//When is Registered AND have: name and nick
 	int			_fd;
 	std::string	_IPadd;
 	std::string	_nickname;
@@ -21,13 +23,17 @@ public:
 
 		//		SETTERS
 	void		SetFd(int fd);
+	void		SetIsRegistered(bool selector);
+	void		SetIsLogedInServer(bool selector);
 	void		SetIpAdd(std::string ipadd);
-	void		SetNickname(std::string& nickName);
-	void		SetUsername(std::string& username);
+	void		SetNickname(std::string nickName);
+	void		SetUsername(std::string username);
 	void		SetBuffer(std::string recived);
 
 		//		GETTERS
 	int			GetFd();
+	bool		GetIsRegistered();
+	bool		GetIsLogedInServer();
 	std::string GetIpAdd();
 	std::string	GetNickName();
 	std::string	GetUserName();
