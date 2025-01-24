@@ -10,6 +10,7 @@ errores potenciales y envía respuestas adecuadas al cliente
 en función de las condiciones detectadas.
 */
 
+
 void	Server::InviteCommand(std::string &cmd, int &fd)
 {
 	std::vector<std::string> smcd = split_cmd(cmd);

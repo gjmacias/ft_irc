@@ -9,66 +9,75 @@ class Client;
 class Channel
 {
 private:
+	std::vector<std::pair<char, bool> >	_modes;
 
-	int									_invit_only;
-	int 								_topic;
-	int									_key;
-	int									_limit;
-	bool								_topic_restriction;
-	std::string							_created_at;
 	std::string							_name;
 	std::string							_password;
 	std::string 						_topic_name;
-	std::vector<Client>					_clients;
-	std::vector<Client>					_admins;
-	std::vector<std::pair<char, bool> >	_modes;
+
+	std::vector<Client *>				_clients;
+	std::vector<Client *>				_admins;
 
 public:
+//	##################		CHANNEL.CPP		##################
+		//		CONSTRUCTOR
 	Channel();
 	~Channel();
 	Channel(Channel const &src);
 	Channel &operator=(Channel const &src);
 
 		//		SETTERS
-	void		SetInvitOnly(int invit_only);
-	void		SetTopic(int topic);
-	void		SetKey(int key);
-	void		SetLimit(int limit);
-	void		SetTopicName(std::string topic_name);
-	void		SetPassword(std::string password);
+	void		SetModesInvitOnly(bool invit_only);
+	void		SetModesTopic(bool topic);
+	void		SetModesKey(bool key);
+	void		SetModesLimit(bool limit);
+	void		SetModesTopicRestriction(bool restricted);
+
 	void		SetName(std::string name);
-	void		SetTime(std::string time);
-	void		SetTopicRestriction(bool value);
+	void		SetPassword(std::string password);
+	void		SetTopicName(std::string topic_name);
+
 	void		SetModeAtindex(size_t index, bool mode);
 
 		//		GETTERS
-	int			GetInvitOnly();
-	int			GetTopic();
-	int			GetKey();
-	int			GetLimit();
-	int			GetClientsNumber();
-	bool		Gettopic_restriction() const;
-	bool		getModeAtindex(size_t index);
-	bool		clientInChannel(std::string &nick);
-	std::string	GetTopicName();
-	std::string GetPassword();
+	bool		GetModesInvitOnly();
+	bool		GetModesTopic();
+	bool		GetModesKey();
+	bool		GetModesLimit();
+	bool		GetModesTopicRestriction();
+
 	std::string GetName();
-	std::string GetTime();
-	std::string get_creationtime();
-	std::string getModes();
-	std::string clientChannel_list();
-	Client		*get_client(int fd);
-	Client		*get_admin(int fd);
-	Client		*GetClientInChannel(std::string name);
+	std::string GetPassword();
+	std::string	GetTopicName();
+	
+	std::string GetModes();
+	Client		*GetClient(int fd);
+	Client		*GetAdmin(int fd);
+	Client		*GetClientByNickname(std::string nickname);
 
-		//		FUNCTIONS
-	void		add_client(Client newClient);
-	void		add_admin(Client newClient);
-	void		remove_client(int fd);
-	void		remove_admin(int fd);
-	bool		change_clientToAdmin(std::string& nick);
-	bool		change_adminToClient(std::string& nick);
+		// MAIN FUNCTIONS
+	bool		IsModeCharActive(char character);
+	bool		IsClientInChannel(std::string nickname);
+	int			CountAllClients();
+	std::string ListOfClients();
+//	##########################################################
 
+//	##################	CHANNEL_FUNCTIONS	##################
+		//		Add Channel
+	void		AddClient(Client *newClient);
+	void		AddAdmin(Client *newClient);
+
+		//		Removers Channel
+	void		RemoveClient(int fd);
+	void		RemoveAdmin(int fd);
+
+		//		Change Channel
+	bool		ChangeClientToAdmin(std::string nickname);
+	bool		ChangeAdminToClient(std::string nickname);
+
+	void		SendEveryone(std::string message);
+	void		SendMeToAll(int fd, std::string message);
+//	##########################################################
 };
 
 #endif

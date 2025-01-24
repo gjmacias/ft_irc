@@ -6,4 +6,8 @@
 ###############################################################################
 */
 
-void	Server::TopicCommand(std::string &cmd, int &fd){}
+void	Server::TopicCommand(std::vector<std::string> &splited_cmd, int &fd)
+{
+	(void)splited_cmd;
+	(void)fd;
+}

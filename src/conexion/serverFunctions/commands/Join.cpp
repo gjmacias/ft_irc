@@ -57,7 +57,7 @@ int	Server::SplitJoin(std::vector<std::pair<std::string, std::string> > &token, 
 		}
 		token[j].second = buff;
 	}
-	for (size_t i = 0; i < token.size(); i++) //erase the empty channel names
+	for (size_t i = 0; i < token.size(); i++)
 	{
 		if (token[i].first.empty())
 			token.erase(token.begin() + i--);
@@ -102,9 +102,9 @@ bool IsInvited(Client *cli, std::string ChName, int flag)
 
 void	Server::ExistCh(std::vector<std::pair<std::string, std::string> >&token, int i, int j, int fd)
 {
-	if (this->channels[j].GetClientInChannel(GetClient(fd)->GetNickName())) // if the client is already registered
+	if (this->channels[j].GetClientInChannel(GetClient(fd)->GetNickName()))
 		return ;
-	if (SearchForClients(GetClient(fd)->GetNickName()) >= 10) // if the client is already in 10 channels
+	if (SearchForClients(GetClient(fd)->GetNickName()) >= 10)
 	{
 		senderror(405, GetClient(fd)->GetNickName(), GetClient(fd)->GetFd(), " :You have joined too many channels\r\n");
 		return ;
@@ -117,7 +117,7 @@ void	Server::ExistCh(std::vector<std::pair<std::string, std::string> >&token, in
 			return ;
 		}
 	}
-	if (this->channels[j].GetInviteOnly()) // if the channel is invit only
+	if (this->channels[j].GetInviteOnly())
 	{
 		if (!IsInvited(GetClient(fd), token[i].first, 1))
 		{

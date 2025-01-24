@@ -191,9 +191,9 @@ void Server::ReceiveNewData(int fd)
 			return;
 		cmd = split_recivedBuffer(client->GetBuffer());
 		for(size_t i = 0; i < cmd.size(); i++)
-			ParseAndExcecute(cmd[i], fd);
+			ParseAndExecute(cmd[i], fd);
 		if (GetClient(fd)) 
-        	GetClient(fd)->ClearUsedBuffer();
+			GetClient(fd)->ClearUsedBuffer();
  	}
 }
 

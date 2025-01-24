@@ -13,13 +13,26 @@
 # include <unistd.h>
 # include <arpa/inet.h>
 # include <poll.h>
+# include <sstream>
+
+// C Libraries
 # include <csignal>
 # include <cstdlib>
 # include <cstring>
 # include <cerrno>
+# include <cstdlib>
 
 // Proyect Libraries
-#include "Client.hpp"
+# include "Client.hpp"
+# include "Channel.hpp"
+# include "Errors.hpp"
+# include "Information.hpp"
+# include "AllFunctions.h"
+
+class Client;
+class Channel;
+
+class Client;
 
 class Client;
 
@@ -31,6 +44,7 @@ private:
 	int							_mainSocketFd;
 	std::string					_password;
 	std::vector<Client>			_clients;
+	std::vector<Channel>		_channels;
 	std::vector<struct pollfd>	_pollSocketFds;
 public:
 //	##################		SERVER.CPP		##################
@@ -65,10 +79,10 @@ public:
 		//		Client Involved
 	void		ClientAuthentification(std::string cmd, int fd);
 	void		ClientNickname(std::string cmd, int fd);
-	void		ClientUsername(std::string cmd, int fd);
+	void		ClientUsername(std::vector<std::string> &splited_cmd, int fd);
 
 		//		Parse and execute
-	void		ParseAndExcecute(std::string &cmd, int fd);
+	void		ParseAndExecute(std::string &cmd, int fd);
 
 		//		Removers Server
 	void		RemoveFd(int fd);
@@ -82,7 +96,8 @@ public:
 	void		SendError(int fd, int code, std::string clientname, std::string channelname, std::string msg);
 
 		//		Validations Server
-	bool		IsRegistered(int fd);
+	bool		IsRegisteredAndLoged(int fd);
+	bool		IsOnlyRegistered(Client *client);
 	bool		IsValidNickname(std::string& nickname);
 	bool		IsNickNameInUse(std::string& nickname);
 //	##########################################################
@@ -91,28 +106,28 @@ public:
 
 //	##################	SERVER_FUNCTIONS/COMMANDS	##################
 		//		INVITE
-	void		InviteCommand(std::string &cmd, int &fd);
+	void		InviteCommand(std::vector<std::string> &splited_cmd, int &fd);
 
 		//		JOIN
-	void		JoinCommand(std::string &cmd, int &fd);
+	void		JoinCommand(std::vector<std::string> &splited_cmd, int &fd);
 
 		//		KICK
-	void		KickCommand(std::string &cmd, int &fd);
+	void		KickCommand(std::vector<std::string> &splited_cmd, int &fd);
 
 		//		MODE
-	void		ModeCommand(std::string &cmd, int &fd);
+	void		ModeCommand(std::vector<std::string> &splited_cmd, int &fd);
 	
 		//		PART
-	void		PartCommand(std::string &cmd, int &fd);
+	void		PartCommand(std::vector<std::string> &splited_cmd, int &fd);
 
 		//		PRIVATE_MESSAGE
-	void		PrivateMessageCommand(std::string &cmd, int &fd);
+	void		PrivateMessageCommand(std::vector<std::string> &splited_cmd, int &fd);
 
 		//		QUIT
-	void		QuitCommand(std::string &cmd, int &fd);
+	void		QuitCommand(std::vector<std::string> &splited_cmd, int &fd);
 
 		//		TOPIC
-	void		TopicCommand(std::string &cmd, int &fd);
+	void		TopicCommand(std::vector<std::string> &splited_cmd, int &fd);
 //	##########################################################
 };
 

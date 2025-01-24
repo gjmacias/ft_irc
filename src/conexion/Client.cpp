@@ -40,9 +40,11 @@ Client &Client::operator=(Client const &src)
 ###############################################################################
 */
 void Client::SetFd(int fd){this->_fd = fd;}
+void Client::SetIsRegistered(bool selector){this->_isRegistered = selector;}
+void Client::SetIsLogedInServer(bool selector){this->_isLogedInServer = selector;}
 void Client::SetIpAdd(std::string ipadd){this->_IPadd = ipadd;}
-void Client::SetNickname(std::string& nickName){this->_nickname = nickName;}
-void Client::SetUsername(std::string& username){this->_username = username;}
+void Client::SetNickname(std::string nickName){this->_nickname = nickName;}
+void Client::SetUsername(std::string username){this->_username = username;}
 void Client::SetBuffer(std::string recived){this->_buffer += recived;}
 
 /*
@@ -50,8 +52,10 @@ void Client::SetBuffer(std::string recived){this->_buffer += recived;}
 #									GETTERS									  #
 ###############################################################################
 */
-int Client::GetFd(){return this->_fd;}
-std::string Client::GetIpAdd(){return _IPadd;}
+int			Client::GetFd(){return this->_fd;}
+bool		Client::GetIsRegistered(){return this->_isRegistered;}
+bool		Client::GetIsLogedInServer(){return this->_isLogedInServer;}
+std::string Client::GetIpAdd(){return this->_IPadd;}
 std::string Client::GetNickName(){return this->_nickname;}
 std::string Client::GetUserName(){return this->_username;}
 std::string Client::GetBuffer(){return this->_buffer;}
