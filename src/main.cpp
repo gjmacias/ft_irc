@@ -22,10 +22,10 @@ int	main(int words, char **arguments)
 			std::cerr << "invalid Port number / Password!" << std::endl;
 			return (1);
 		}
-		myServer.ServerInit(std::atoi(arguments[1]), arguments[2]);
+		myServer.ServerInit(atoi(arguments[1]), arguments[2]);
 		myServer.ServerLoop();
 	}
-	catch(const std::exception& e)
+	catch(const std::exception &e)
 	{
 		myServer.CloseFds();
 		std::cerr << e.what() << std::endl;
