@@ -53,8 +53,8 @@ void	Server::RemoveClientFromChannels(int fd)
 		}
 		if (flag)
 		{
-			// revisar// std::string rpl = ":" + GetClient(fd)->GetNickName() + "!~" + GetClient(fd)->GetUserName() + "@localhost QUIT Quit\r\n";
-			// revisar// this->_channels[i].sendTo_all(rpl);
+			 revisar// std::string rpl = ":" + GetClient(fd)->GetNickName() + "!~" + GetClient(fd)->GetUserName() + "@localhost QUIT Quit\r\n";
+			 revisar// this->_channels[i].sendTo_all(rpl);
 		}
 	}
 }

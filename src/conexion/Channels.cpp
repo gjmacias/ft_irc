@@ -44,7 +44,7 @@ Channel &Channel::operator=(Channel const &src)
 */
 void	Channel::SetModesInvitOnly(bool invit_only){this->_modes[0].second = invit_only;}
 void	Channel::SetModesTopic(bool topic){this->_modes[1].second = topic;}
-void	Channel::SetModesKey(bool key){this->_modes[2].second = key;}
+void	Channel::SetModesKey(bool key){this->_modes[2].second = key;}			REVISAR
 void	Channel::SetModesLimit(bool limit){this->_modes[3].second = limit;}
 void	Channel::SetModesTopicRestriction(bool value){this->_modes[4].second = value;}
 

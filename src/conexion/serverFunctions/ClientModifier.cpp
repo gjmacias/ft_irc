@@ -79,7 +79,7 @@ void Server::ClientNickname(std::string cmd, int fd)
 			SendResponse(ERR_NOTREGISTERED(cmd), fd);
 		else
 		{
-			//revisar// std::string oldnick = client->GetNickName();
+			revisar// std::string oldnick = client->GetNickName();
 			// client->SetNickname(cmd);
 			// if(!oldnick.empty() && oldnick != cmd)
 			// {
