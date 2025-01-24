@@ -20,7 +20,6 @@
 # include <cstdlib>
 # include <cstring>
 # include <cerrno>
-# include <cstdlib>
 
 // Proyect Libraries
 # include "Client.hpp"
@@ -29,10 +28,7 @@
 # include "Information.hpp"
 # include "AllFunctions.h"
 
-class Client;
 class Channel;
-
-class Client;
 
 class Client;
 

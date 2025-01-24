@@ -24,7 +24,6 @@ Server &Server::operator=(Server const &src)
 		this->_mainSocketFd = src._mainSocketFd;
 		this->_password = src._password;
 		this->_clients = src._clients;
-		this->_clients = src._clients;
 		this->_pollSocketFds = src._pollSocketFds;
 	}
 	return *this;
