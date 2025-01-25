@@ -163,9 +163,11 @@ void	Server::NotExistCh(std::vector<std::pair<std::string, std::string> >&token,
         RPL_ENDOFNAMES(GetClient(fd)->GetNickName(),newChannel.GetName()),fd);
 }
 
-void	Server::JoinCommand(std::string &cmd, int &fd)
+void	Server::JoinCommand(std::vector<std::string> &splited_cmd, int &fd)
 {
-    std::vector < std::pair < std::string, std::string >> token;
+    (void)splited_cmd;
+	(void)fd;
+	std::vector < std::pair < std::string, std::string >> token;
     if (!SplitJoin(token, cmd, fd))
     {
         senderror(461, GetClient(fd)->GetNickName(), GetClient(fd)->GetFd(), " :Not enough parameters\r\n");

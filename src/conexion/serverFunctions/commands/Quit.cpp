@@ -53,9 +53,11 @@ std::string	SplitQuit(std::string cmd)
 	return (reason);
 }
 
-void	Server::QuitCommand(std::string &cmd, int &fd)
+void	Server::QuitCommand(std::vector<std::string> &splited_cmd, int &fd)
 {
-    std::string	reason;
+    (void)splited_cmd;
+	(void)fd;
+	std::string	reason;
 	std::string	rpl;
 	size_t		i;
 

@@ -102,9 +102,11 @@ std::string Server::SplitCmdKick(std::string cmd, std::vector<std::string> &tmp,
 	return (reason);
 }
 
-void	Server::KickCommand(std::string &cmd, int &fd)
+void	Server::KickCommand(std::vector<std::string> &splited_cmd, int &fd)
 {
-    std::vector<std::string>	tmp;
+    (void)splited_cmd;
+	(void)fd;
+	std::vector<std::string>	tmp;
 	std::string					reason;
 	std::string					user;
 	std::stringstream			ss;

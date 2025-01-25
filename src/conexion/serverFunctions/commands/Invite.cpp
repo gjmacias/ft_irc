@@ -11,8 +11,10 @@ en función de las condiciones detectadas.
 */
 
 
-void	Server::InviteCommand(std::string &cmd, int &fd)
+void	Server::InviteCommand(std::vector<std::string> &splited_cmd, int &fd)
 {
+	(void)splited_cmd;
+	(void)fd;
 	std::vector<std::string> smcd = split_cmd(cmd);
 	if (scmd.size() < 3)
 		{
