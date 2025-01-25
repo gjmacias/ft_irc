@@ -5,6 +5,7 @@
 #									KICK									  #
 ###############################################################################
 */
+Revissar/*
 void	FindK(std::string cmd, std::string tofind, std::string &str)
 {
 	std::string	tmp;
@@ -101,6 +102,7 @@ std::string Server::SplitCmdKick(std::string cmd, std::vector<std::string> &tmp,
 	}
 	return (reason);
 }
+*/
 
 void	Server::KickCommand(std::vector<std::string> &splited_cmd, int &fd)
 {

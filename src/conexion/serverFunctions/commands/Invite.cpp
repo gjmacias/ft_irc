@@ -13,9 +13,9 @@ en función de las condiciones detectadas.
 
 void	Server::InviteCommand(std::vector<std::string> &splited_cmd, int &fd)
 {
-	(void)splited_cmd;
+	//(void)splited_cmd;
 	(void)fd;
-	std::vector<std::string> smcd = split_cmd(cmd);
+	std::vector<std::string> scmd = splited_cmd;
 	if (scmd.size() < 3)
 		{
 			senderror(461, GetClient(fd)->GetNickName(), fd, " :Not enough parameters\r\n");

@@ -5,7 +5,7 @@
 #									Join									  #
 ###############################################################################
 */
-int	Server::SplitJoin(std::vector<std::pair<std::string, std::string> > &token, std::string cmd, int fd)
+/*int	Server::SplitJoin(std::vector<std::pair<std::string, std::string> > &token, std::string cmd, int fd)
 {
 	std::vector<std::string>	tmp;
 	std::string					ChStr;
@@ -73,7 +73,7 @@ int	Server::SplitJoin(std::vector<std::pair<std::string, std::string> > &token, 
 			token[i].first.erase(token[i].first.begin());
 	}
 	return (1);
-}
+}*/
 
 int	Server::SearchForClients(std::string nickname)
 {
@@ -168,11 +168,11 @@ void	Server::JoinCommand(std::vector<std::string> &splited_cmd, int &fd)
     (void)splited_cmd;
 	(void)fd;
 	std::vector < std::pair < std::string, std::string >> token;
-    if (!SplitJoin(token, cmd, fd))
+    /*if (!SplitJoin(token, cmd, fd))
     {
         senderror(461, GetClient(fd)->GetNickName(), GetClient(fd)->GetFd(), " :Not enough parameters\r\n");
         return ;
-    }
+    }*/
     if (token.size() > 10)
     {
         senderror(407, GetClient(fd)->GetNickName(), GetClient(fd)->GetFd(), " :Too many channels\r\n");

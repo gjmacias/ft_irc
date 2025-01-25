@@ -5,7 +5,7 @@
 #									Quit									  #
 ###############################################################################
 */
-void	FindQ(std::string cmd, std::string tofind, std::string &str)
+/*void	FindQ(std::string cmd, std::string tofind, std::string &str)
 {
 	size_t		i;
 	std::string	tmp;
@@ -51,17 +51,17 @@ std::string	SplitQuit(std::string cmd)
 		reason.insert(reason.begin(), ':');
 	}
 	return (reason);
-}
+}*/
 
 void	Server::QuitCommand(std::vector<std::string> &splited_cmd, int &fd)
 {
     (void)splited_cmd;
 	(void)fd;
-	std::string	reason;
+	std::vector<std::string>	reason;
 	std::string	rpl;
 	size_t		i;
 
-	reason = SplitQuit(cmd);
+	reason = splited_cmd;
 	for (i = 0; i <channels.size(); i++)
 	{
 		if (channels[i].get_client(fd))
@@ -88,7 +88,7 @@ void	Server::QuitCommand(std::vector<std::string> &splited_cmd, int &fd)
 		}
 	}
 	std::cout << RED << "Client <" << fd << "> Disconnected" << WHITE << std::endl;
-	RmChannels(fd);
+	RemoveChannels(fd);
 	RemoveClients(fd);
 	RemoveFds(fd);
 	close(fd);

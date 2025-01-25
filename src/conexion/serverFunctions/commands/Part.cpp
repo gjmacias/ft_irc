@@ -11,17 +11,17 @@ void	Server::PartCommand(std::vector<std::string> &splited_cmd, int &fd)
 	(void)splited_cmd;
 	(void)fd;
 	std::vector<std::string>	tmp;
-	std::string					reason;
+	std::vector<std::string>	reason;
 	std::stringstream			ss;
 	bool						flag;
 	size_t						i;
 	size_t						j;
 
-	if (!SplitCmdPart(cmd, tmp, reason, fd))
+	/*if (!SplitCmdPart(cmd, tmp, reason, fd))
 	{
 		senderror(461, GetClient(fd)->GetNickName(), GetClient(fd)->GetFd(), " :Not enough  parameters\r\n");
 		return ;
-	}
+	}*/
 	for (i = 0, i < tmp.size(); i++)
 	{
 		flag = false;
