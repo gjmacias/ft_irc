@@ -36,13 +36,19 @@ void Server::ClientAuthentification(std::string cmd, int fd)
 			SendResponse(ERR_INCORPASS(std::string("*")), fd);
 	}
 	else
-		SendResponse(ERR_ALREADYREGISTERED(GetClient(fd)->GetNickName()), fd);
+		SendResponse(ERR_ALREADYREGISTERED(GetClient(fd)->GetNickname()), fd);
 }
 
 void Server::ClientNickname(std::string cmd, int fd)
 {
 	Client		*client = GetClient(fd);
 	size_t		position;
+
+	if (!(client->GetIsRegistered()))
+	{
+		SendResponse(ERR_NOTREGISTERED(cmd), fd);
+		return ;
+	}
 
 	cmd = cmd.substr(4);
 	position = cmd.find_first_not_of("\t\v ");
@@ -61,9 +67,9 @@ void Server::ClientNickname(std::string cmd, int fd)
 		return;
 	}
 
-	if (IsNickNameInUse(cmd) && client->GetNickName() != cmd)
+	if (IsNickNameInUse(cmd) && client->GetNickname() != cmd)
 	{
-		if(client->GetNickName().empty())
+		if(client->GetNickname().empty())
 			client->SetNickname("*");
 	    SendResponse(ERR_NICKINUSE(std::string(cmd)), fd); 
 		return;
@@ -73,32 +79,21 @@ void Server::ClientNickname(std::string cmd, int fd)
 		SendResponse(ERR_ERRONEUSNICK(std::string(cmd)), fd);
 		return;
 	}
+	
+	std::string oldnick = client->GetNickname();
+
+	if (client->GetNickname().empty() || cmd == oldnick)
+		return;
 	else
 	{
-		if (!(client->GetIsRegistered()))
-			SendResponse(ERR_NOTREGISTERED(cmd), fd);
-		else
-		{
-			//revisar// std::string oldnick = client->GetNickName();
-			// client->SetNickname(cmd);
-			// if(!oldnick.empty() && oldnick != cmd)
-			// {
-			// 	if(oldnick == "*" && !client->GetUserName().empty())
-			// 	{
-			// 		client->SetIsLogedInServer(true);
-			// 		SendResponse(RPL_CONNECTED(client->GetNickName()), fd);
-			// 		SendResponse(RPL_NICKCHANGE(client->GetNickName(), cmd), fd);
-			// 	}
-			// 	else
-			// 		SendResponse(RPL_NICKCHANGE(oldnick,cmd), fd);
-			// 	return;
-			// }			
-		}
-	}
+		client->SetNickname(cmd);
+		SendResponse(RPL_NICKCHANGE(oldnick, cmd), fd);
+	}	
+
 	if(IsOnlyRegistered(client))
 	{
 		client->SetIsLogedInServer(true);
-		SendResponse(RPL_CONNECTED(client->GetNickName()), fd);
+		SendResponse(RPL_CONNECTED(client->GetNickname()), fd);
 	}
 }
 
@@ -108,14 +103,14 @@ void	Server::ClientUsername(std::vector<std::string> &splited_cmd, int fd)
 
 	if(client && splited_cmd.size() < 5)
 	{
-		SendResponse(ERR_NOTENOUGHPARAM(client->GetNickName()), fd);
+		SendResponse(ERR_NOTENOUGHPARAM(client->GetNickname()), fd);
 		return; 
 	}
 	if(!(client) || !(client->GetIsRegistered()))
 		SendResponse(ERR_NOTREGISTERED(std::string("*")), fd);
-	else if (client && !(client->GetUserName().empty()))
+	else if (client && !(client->GetUsername().empty()))
 	{
-		SendResponse(ERR_ALREADYREGISTERED(client->GetNickName()), fd);
+		SendResponse(ERR_ALREADYREGISTERED(client->GetNickname()), fd);
 		return;
 	}
 	else
@@ -124,6 +119,6 @@ void	Server::ClientUsername(std::vector<std::string> &splited_cmd, int fd)
 	if(IsOnlyRegistered(client))
 	{
 		client->SetIsLogedInServer(true);
-		SendResponse(RPL_CONNECTED(client->GetNickName()), fd);
+		SendResponse(RPL_CONNECTED(client->GetNickname()), fd);
 	}
 }

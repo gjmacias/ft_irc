@@ -12,7 +12,7 @@ bool Channel::ChangeClientToAdmin(std::string nickname)
 
 	while (i < this->_clients.size())
 	{
-		if(this->_clients[i]->GetNickName() == nickname)
+		if(this->_clients[i]->GetNickname() == nickname)
 			break;
 		i++;
 	}
@@ -31,7 +31,7 @@ bool Channel::ChangeAdminToClient(std::string nickname)
 
 	while (i < this->_admins.size())
 	{
-		if(this->_admins[i]->GetNickName() == nickname)
+		if(this->_admins[i]->GetNickname() == nickname)
 			break;
 		i++;
 	}

@@ -43,10 +43,10 @@ Channel &Channel::operator=(Channel const &src)
 ###############################################################################
 */
 void	Channel::SetModesInvitOnly(bool invit_only){this->_modes[0].second = invit_only;}
-void	Channel::SetModesTopic(bool topic){this->_modes[1].second = topic;}
-void	Channel::SetModesKey(bool key){this->_modes[2].second = key;}			//REVISAR
-void	Channel::SetModesLimit(bool limit){this->_modes[3].second = limit;}
-void	Channel::SetModesTopicRestriction(bool value){this->_modes[4].second = value;}
+void	Channel::SetModesTopicRestriction(bool restricted){this->_modes[1].second = restricted;}
+void	Channel::SetModesChannelKey(bool key){this->_modes[2].second = key;}
+void	Channel::SetModesOperatorPrivilege(bool privilege){this->_modes[3].second = privilege;}
+void	Channel::SetModesLimit(bool limit){this->_modes[4].second = limit;}
 
 void	Channel::SetName(std::string name){this->_name = name;}
 void	Channel::SetPassword(std::string password){this->_password = password;}
@@ -60,10 +60,10 @@ void	Channel::SetModeAtindex(size_t index, bool mode){this->_modes[index].second
 ###############################################################################
 */
 bool	Channel::GetModesInvitOnly(){return this->_modes[0].second;}
-bool	Channel::GetModesTopic(){return this->_modes[1].second;}
-bool	Channel::GetModesKey(){return this->_modes[2].second;}
-bool	Channel::GetModesLimit(){return this->_modes[3].second;}
-bool	Channel::GetModesTopicRestriction(){return this->_modes[4].second;}
+bool	Channel::GetModesTopicRestriction(){return this->_modes[1].second;}
+bool	Channel::GetModesChannelKey(){return this->_modes[2].second;}
+bool	Channel::GetModesOperatorPrivilege(){return this->_modes[3].second;}
+bool	Channel::GetModesLimit(){return this->_modes[4].second;}
 
 std::string	Channel::GetName(){return this->_name;}
 std::string	Channel::GetPassword(){return this->_password;}
@@ -103,11 +103,11 @@ Client	*Channel::GetAdmin(int fd)
 Client* Channel::GetClientByNickname(std::string nickname)
 {
 	for (std::vector<Client *>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it){
-		if ((*it)->GetNickName() == nickname)
+		if ((*it)->GetNickname() == nickname)
 			return (*it);
 	}
 	for (std::vector<Client *>::iterator it = this->_admins.begin(); it != this->_admins.end(); ++it){
-		if ((*it)->GetNickName() == nickname)
+		if ((*it)->GetNickname() == nickname)
 			return (*it);
 	}
 	return NULL;
@@ -132,12 +132,12 @@ bool	Channel::IsClientInChannel(std::string nickname)
 {
 	for(size_t i = 0; i < this->_clients.size(); i++)
 	{
-		if(this->_clients[i]->GetNickName() == nickname)
+		if(this->_clients[i]->GetNickname() == nickname)
 			return true;
 	}
 	for(size_t i = 0; i < this->_admins.size(); i++)
 	{
-		if(this->_admins[i]->GetNickName() == nickname)
+		if(this->_admins[i]->GetNickname() == nickname)
 			return true;
 	}
 	return false;
@@ -151,7 +151,7 @@ std::string Channel::ListOfClients()
 
 	for(size_t i = 0; i < this->_admins.size(); i++)
 	{
-		list += "@" + this->_admins[i]->GetNickName();
+		list += "@" + this->_admins[i]->GetNickname();
 		if((i + 1) < this->_admins.size())
 			list += " ";
 	}
@@ -159,7 +159,7 @@ std::string Channel::ListOfClients()
 		list += " ";
 	for(size_t i = 0; i < this->_clients.size(); i++)
 	{
-		list += this->_clients[i]->GetNickName();
+		list += this->_clients[i]->GetNickname();
 		if((i + 1) < this->_clients.size())
 			list += " ";
 	}

@@ -28,10 +28,10 @@ public:
 
 		//		SETTERS
 	void		SetModesInvitOnly(bool invit_only);
-	void		SetModesTopic(bool topic);
-	void		SetModesKey(bool key);
-	void		SetModesLimit(bool limit);
 	void		SetModesTopicRestriction(bool restricted);
+	void		SetModesChannelKey(bool key);
+	void		SetModesOperatorPrivilege(bool privilege);
+	void		SetModesLimit(bool limit);
 
 	void		SetName(std::string name);
 	void		SetPassword(std::string password);
@@ -41,10 +41,10 @@ public:
 
 		//		GETTERS
 	bool		GetModesInvitOnly();
-	bool		GetModesTopic();
-	bool		GetModesKey();
-	bool		GetModesLimit();
 	bool		GetModesTopicRestriction();
+	bool		GetModesChannelKey();
+	bool		GetModesOperatorPrivilege();
+	bool		GetModesLimit();
 
 	std::string GetName();
 	std::string GetPassword();

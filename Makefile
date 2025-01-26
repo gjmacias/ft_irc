@@ -25,6 +25,7 @@ SRC			=	main.cpp \
 				conexion/channelFunctions/RemoveChannel.cpp \
 				conexion/channelFunctions/SenderChannel.cpp \
 				\
+				conexion/serverFunctions/AddServer.cpp \
 				conexion/serverFunctions/ClientModifier.cpp \
 				conexion/serverFunctions/ParseAndExecute.cpp \
 				conexion/serverFunctions/RemoverServer.cpp \
