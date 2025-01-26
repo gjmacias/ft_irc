@@ -42,7 +42,7 @@ void	Server::ParseAndExecute(std::string &cmd, int fd)
 		else if (UpperCase(splited_cmd[0]) == "TOPIC")
 			TopicCommand(splited_cmd, fd);
 		else if (splited_cmd.size())
-			SendResponse(ERR_CMDNOTFOUND(GetClient(fd)->GetNickName(), splited_cmd[0]), fd);
+			SendResponse(ERR_CMDNOTFOUND(GetClient(fd)->GetNickname(), splited_cmd[0]), fd);
 	}
 	else if (!IsRegisteredAndLoged(fd))
 		SendResponse(ERR_NOTREGISTERED(std::string("*")), fd);

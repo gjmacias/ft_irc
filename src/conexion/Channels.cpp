@@ -103,11 +103,11 @@ Client	*Channel::GetAdmin(int fd)
 Client* Channel::GetClientByNickname(std::string nickname)
 {
 	for (std::vector<Client *>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it){
-		if ((*it)->GetNickName() == nickname)
+		if ((*it)->GetNickname() == nickname)
 			return (*it);
 	}
 	for (std::vector<Client *>::iterator it = this->_admins.begin(); it != this->_admins.end(); ++it){
-		if ((*it)->GetNickName() == nickname)
+		if ((*it)->GetNickname() == nickname)
 			return (*it);
 	}
 	return NULL;
@@ -132,12 +132,12 @@ bool	Channel::IsClientInChannel(std::string nickname)
 {
 	for(size_t i = 0; i < this->_clients.size(); i++)
 	{
-		if(this->_clients[i]->GetNickName() == nickname)
+		if(this->_clients[i]->GetNickname() == nickname)
 			return true;
 	}
 	for(size_t i = 0; i < this->_admins.size(); i++)
 	{
-		if(this->_admins[i]->GetNickName() == nickname)
+		if(this->_admins[i]->GetNickname() == nickname)
 			return true;
 	}
 	return false;
@@ -151,7 +151,7 @@ std::string Channel::ListOfClients()
 
 	for(size_t i = 0; i < this->_admins.size(); i++)
 	{
-		list += "@" + this->_admins[i]->GetNickName();
+		list += "@" + this->_admins[i]->GetNickname();
 		if((i + 1) < this->_admins.size())
 			list += " ";
 	}
@@ -159,7 +159,7 @@ std::string Channel::ListOfClients()
 		list += " ";
 	for(size_t i = 0; i < this->_clients.size(); i++)
 	{
-		list += this->_clients[i]->GetNickName();
+		list += this->_clients[i]->GetNickname();
 		if((i + 1) < this->_clients.size())
 			list += " ";
 	}

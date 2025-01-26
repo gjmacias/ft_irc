@@ -56,7 +56,7 @@ Client	*Server::GetClient_Nickame(std::string nickname)
 {
 	for (size_t i = 0; i < this->_clients.size(); i++)
 	{
-		if (this->_clients[i].GetNickName() == nickname)
+		if (this->_clients[i].GetNickname() == nickname)
 			return &this->_clients[i];
 	}
 	return NULL;
@@ -67,7 +67,7 @@ Channel *Server::GetChannel(std::string name)
 	for (size_t i = 0; i < this->_channels.size(); i++)
 	{
 		if (this->_channels[i].GetName() == name)
-			return &channels[i];
+			return &_channels[i];
 	}
 	return NULL;
 }
