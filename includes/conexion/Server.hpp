@@ -58,6 +58,7 @@ public:
 	std::string	GetPassword();
 	Client		*GetClient(int fd);
 	Client		*GetClient_Nickame(std::string nickname);
+	Channel		*GetChannel(std::string name);
 
 		//		MAIN FUNCTIONS
 	static void	SignalHandler(int signum);
@@ -72,7 +73,10 @@ public:
 
 
 //	##################	SERVER_FUNCTIONS	##################
-		//		Client Involved
+		//		Adders Server
+	void		AddChannel(Channel newChannel);
+	
+			//		Client Involved
 	void		ClientAuthentification(std::string cmd, int fd);
 	void		ClientNickname(std::string cmd, int fd);
 	void		ClientUsername(std::vector<std::string> &splited_cmd, int fd);

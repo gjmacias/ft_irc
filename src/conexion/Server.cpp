@@ -62,6 +62,16 @@ Client	*Server::GetClient_Nickame(std::string nickname)
 	return NULL;
 }
 
+Channel *Server::GetChannel(std::string name)
+{
+	for (size_t i = 0; i < this->_channels.size(); i++)
+	{
+		if (this->_channels[i].GetName() == name)
+			return &channels[i];
+	}
+	return NULL;
+}
+
 /*
 ###############################################################################
 #								FUNCTIONS									  #

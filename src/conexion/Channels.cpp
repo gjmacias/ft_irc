@@ -43,10 +43,10 @@ Channel &Channel::operator=(Channel const &src)
 ###############################################################################
 */
 void	Channel::SetModesInvitOnly(bool invit_only){this->_modes[0].second = invit_only;}
-void	Channel::SetModesTopic(bool topic){this->_modes[1].second = topic;}
-void	Channel::SetModesKey(bool key){this->_modes[2].second = key;}			REVISAR
-void	Channel::SetModesLimit(bool limit){this->_modes[3].second = limit;}
-void	Channel::SetModesTopicRestriction(bool value){this->_modes[4].second = value;}
+void	Channel::SetModesTopicRestriction(bool restricted){this->_modes[1].second = restricted;}
+void	Channel::SetModesChannelKey(bool key){this->_modes[2].second = key;}
+void	Channel::SetModesOperatorPrivilege(bool privilege){this->_modes[3].second = privilege;}
+void	Channel::SetModesLimit(bool limit){this->_modes[4].second = limit;}
 
 void	Channel::SetName(std::string name){this->_name = name;}
 void	Channel::SetPassword(std::string password){this->_password = password;}
@@ -60,10 +60,10 @@ void	Channel::SetModeAtindex(size_t index, bool mode){this->_modes[index].second
 ###############################################################################
 */
 bool	Channel::GetModesInvitOnly(){return this->_modes[0].second;}
-bool	Channel::GetModesTopic(){return this->_modes[1].second;}
-bool	Channel::GetModesKey(){return this->_modes[2].second;}
-bool	Channel::GetModesLimit(){return this->_modes[3].second;}
-bool	Channel::GetModesTopicRestriction(){return this->_modes[4].second;}
+bool	Channel::GetModesTopicRestriction(){return this->_modes[1].second;}
+bool	Channel::GetModesChannelKey(){return this->_modes[2].second;}
+bool	Channel::GetModesOperatorPrivilege(){return this->_modes[3].second;}
+bool	Channel::GetModesLimit(){return this->_modes[4].second;}
 
 std::string	Channel::GetName(){return this->_name;}
 std::string	Channel::GetPassword(){return this->_password;}

@@ -32,6 +32,8 @@ void Server::RemoveClient(int fd)
 
 void	Server::RemoveClientFromChannels(int fd)
 {
+	std::string	response;
+
 	for (size_t i = 0; i < this->_channels.size(); i++)
 	{
 		int flag = 0;
@@ -53,8 +55,8 @@ void	Server::RemoveClientFromChannels(int fd)
 		}
 		if (flag)
 		{
-			 revisar// std::string rpl = ":" + GetClient(fd)->GetNickName() + "!~" + GetClient(fd)->GetUserName() + "@localhost QUIT Quit\r\n";
-			 revisar// this->_channels[i].sendTo_all(rpl);
+			response = ":" + GetClient(fd)->GetNickName() + "!~" + GetClient(fd)->GetUserName() + "@localhost QUIT Quit\r\n";
+			this->_channels[i].SendEveryone(response);
 		}
 	}
 }
