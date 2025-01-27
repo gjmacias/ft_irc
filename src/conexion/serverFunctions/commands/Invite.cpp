@@ -13,49 +13,46 @@ en función de las condiciones detectadas.
 
 void	Server::InviteCommand(std::vector<std::string> &splited_cmd, int &fd)
 {
-	//(void)splited_cmd;
-	(void)fd;
-	std::vector<std::string> scmd = splited_cmd;
-	if (scmd.size() < 3)
+	if (splited_cmd.size() < 3)
 		{
-			senderror(461, GetClient(fd)->GetNickName(), fd, " :Not enough parameters\r\n");
+			SendError(461, GetClient(fd)->GetNickname(), fd, " :Not enough parameters\r\n");
 			return ;
 		}
-	std::channelname = smcd[2].substr(1);
-	if (scmd[2][0] != '#' || !GetChannel(channelname))
+	std::string channelname = splited_cmd[2].substr(1);
+	if (splited_cmd[2][0] != '#' || !GetChannel(channelname))
 	{
-		senderror(403, channelname, fd, " :No such channel\r\n");
+		SendError(403, channelname, fd, " :No such channel\r\n");
 		return ;
 	}
-	if (!(GetChannel(channelname)->get_client(fd)) && !(GetChannel(channelname)->get_admin(fd)))
+	if (!(GetChannel(channelname)->GetClient(fd)) && !(GetChannel(channelname)->GetAdmin(fd)))
 	{
-		senderror(442, channelname, fd, " :You're not on that channel\r\n");
+		SendError(442, channelname, fd, " :You're not on that channel\r\n");
 		return ;
 	}
-	if (GetChannel(channelname)->GetClientInChannel(csmd[1]))
+	if (GetChannel(channelname)->IsClientInChannel(splited_cmd[1]))
 	{
-		senderror(443, GetClient(fd)->GetNickName(), channelname, fd, " :is already on channel\r\n");
+		SendError(443, GetClient(fd)->GetNickname(), channelname, fd, " :is already on channel\r\n");
 		return ;
 	}
-	Client	*clt = GetClientNick(scmd[1]);
+	Client	*clt = GetClientNick(splited_cmd[1]);
 	if (!clt)
 	{
-		senderror(401, scmd[1], fd, " :No such Nick\r\n");
+		SendError(401, splited_cmd[1], fd, " :No such Nick\r\n");
 		return ;
 	}
-	if (GetChannel(channelname)->GetInvitOnly() && !GetChannel(channelname)->get_admin(fd))
+	if (GetChannel(channelname)->GetModesInvitOnly() && !GetChannel(channelname)->GetAdmin(fd))
 	{
-		senderror(482, GetChannel(channelname)->get_client(fd)->GetNickName(), fd, " :You're not channel operator\r\n");
+		SendError(482, GetChannel(channelname)->GetClient(fd)->GetNickname(), fd, " :You're not channel operator\r\n");
 		return ;
 	}
 	if (GetChannel(channelname)->GetLimit() && GetChannel(channelname)->GetClientsNumber() >= GetChannel(channelname)->GetLimit())
 	{
-		senderror(473, GetChannel(channelname)->get_client(fd)->GetNickName(), channelname, fd, " :Cannot invite to channel (+i)\r\n");
+		SendError(473, GetChannel(channelname)->GetClient(fd)->GetNickname(), channelname, fd, " :Cannot invite to channel (+i)\r\n");
 		return ;
 	}
 	clt->AddChannelInvite(channelname);
-	std::string rep1 = ": 341 " + GetClient(fd)->GetNickName() + " " + clt->GetNickName() + " " + scmd[2] + "\r\n";
-	_sendResponse(rep1, fd);
-	std::string rep2 = ":" + clt->getHostName() + " INVITE " + clt->GetNickName() + " " + scmd[2] + "\r\n";
-	_sendResponse(rep2, clt->GetFd());
+	std::string rep1 = ": 341 " + GetClient(fd)->GetNickname() + " " + clt->GetNickname() + " " + splited_cmd[2] + "\r\n";
+	SendResponse(rep1, fd);
+	std::string rep2 = ":" + clt->getHostName() + " INVITE " + clt->GetNickname() + " " + splited_cmd[2] + "\r\n";
+	SendResponse(rep2, clt->GetFd());
 }
