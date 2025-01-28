@@ -6,33 +6,33 @@
 ###############################################################################
 */
 
-void	Server::CheckForChannels_Clients(std::vector<std::string> &tmp, int fd)
+void	Server::CheckForChannels_Clients(std::vector<std::string> &splited_cmd, int fd)
 {
-	for (size_t i = 0; i < tmp.size(); i++)
+	for (size_t i = 0; i < splited_cmd.size(); i++)
 	{
-		if (tmp[i][0] == '#')
+		if (splited_cmd[i][0] == '#')
 		{
-			tmp[i].erase(tmp[i].begin());
-			if (!GetChannel(tmp[i]))//ERR_NOSUCHNICK (401) // if the channel doesn't exist
+			splited_cmd[i].erase(splited_cmd[i].begin());
+			if (!GetChannel(splited_cmd[i]))//ERR_NOSUCHNICK (401) // if the channel doesn't exist
 				{
-					senderror(401, "#" + tmp[i], GetClient(fd)->GetFd(), " :No such nick/channel\r\n"); 
-					tmp.erase(tmp.begin() + i); 
+					senderror(401, "#" + splited_cmd[i], GetClient(fd)->GetFd(), " :No such nick/channel\r\n"); 
+					splited_cmd.erase(splited_cmd.begin() + i); 
 					i--;
 				}
-			else if (!GetChannel(tmp[i])->GetClientInChannel(GetClient(fd)->GetNickName())) //ERR_CANNOTSENDTOCHAN (404) // if the client is not in the channel
+			else if (!GetChannel(splited_cmd[i])->GetClientInChannel(GetClient(fd)->GetNickName())) //ERR_CANNOTSENDTOCHAN (404) // if the client is not in the channel
 				{
-					senderror(404, GetClient(fd)->GetNickName(), "#" + tmp[i], GetClient(fd)->GetFd(), " :Cannot send to channel\r\n");
-					tmp.erase(tmp.begin() + i);
+					senderror(404, GetClient(fd)->GetNickName(), "#" + splited_cmd[i], GetClient(fd)->GetFd(), " :Cannot send to channel\r\n");
+					splited_cmd.erase(splited_cmd.begin() + i);
 					i--;
 				}
-			else tmp[i] = "#" + tmp[i];
+			else splited_cmd[i] = "#" + splited_cmd[i];
 		}
 		else
 		{
-			if (!GetClientNick(tmp[i]))//ERR_NOSUCHNICK (401) // if the client doesn't exist
+			if (!GetClient_Nickame(splited_cmd[i]))//ERR_NOSUCHNICK (401) // if the client doesn't exist
 				{
-					senderror(401, tmp[i], GetClient(fd)->GetFd(), " :No such nick/channel\r\n");
-					tmp.erase(tmp.begin() + i);
+					senderror(401, splited_cmd[i], GetClient(fd)->GetFd(), " :No such nick/channel\r\n");
+					splited_cmd.erase(splited_cmd.begin() + i);
 					i--;
 				}
 		}
@@ -41,11 +41,7 @@ void	Server::CheckForChannels_Clients(std::vector<std::string> &tmp, int fd)
 
 void	Server::PrivateMessageCommand(std::vector<std::string> &splited_cmd, int &fd)
 {
-	(void)splited_cmd;
-	(void)fd;
-	std::vector<std::string> tmp = splited_cmd;
-
-	if (!tmp.size())//ERR_NORECIPIENT (411) // if the client doesn't specify the recipient
+	if (!splited_cmd.size())//ERR_NORECIPIENT (411) // if the client doesn't specify the recipient
 		{
 			senderror(411, GetClient(fd)->GetNickName(), GetClient(fd)->GetFd(), " :No recipient given (PRIVMSG)\r\n");
 			return;
@@ -55,24 +51,24 @@ void	Server::PrivateMessageCommand(std::vector<std::string> &splited_cmd, int &f
 			senderror(412, GetClient(fd)->GetNickName(), GetClient(fd)->GetFd(), " :No text to send\r\n");
 			return;
 		}
-	if (tmp.size() > 10) //ERR_TOOMANYTARGETS (407) // if the client send the message to more than 10 clients
+	if (splited_cmd.size() > 10) //ERR_TOOMANYTARGETS (407) // if the client send the message to more than 10 clients
 		{
 			senderror(407, GetClient(fd)->GetNickName(), GetClient(fd)->GetFd(), " :Too many recipients\r\n");
 			return;
 		}
-	CheckForChannels_Clients(tmp, fd); // check if the channels and clients exist
-	for (size_t i = 0; i < tmp.size(); i++)
+	CheckForChannels_Clients(splited_cmd, fd); // check if the channels and clients exist
+	for (size_t i = 0; i < splited_cmd.size(); i++)
 	{// send the message to the clients and channels
-		if (tmp[i][0] == '#')
+		if (splited_cmd[i][0] == '#')
 		{
-			tmp[i].erase(tmp[i].begin());
-			std::string resp = ":" + GetClient(fd)->GetNickName() + "!~" + GetClient(fd)->GetUserName() + "@localhost PRIVMSG #" + tmp[i] + " :" + message + "\r\n";
-			GetChannel(tmp[i])->sendTo_all(resp, fd);
+			splited_cmd[i].erase(splited_cmd[i].begin());
+			std::string resp = ":" + GetClient(fd)->GetNickName() + "!~" + GetClient(fd)->GetUsername() + "@localhost PRIVMSG #" + splited_cmd[i] + " :" + message + "\r\n";
+			GetChannel(splited_cmd[i])->SendMeToAll(resp, fd);
 		}
 		else
 		{
-			std::string resp = ":" + GetClient(fd)->GetNickName() + "!~" + GetClient(fd)->GetUserName() + "@localhost PRIVMSG " + tmp[i] + " :" + message + "\r\n";
-			_sendResponse(resp, GetClientNick(tmp[i])->GetFd());
+			std::string resp = ":" + GetClient(fd)->GetNickName() + "!~" + GetClient(fd)->GetUsername() + "@localhost PRIVMSG " + splited_cmd[i] + " :" + message + "\r\n";
+			SendResponse(resp, GetClient_Nickame(splited_cmd[i])->GetFd());
 		}
 	}
 }

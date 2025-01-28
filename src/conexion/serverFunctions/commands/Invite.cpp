@@ -34,7 +34,7 @@ void	Server::InviteCommand(std::vector<std::string> &splited_cmd, int &fd)
 		SendError(443, GetClient(fd)->GetNickname(), channelname, fd, " :is already on channel\r\n");
 		return ;
 	}
-	Client	*clt = GetClientNick(splited_cmd[1]);
+	Client	*clt = GetClient(splited_cmd[1]);
 	if (!clt)
 	{
 		SendError(401, splited_cmd[1], fd, " :No such Nick\r\n");
@@ -50,7 +50,7 @@ void	Server::InviteCommand(std::vector<std::string> &splited_cmd, int &fd)
 		SendError(473, GetChannel(channelname)->GetClient(fd)->GetNickname(), channelname, fd, " :Cannot invite to channel (+i)\r\n");
 		return ;
 	}
-	clt->AddChannelInvite(channelname);
+	clt->ImInChannel(channelname);//Duda si esto va así
 	std::string rep1 = ": 341 " + GetClient(fd)->GetNickname() + " " + clt->GetNickname() + " " + splited_cmd[2] + "\r\n";
 	SendResponse(rep1, fd);
 	std::string rep2 = ":" + clt->getHostName() + " INVITE " + clt->GetNickname() + " " + splited_cmd[2] + "\r\n";

@@ -92,8 +92,8 @@ public:
 
 		//		Sender Server
 	void		SendResponse(std::string response, int fd);
-	//void		SendError(int fd, int code, std::string clientname, std::string msg);
 	void		SendError(int fd, int code, std::string clientname, std::string channelname, std::string msg);
+	void		SendError(int fd, int code, std::string clientname, std::string msg);
 
 		//		Validations Server
 	bool		IsRegisteredAndLoged(int fd);

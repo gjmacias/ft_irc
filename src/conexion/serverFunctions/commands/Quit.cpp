@@ -31,65 +31,61 @@
 std::string	SplitQuit(std::string cmd)
 {
 	std::istringstream	stm(cmd);
-	std::string			reason;
+	std::string			splited_cmd;
 	std::string			str;
 	size_t				i;
 	stm >> str;
-	FindQ(cmd, str, reason);
-	if (reason.empty())
+	FindQ(cmd, str, splited_cmd);
+	if (splited_cmd.empty())
 		return (std::string("Quit"));
-	if (reason[0] != ':')//if the message doesn't start with ':'
+	if (splited_cmd[0] != ':')//if the message doesn't start with ':'
 	{
-		for (i = 0; i < reason.size(); i++)
+		for (i = 0; i < splited_cmd.size(); i++)
 		{
-			if (reason[i] == ' ')
+			if (splited_cmd[i] == ' ')
 			{
-				reason.erase(reason.begin() + i, reason.end());
+				splited_cmd.erase(splited_cmd.begin() + i, splited_cmd.end());
 				break;
 			}
 		}
-		reason.insert(reason.begin(), ':');
+		splited_cmd.insert(splited_cmd.begin(), ':');
 	}
-	return (reason);
+	return (splited_cmd);
 }*/
 
 void	Server::QuitCommand(std::vector<std::string> &splited_cmd, int &fd)
 {
-    (void)splited_cmd;
-	(void)fd;
-	std::vector<std::string>	reason;
 	std::string	rpl;
 	size_t		i;
 
-	reason = splited_cmd;
 	for (i = 0; i <channels.size(); i++)
 	{
-		if (channels[i].get_client(fd))
+		if (channels[i].GetClient(fd))
 		{
-			channels[i].remove_client(fd);
+			channels[i].RemoveClient(fd);
 			if (channels[i].GetClientsNumber() == 0)
 				channels.erase(channels.begin() + i);
 			else
 			{
-				rpl = ":" + GetClient(fd)->GetNickName() + "!~" + GetClient(fd)->GetUserName() + "@localhost QUIT " + reason + "\r\n";
-				channels[i].sendTo_all(rpl);
+				rpl = ":" + GetClient(fd)->GetNickName() + "!~" + GetClient(fd)->GetUserName() + "@localhost QUIT " + splited_cmd + "\r\n";
+				channels[i].SendEveryone(rpl);
 			}
 		}
-		else if (channels[i].get_admin(fd))
+		else if (channels[i].GetAdmin(fd))
 		{
-			channels[i].remove_admin(fd);
-			if (channels[i].GetClientsNumber() == 0)
+			channels[i].RemoveAdmin(fd);
+			if (channels[i].GetClientsNumber() == 0) //Buscar equivalente
 				channels.erase(channels.begin() + i);
 			else
 			{
-				rpl = ":" + GetClient(fd)->GetNickName() + "!~" + GetClient(fd)->GetUserName() + "@localhost QUIT " + reason +"\r\n";
-				channels[i].sendTo_all(rpl);
+				rpl = ":" + GetClient(fd)->GetNickName() + "!~" + GetClient(fd)->GetUserName() + "@localhost QUIT " + splited_cmd +"\r\n";
+				channels[i].SendEveryone(rpl);
 			}
 		}
 	}
 	std::cout << RED << "Client <" << fd << "> Disconnected" << WHITE << std::endl;
-	RemoveChannels(fd);
-	RemoveClients(fd);
-	RemoveFds(fd);
+	RemoveChannel(fd);
+	RemoveClient(fd);
+	RemoveFd(fd);
 	close(fd);
 }
