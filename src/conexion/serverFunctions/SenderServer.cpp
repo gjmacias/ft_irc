@@ -23,7 +23,7 @@ void	Server::SendError(int fd, int code, std::string clientname, std::string msg
 		std::cerr << "send() faild" << std::endl;
 }
 
-void	Server::SendError(int fd, int code, std::string clientname, std::string channelname, std::string msg)
+void	Server::SendErrorV2(int fd, int code, std::string clientname, std::string channelname, std::string msg)
 {
 	std::stringstream	ss;
 	std::string			response;

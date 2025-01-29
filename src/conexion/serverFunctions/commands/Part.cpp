@@ -8,46 +8,45 @@
 
 void	Server::PartCommand(std::vector<std::string> &splited_cmd, int &fd)
 {
-	std::vector<std::string>	tmp;
 	std::vector<std::string>	reason;
 	std::stringstream			ss;
 	bool						flag;
 	size_t						i;
 	size_t						j;
 
-	/*if (!SplitCmdPart(cmd, tmp, reason, fd))
+	/*if (!SplitCmdPart(cmd, splited_cmd, reason, fd))
 	{
-		senderror(461, GetClient(fd)->GetNickName(), GetClient(fd)->GetFd(), " :Not enough  parameters\r\n");
+		senderror(461, GetClient(fd)->GetNickname(), GetClient(fd)->GetFd(), " :Not enough  parameters\r\n");
 		return ;
 	}*/
-	for (i = 0, i < tmp.size(); i++)
+	for (i = 0, i < splited_cmd.size(); i++)
 	{
 		flag = false;
-		for (j = 0; i < tmp.size(); j++)
+		for (j = 0; i < splited_cmd.size(); j++)
 		{
-			if (this->channels[j].GetName() == tmp[i])
+			if (this->channels[j].GetName() == splited_cmd[i])
 			{
 				flag = true;
-				if (!channels[j].get_client(fd) && !channels[j].get_admin(fd))
+				if (!channels[j].get_client(fd) && !channels[j].GetAdmin(fd))
 				{
-					senderror(442, GetClient(fd)->GetNickName(), "#" + tmp[i], GetClient(fd)->GetFd(), " :You are not on that channel\r\n");
+					SendErrorV2(442, GetClient(fd)->GetNickname(), "#" + splited_cmd[i], GetClient(fd)->GetFd(), " :You are not on that channel\r\n");
 					continue ;
 				}
-				ss << ":" << GetClient(fd)->GetNickName() << "!~" << GetClient(fd)->GetUserName() << "@" << "localhost" << " PART #" << tmp[i];
+				ss << ":" << GetClient(fd)->GetNickname() << "!~" << GetClient(fd)->GetUserName() << "@" << "localhost" << " PART #" << splited_cmd[i];
 				if (!reason.empty())
 					ss << " :" << reason << "\r\n";
 				else
 					ss << "\r\n";
 				channels[j].sendTo_all(ss.str());
-				if (channels[j].get_admin(channels[j].GetClientInChannel(GetClient(fd)->GetNickName())->GetFd()))
-					channels[j].remove_admin(channels[j].GetClientInChannel(GetClient(fd)->GetNickName())->GetFd());
+				if (channels[j].GetAdmin(channels[j].GetClientInChannel(GetClient(fd)->GetNickname())->GetFd()))
+					channels[j].RemoveAdmin(channels[j].GetClientInChannel(GetClient(fd)->GetNickname())->GetFd());
 				else
-					channels[j].remove_client(channels[j].GetClientInChannel(GetClient(fd)->GetNickName())->GetFd());
-				if (channels[j].GetClientsNumber() == 0)
+					channels[j].RemoveClient(channels[j].GetClientInChannel(GetClient(fd)->GetNickname())->GetFd());
+				if (channels[j].CountAllClients() == 0)
 					channels.erase(channels.begin() + j);
 			}
 		}
 		if (!flag) // if the channel doesn't exist
-			senderror(403, GetClient(fd)->GetNickName(), "#" + tmp[i], GetClient(fd)->GetFd(), " :No such channel\r\n");
+			SendErrorV2(403, GetClient(fd)->GetNickname(), "#" + splited_cmd[i], GetClient(fd)->GetFd(), " :No such channel\r\n");
 	}
 }

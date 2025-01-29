@@ -63,7 +63,7 @@ void	Server::QuitCommand(std::vector<std::string> &splited_cmd, int &fd)
 		if (channels[i].GetClient(fd))
 		{
 			channels[i].RemoveClient(fd);
-			if (channels[i].GetClientsNumber() == 0)
+			if (channels[i].CountAllClients() == 0)
 				channels.erase(channels.begin() + i);
 			else
 			{
@@ -74,7 +74,7 @@ void	Server::QuitCommand(std::vector<std::string> &splited_cmd, int &fd)
 		else if (channels[i].GetAdmin(fd))
 		{
 			channels[i].RemoveAdmin(fd);
-			if (channels[i].GetClientsNumber() == 0) //Buscar equivalente
+			if (channels[i].CountAllClients() == 0) //Buscar equivalente
 				channels.erase(channels.begin() + i);
 			else
 			{
