@@ -34,8 +34,8 @@ void	Server::InviteCommand(std::vector<std::string> &splited_cmd, int &fd)
 		SendErrorV2(443, GetClient(fd)->GetNickname(), channelname, fd, " :is already on channel\r\n");
 		return ;
 	}
-	Client	*clt = GetClient(splited_cmd[1]);
-	if (!clt)
+	Client	*client = GetClient(splited_cmd[1]);
+	if (!client)
 	{
 		SendError(401, splited_cmd[1], fd, " :No such Nick\r\n");
 		return ;
@@ -45,14 +45,14 @@ void	Server::InviteCommand(std::vector<std::string> &splited_cmd, int &fd)
 		SendError(482, GetChannel(channelname)->GetClient(fd)->GetNickname(), fd, " :You're not channel operator\r\n");
 		return ;
 	}
-	if (GetChannel(channelname)->GetModesLimit() && GetChannel(channelname)->GetClientsNumber() >= GetChannel(channelname)->GetModesLimit())
+	if (GetChannel(channelname)->GetModesLimit() && GetChannel(channelname)->CountAllClients() >= GetChannel(channelname)->GetModesLimit())
 	{
 		SendErrorV2(473, GetChannel(channelname)->GetClient(fd)->GetNickname(), channelname, fd, " :Cannot invite to channel (+i)\r\n");
 		return ;
 	}
-	clt->ImInChannel(channelname);//Duda si esto va así
-	std::string rep1 = ": 341 " + GetClient(fd)->GetNickname() + " " + clt->GetNickname() + " " + splited_cmd[2] + "\r\n";
+	client->ImInChannel(channelname);//Duda si esto va así
+	std::string rep1 = ": 341 " + GetClient(fd)->GetNickname() + " " + client->GetNickname() + " " + splited_cmd[2] + "\r\n";
 	SendResponse(rep1, fd);
-	std::string rep2 = ":" + clt->getHostName() + " INVITE " + clt->GetNickname() + " " + splited_cmd[2] + "\r\n";
-	SendResponse(rep2, clt->GetFd());
+	std::string rep2 = ":" + client->GetIpAdd() + " INVITE " + client->GetNickname() + " " + splited_cmd[2] + "\r\n";
+	SendResponse(rep2, client->GetFd());
 }
