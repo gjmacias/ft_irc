@@ -32,6 +32,7 @@ void	Server::InviteCommand(std::vector<std::string> &splited_cmd, int &fd)
 	if (GetChannel(channelname)->IsClientInChannel(splited_cmd[1]))
 	{
 		SendErrorV2(443, GetClient(fd)->GetNickname(), channelname, fd, " :is already on channel\r\n");
+		SendErrorV2(443, GetClient(fd)->GetNickname(), channelname, fd, " :is already on channel\r\n");
 		return ;
 	}
 	Client	*Client = GetClient(splited_cmd[1]);
@@ -46,7 +47,9 @@ void	Server::InviteCommand(std::vector<std::string> &splited_cmd, int &fd)
 		return ;
 	}
 	if (GetChannel(channelname)->GetModesLimit() && GetChannel(channelname)->CountAllClients() >= GetChannel(channelname)->GetModesLimit())
+	if (GetChannel(channelname)->GetModesLimit() && GetChannel(channelname)->CountAllClients() >= GetChannel(channelname)->GetModesLimit())
 	{
+		SendErrorV2(473, GetChannel(channelname)->GetClient(fd)->GetNickname(), channelname, fd, " :Cannot invite to channel (+i)\r\n");
 		SendErrorV2(473, GetChannel(channelname)->GetClient(fd)->GetNickname(), channelname, fd, " :Cannot invite to channel (+i)\r\n");
 		return ;
 	}
