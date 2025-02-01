@@ -24,6 +24,11 @@ SRC			=	main.cpp \
 				conexion/channelFunctions/ChangeChannel.cpp \
 				conexion/channelFunctions/RemoveChannel.cpp \
 				conexion/channelFunctions/SenderChannel.cpp \
+				conexion/channelFunctions/ValidationChannel.cpp \
+				\
+				conexion/clientFunctions/AddClient.cpp \
+				conexion/clientFunctions/RemoveClient.cpp \
+				conexion/clientFunctions/ValidationClient.cpp \
 				\
 				conexion/serverFunctions/AddServer.cpp \
 				conexion/serverFunctions/ClientModifier.cpp \

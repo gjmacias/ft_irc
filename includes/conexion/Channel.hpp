@@ -11,6 +11,8 @@ class Channel
 private:
 	std::vector<std::pair<char, bool> >	_modes;
 
+	unsigned int						_mode_limit_numberOfClients;
+
 	std::string							_name;
 	std::string							_password;
 	std::string 						_topic_name;
@@ -32,6 +34,7 @@ public:
 	void		SetModesChannelKey(bool key);
 	void		SetModesOperatorPrivilege(bool privilege);
 	void		SetModesLimit(bool limit);
+	void		SetModesLimitNumber(unsigned int number_limit);
 
 	void		SetName(std::string name);
 	void		SetPassword(std::string password);
@@ -45,6 +48,7 @@ public:
 	bool		GetModesChannelKey();
 	bool		GetModesOperatorPrivilege();
 	bool		GetModesLimit();
+	bool		GetModesLimitNumber();
 
 	std::string GetName();
 	std::string GetPassword();
@@ -56,8 +60,6 @@ public:
 	Client		*GetClientByNickname(std::string nickname);
 
 		// MAIN FUNCTIONS
-	bool		IsModeCharActive(char character);
-	bool		IsClientInChannel(std::string nickname);
 	int			CountAllClients();
 	std::string ListOfClients();
 //	##########################################################
@@ -75,8 +77,13 @@ public:
 	bool		ChangeClientToAdmin(std::string nickname);
 	bool		ChangeAdminToClient(std::string nickname);
 
+		//		Senders Channel
 	void		SendEveryone(std::string message);
 	void		SendMeToAll(int fd, std::string message);
+
+		//		Validations Channel
+	bool		IsModeCharActive(char character);
+	bool		IsClientInChannel(std::string nickname);
 //	##########################################################
 };
 

@@ -167,7 +167,7 @@ void Server::AcceptNewClient()
 	NewPoll.revents = 0;
 
 	newClient.SetFd(clientFd);
-	newClient.SetIpAdd(inet_ntoa(clientAddress.sin_addr));
+	newClient.SetIPaddress(inet_ntoa(clientAddress.sin_addr));
 	_clients.push_back(newClient);
 	_pollSocketFds.push_back(NewPoll);
 

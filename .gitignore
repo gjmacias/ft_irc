@@ -1,0 +1,11 @@
+# Ignorar todos los archivos y carpetas que comienzan con un punto
+.*
+
+# Excepciones para mantener .git y similares, si es necesario
+!.git
+!.gitignore
+!.gitattributes
+
+# Ignorar archivos específicos de compilación
+*.out
+*.exe
