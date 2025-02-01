@@ -125,12 +125,12 @@ void	Server::KickCommand(std::vector<std::string> &splited_cmd, int &fd)
 		if (GetChannel(tmp[i])) // check if the channel exist
 		{
 			Channel *ch = GetChannel(tmp[i]);
-			if (!ch->get_client(fd) && !ch->get_admin(fd))  // check if the client is in the channel
+			if (!ch->get_client(fd) && !ch->GetAdmin(fd))  // check if the client is in the channel
 			{
 				senderror(442, GetClient(fd)->GetNickName(), "#" + tmp[i], GetClient(fd)->GetFd(), " :You're not on that channel\r\n");
 				continue ; 
 			}
-			if (ch->get_admin(fd)) // check if the client is admin
+			if (ch->GetAdmin(fd)) // check if the client is admin
 			{
 				if (ch->GetClientInChannel(user)) // check if the client to kick is in the channel
 				{
@@ -140,7 +140,7 @@ void	Server::KickCommand(std::vector<std::string> &splited_cmd, int &fd)
 					else
 						ss << "\r\n";
 					ch->sentTo_all(ss.str());
-					if (ch->get_admin(ch->GetClientInChannel(user)->GetFd()))
+					if (ch->GetAdmin(ch->GetClientInChannel(user)->GetFd()))
 						ch->remove_admin(ch->GetClientInChannel(user)->GetFd());
 					else
 						ch->remove_client(ch->GetClientInChannel(user)->GetFd());

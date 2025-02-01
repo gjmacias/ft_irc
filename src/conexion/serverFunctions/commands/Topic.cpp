@@ -36,45 +36,37 @@ int Server::getpos(std::string &cmd)
 
 void	Server::TopicCommand(std::vector<std::string> &splited_cmd, int &fd)
 {
-	(void)splited_cmd;
-	(void)fd;
 	size_t						pos;
-	std::vector<std::string>	scmd = splited_cmd;
 	std::vector<std::string>	tmp;
-
-	if (scmd = "TOPIC :")
+	std::string 				nmch;
+	if (splited_cmd = "TOPIC :" || splited_cmd.size() == 1)
 	{
-		senderror(461, GetClient(fd)->GetNickName(), fd, " :Not enough parameters\r\n");
+		SendError(461, fd, GetClient(fd)->GetNickName(), " :Not enough parameters\r\n");
 		return ;
 	}
-	if (scmd.size() == 1)
-	{
-		senderror(461, GetClient(fd)->GetNickName(), fd, " :Not enough parameters\r\n");
-		return ;
-	}
-	std::string nmch = scmd[1].substr(1);
+	nmch = splited_cmd[1].substr(1);
 	if (!GetChannel(nmch))
 	{
-		senderror(403, "#" + nmch, fd, " :No such channel \r\n");
+		SendError(403, "#" + nmch, " :No such channel \r\n");
 		return ;
 	}
-	if (!(GetChannel(nmch)->get_client(fd)) && !(GetChannel(nmch)->get_admin(fd)))
+	if (!(GetChannel(nmch)->GetClient(fd)) && !(GetChannel(nmch)->GetAdmin(fd)))
 	{
-		senderror(442, "#" + nmch, fd, " :You're not on that channel\r\n");
+		SendError(442, "#" + nmch, " :You're not on that channel\r\n");
 		return ;
 	}
-	if (scmd.size() == 2)
+	if (splited_cmd.size() == 2)
 	{
 		if (GetChannel(nmch)->GetTopicName() == "")
 		{
-			_sendResponse(": 331 " + GetClient(fd)->GetNickName() + " " + "#" + nmch + " : No topic is set\r\n");
+			SendResponse(": 331 " + GetClient(fd)->GetNickName() + " " + "#" + nmch + " : No topic is set\r\n");
 			return ;
 		}
 		pos = GetChannel(nmch)->GetTopicName().find(":"); //Puede que esto de problemas con el spliteado.
 		if (GetChannel(nmch)->GetTopicName() != "" && pos == std::string::npos)
 		{
-			_sendResponse(": 332 " + GetClient(fd)->GetNickName() + " " + "#" + nmch + " " + GetChannel(nmch)->GetTopicName() + "\r\n", fd);
-			_sendResponse(": 332 " + GetClient(fd)->GetNickName() + " " + "#" + nmch + " " + GetClient(nmch)->GetNickName() + " " + GetChannel(nmch)->GetTime() + "\r\n", fd);
+			SendResponse(": 332 " + GetClient(fd)->GetNickName() + " " + "#" + nmch + " " + GetChannel(nmch)->GetTopicName() + "\r\n");
+			SendResponse(": 332 " + GetClient(fd)->GetNickName() + " " + "#" + nmch + " " + GetClient(nmch)->GetNickName() + " " + GetChannel(nmch)->GetTime() + "\r\n");
 			return ;
 		}
 		else
@@ -82,34 +74,34 @@ void	Server::TopicCommand(std::vector<std::string> &splited_cmd, int &fd)
 			pos = GetChannel(nmch)->GetTopicName().find(" ");
 			if (pos == 0)
 				GetChannel(nmch)->GetTopicName().erase(0, 1);
-			_sendResponse(": 332 " + GetClient(fd)->GetNickName() + " " + "#" + nmch + " " + GetChannel(nmch)->GetTopicName() + "\r\n", fd);
-			_sendResponse(": 332 " + GetClient(fd)->GetNickName() + " " + "#" + nmch + " " + GetClient(nmch)->GetNickName() + " " + GetChannel(nmch)->GetTime() + "\r\n", fd);
+			SendResponse(": 332 " + GetClient(fd)->GetNickName() + " " + "#" + nmch + " " + GetChannel(nmch)->GetTopicName() + "\r\n");
+			SendResponse(": 332 " + GetClient(fd)->GetNickName() + " " + "#" + nmch + " " + GetClient(nmch)->GetNickName() + " " + GetChannel(nmch)->GetTime() + "\r\n");
 			return ;	
 		}
 	}
-	if (scmd.size() >= 3)
+	if (splited_cmd.size() >= 3)
 	{
 		Revisar/*
 		int pos = getpos(cmd);
-		if (pos == -1 || scmd[2][0] != ':')
+		if (pos == -1 || splited_cmd[2][0] != ':')
 		{
-			tmp.push_back(scmd[0]);
-			tmp.push_back(scmd[1]);
-			tmp.push_back(scmd[2]);
+			tmp.push_back(splited_cmd[0]);
+			tmp.push_back(splited_cmd[1]);
+			tmp.push_back(splited_cmd[2]);
 		}
 		else
 		{
-			tmp.push_back(scmd[0]);
-			tmp.push_back(scmd[1]);
+			tmp.push_back(splited_cmd[0]);
+			tmp.push_back(splited_cmd[1]);
 			tmp.push_back(cmd.substr(getpos(cmd)));
 		}
 
 		if (tmp[2][0] == ':' && tmp[2][1] == '\0')
-		{senderror(331, "#" + nmch, fd, " :No topic is set\r\n");return;} // RPL_NOTOPIC (331) if no topic is set
+		{SendError(331, "#" + nmch, " :No topic is set\r\n");return;} // RPL_NOTOPIC (331) if no topic is set
 
-		if (GetChannel(nmch)->Gettopic_restriction() && GetChannel(nmch)->get_client(fd))
-		{senderror(482, "#" + nmch, fd, " :You're Not a channel operator\r\n");return;} // ERR_CHANOPRIVSNEEDED (482) if the client is not a channel operator
-		else if (GetChannel(nmch)->Gettopic_restriction() && GetChannel(nmch)->get_admin(fd))
+		if (GetChannel(nmch)->Gettopic_restriction() && GetChannel(nmch)->GetClient(fd))
+		{SendError(482, "#" + nmch, " :You're Not a channel operator\r\n");return;} // ERR_CHANOPRIVSNEEDED (482) if the client is not a channel operator
+		else if (GetChannel(nmch)->Gettopic_restriction() && GetChannel(nmch)->GetAdmin(fd))
 		{
 			GetChannel(nmch)->SetTime(tTopic());
 			GetChannel(nmch)->SetTopicName(tmp[2]);

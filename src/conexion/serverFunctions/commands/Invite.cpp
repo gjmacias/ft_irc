@@ -35,7 +35,7 @@ void	Server::InviteCommand(std::vector<std::string> &splited_cmd, int &fd)
 		SendErrorV2(443, fd, GetClient(fd)->GetNickname(), channelname, " :is already on channel\r\n");
 		return ;
 	}
-	Client	*Client = GetClient(splited_cmd[1]);
+	Client	*Client = GetClient(fd);
 	if (!Client)
 	{
 		SendError(401, fd, splited_cmd[1], " :No such Nick\r\n");
