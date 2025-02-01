@@ -12,7 +12,7 @@ void	Server::SendResponse(std::string response, int fd)
 }
 
 	//	-----	Send Errors		-----
-void	Server::SendError(int code, std::string clientname, int fd, std::string msg)
+void	Server::SendError(int fd, int code, std::string clientname, std::string msg)
 {
 	std::stringstream	ss;
 	std::string			response;
@@ -23,7 +23,7 @@ void	Server::SendError(int code, std::string clientname, int fd, std::string msg
 		std::cerr << "send() faild" << std::endl;
 }
 
-void	Server::SendErrorV2(int code, std::string clientname, std::string channelname, int fd, std::string msg)
+void	Server::SendErrorV2(int fd, int code, std::string clientname, std::string channelname, std::string msg)
 {
 	std::stringstream	ss;
 	std::string			response;
