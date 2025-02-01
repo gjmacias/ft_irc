@@ -15,13 +15,13 @@ void	Server::CheckForChannels_Clients(std::vector<std::string> &splited_cmd, int
 			splited_cmd[i].erase(splited_cmd[i].begin());
 			if (!GetChannel(splited_cmd[i]))//ERR_NOSUCHNICK (401) // if the channel doesn't exist
 				{
-					senderror(401, "#" + splited_cmd[i], GetClient(fd)->GetFd(), " :No such nick/channel\r\n"); 
+					SendError(401, GetClient(fd)->GetFd(), "#" + splited_cmd[i], " :No such nick/channel\r\n"); 
 					splited_cmd.erase(splited_cmd.begin() + i); 
 					i--;
 				}
 			else if (!GetChannel(splited_cmd[i])->GetClientInChannel(GetClient(fd)->GetNickName())) //ERR_CANNOTSENDTOCHAN (404) // if the client is not in the channel
 				{
-					senderror(404, GetClient(fd)->GetNickName(), "#" + splited_cmd[i], GetClient(fd)->GetFd(), " :Cannot send to channel\r\n");
+					SendErrorV2(404, GetClient(fd)->GetFd(), GetClient(fd)->GetNickName(), "#" + splited_cmd[i], " :Cannot send to channel\r\n");
 					splited_cmd.erase(splited_cmd.begin() + i);
 					i--;
 				}
@@ -29,9 +29,9 @@ void	Server::CheckForChannels_Clients(std::vector<std::string> &splited_cmd, int
 		}
 		else
 		{
-			if (!GetClient_Nickame(splited_cmd[i]))//ERR_NOSUCHNICK (401) // if the client doesn't exist
+			if (!GetClient_Nickname(splited_cmd[i]))//ERR_NOSUCHNICK (401) // if the client doesn't exist
 				{
-					senderror(401, splited_cmd[i], GetClient(fd)->GetFd(), " :No such nick/channel\r\n");
+					SendError(401, GetClient(fd)->GetFd(), splited_cmd[i], " :No such nick/channel\r\n");
 					splited_cmd.erase(splited_cmd.begin() + i);
 					i--;
 				}
@@ -43,17 +43,17 @@ void	Server::PrivateMessageCommand(std::vector<std::string> &splited_cmd, int &f
 {
 	if (!splited_cmd.size())//ERR_NORECIPIENT (411) // if the client doesn't specify the recipient
 		{
-			senderror(411, GetClient(fd)->GetNickName(), GetClient(fd)->GetFd(), " :No recipient given (PRIVMSG)\r\n");
+			SendError(411, GetClient(fd)->GetFd(), GetClient(fd)->GetNickName(), " :No recipient given (PRIVMSG)\r\n");
 			return;
 		}
 	if (message.empty())//ERR_NOTEXTTOSEND (412) // if the client doesn't specify the message
 		{
-			senderror(412, GetClient(fd)->GetNickName(), GetClient(fd)->GetFd(), " :No text to send\r\n");
+			SendError(412, GetClient(fd)->GetFd(), GetClient(fd)->GetNickName(), " :No text to send\r\n");
 			return;
 		}
 	if (splited_cmd.size() > 10) //ERR_TOOMANYTARGETS (407) // if the client send the message to more than 10 clients
 		{
-			senderror(407, GetClient(fd)->GetNickName(), GetClient(fd)->GetFd(), " :Too many recipients\r\n");
+			SendError(407, GetClient(fd)->GetFd(), GetClient(fd)->GetNickName(), " :Too many recipients\r\n");
 			return;
 		}
 	CheckForChannels_Clients(splited_cmd, fd); // check if the channels and clients exist
@@ -68,7 +68,7 @@ void	Server::PrivateMessageCommand(std::vector<std::string> &splited_cmd, int &f
 		else
 		{
 			std::string resp = ":" + GetClient(fd)->GetNickName() + "!~" + GetClient(fd)->GetUsername() + "@localhost PRIVMSG " + splited_cmd[i] + " :" + message + "\r\n";
-			SendResponse(resp, GetClient_Nickame(splited_cmd[i])->GetFd());
+			SendResponse(resp, GetClient_Nickname(splited_cmd[i])->GetFd());
 		}
 	}
 }

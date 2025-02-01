@@ -57,7 +57,7 @@ public:
 	int			GetMainFd();
 	std::string	GetPassword();
 	Client		*GetClient(int fd);
-	Client		*GetClient_Nickame(std::string nickname);
+	Client		*GetClient_Nickname(std::string nickname);
 	Channel		*GetChannel(std::string name);
 
 		//		MAIN FUNCTIONS
