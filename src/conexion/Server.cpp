@@ -52,7 +52,7 @@ Client	*Server::GetClient(int fd)
 	return NULL;
 }
 
-Client	*Server::GetClient_Nickame(std::string nickname)
+Client	*Server::GetClient_Nickname(std::string nickname)
 {
 	for (size_t i = 0; i < this->_clients.size(); i++)
 	{

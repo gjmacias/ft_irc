@@ -14,11 +14,6 @@ void	Server::PartCommand(std::vector<std::string> &splited_cmd, int &fd)
 	size_t						i;
 	size_t						j;
 
-	/*if (!SplitCmdPart(cmd, splited_cmd, reason, fd))
-	{
-		senderror(461, GetClient(fd)->GetNickname(), GetClient(fd)->GetFd(), " :Not enough  parameters\r\n");
-		return ;
-	}*/
 	for (i = 0, i < splited_cmd.size(); i++)
 	{
 		flag = false;
@@ -27,7 +22,7 @@ void	Server::PartCommand(std::vector<std::string> &splited_cmd, int &fd)
 			if (this->channels[j].GetName() == splited_cmd[i])
 			{
 				flag = true;
-				if (!channels[j].get_client(fd) && !channels[j].GetAdmin(fd))
+				if (!channels[j].GelClient(fd) && !channels[j].GetAdmin(fd))
 				{
 					SendErrorV2(442, GetClient(fd)->GetNickname(), "#" + splited_cmd[i], GetClient(fd)->GetFd(), " :You are not on that channel\r\n");
 					continue ;
@@ -47,6 +42,6 @@ void	Server::PartCommand(std::vector<std::string> &splited_cmd, int &fd)
 			}
 		}
 		if (!flag) // if the channel doesn't exist
-			SendErrorV2(403, GetClient(fd)->GetNickname(), "#" + splited_cmd[i], GetClient(fd)->GetFd(), " :No such channel\r\n");
+			SendErrorV2(403, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), "#" + splited_cmd[i], " :No such channel\r\n");
 	}
 }

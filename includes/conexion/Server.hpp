@@ -110,6 +110,10 @@ public:
 
 		//		JOIN
 	void		JoinCommand(std::vector<std::string> &splited_cmd, int &fd);
+	void		NotExistCh(std::vector<std::pair<std::string, std::string> >&token, int i, int fd);
+	void		ExistCh(std::vector<std::pair<std::string, std::string> >&token, int i, int j, int fd);
+	bool 		IsInvited(Client *cli, std::string ChName, int flag);
+	int			SearchForClients(std::string nickname);
 
 		//		KICK
 	void		KickCommand(std::vector<std::string> &splited_cmd, int &fd);
