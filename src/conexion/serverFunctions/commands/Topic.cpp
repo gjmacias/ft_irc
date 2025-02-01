@@ -5,34 +5,6 @@
 #									TOPIC									  #
 ###############################################################################
 */
-Revisar, no me queda claro
-/*
-std::string Server::tTopic()
-{
-	std::time_t current = std::time(NULL);
-	std::stringstream res;
-
-	res << current;
-	return res.str();
-}
-std::string Server::gettopic(std::string &input)
-{
-	size_t pos = input.find(":");
-	if (pos == std::string::npos)
-	{
-		return "";
-	}
-	return input.substr(pos);
-}
-
-int Server::getpos(std::string &cmd)
-{
-	for (int i = 0; i < (int)cmd.size(); i++)
-		if (cmd[i] == ':' && (cmd[i - 1] == 32))
-			return i;
-	return -1;
-}
-*/
 
 void	Server::TopicCommand(std::vector<std::string> &splited_cmd, int &fd)
 {

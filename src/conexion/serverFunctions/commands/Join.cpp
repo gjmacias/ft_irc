@@ -12,7 +12,7 @@ int	Server::SearchForClients(std::string nickname)
 	size_t	i;
 
 	count = 0;
-	for (i = 0; i < tjois->_channels.size(); i++)
+	for (i = 0; i < this->_channels.size(); i++)
 	{
 		if (this->_channels[i].IsClientInChannel(nickname))
 			count++;
@@ -86,7 +86,6 @@ void	Server::NotExistCh(std::vector<std::pair<std::string, std::string> >&token,
 	Channel	newChannel;
 	newChannel.SetName(token[i].first);
 	newChannel.AddAdmin(*GetClient(fd));
-	newChannel.set_createiontime();
 	this->_channels.push_back(newChannel);
 	//notify taht the client join the channel
 	SendResponse(RPL_JOINMSG(GetClient(fd)->getHostname(),GetClient(fd)->GetIpAdd(),newChannel.GetName()) + \
@@ -97,7 +96,7 @@ void	Server::NotExistCh(std::vector<std::pair<std::string, std::string> >&token,
 void	Server::JoinCommand(std::vector<std::string> &splited_cmd, int &fd)
 {
     (void)splited_cmd;
-	(void)fd;
+	bool	flag = false;
 	std::vector < std::pair < std::string, std::string > > token;
     if (token.size() > 10)
     {
