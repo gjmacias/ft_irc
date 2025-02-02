@@ -20,12 +20,12 @@ int	Server::SearchForClients(std::string nickname)
 	return (count);
 }
 
-bool IsInvited(Client *cli, std::string ChName, int flag)
+bool IsInvited(Client *client, std::string channelname, int flag)
 {
-	if (cli->GetInviteChannel(ChName))
+	if (client->ImInChannel(channelname))
 	{
 		if (flag == 1)
-			cli->RmChannelInvite(ChName);
+			client->RmFromMyChannels(channelname);
 		return (true);
 	}
 	return (false);
@@ -65,15 +65,15 @@ void	Server::ExistCh(std::vector<std::pair<std::string, std::string> >&token, in
 	Client	*Client = GetClient(fd);
 	this->_channels[j].AddClient(Client);
 	if(_channels[j].GetTopicName().empty())
-		SendResponse(RPL_JOINMSG(GetClient(fd)->getHostname(),GetClient(fd)->GetIpAdd(),token[i].first) + \
+		SendResponse(RPL_JOINMSG(GetClient(fd)->GetHostname(),GetClient(fd)->GetIPaddress(),token[i].first) + \
 			RPL_NAMREPLY(GetClient(fd)->GetNickname(),_channels[j].GetName(),_channels[j].ListOfClients()) + \
 			RPL_ENDOFNAMES(GetClient(fd)->GetNickname(),_channels[j].GetName()),fd);
 	else
-		SendResponse(RPL_JOINMSG(GetClient(fd)->getHostname(),GetClient(fd)->GetIpAdd(),token[i].first) + \
+		SendResponse(RPL_JOINMSG(GetClient(fd)->GetHostname(),GetClient(fd)->GetIPaddress(),token[i].first) + \
 			RPL_TOPICIS(GetClient(fd)->GetNickname(),_channels[j].GetName(),_channels[j].GetTopicName()) + \
 			RPL_NAMREPLY(GetClient(fd)->GetNickname(),_channels[j].GetName(),_channels[j].ListOfClients()) + \
 			RPL_ENDOFNAMES(GetClient(fd)->GetNickname(),_channels[j].GetName()),fd);
-	_channels[j].SendMeToAll(RPL_JOINMSG(GetClient(fd)->getHostname(), GetClient(fd)->GetIpAdd(), token[i].first), fd);
+	_channels[j].SendMeToAll(fd, RPL_JOINMSG(GetClient(fd)->GetHostname(), GetClient(fd)->GetIPaddress(), token[i].first));
 }
 
 void	Server::NotExistCh(std::vector<std::pair<std::string, std::string> >&token, int i, int fd)
@@ -85,10 +85,10 @@ void	Server::NotExistCh(std::vector<std::pair<std::string, std::string> >&token,
 	}
 	Channel	newChannel;
 	newChannel.SetName(token[i].first);
-	newChannel.AddAdmin(*GetClient(fd));
+	newChannel.AddAdmin(GetClient(fd));
 	this->_channels.push_back(newChannel);
-	//notify taht the client join the channel
-	SendResponse(RPL_JOINMSG(GetClient(fd)->getHostname(),GetClient(fd)->GetIpAdd(),newChannel.GetName()) + \
+	//notify taht the clientent join the channel
+	SendResponse(RPL_JOINMSG(GetClient(fd)->GetHostname(),GetClient(fd)->GetIPaddress(),newChannel.GetName()) + \
         RPL_NAMREPLY(GetClient(fd)->GetNickname(),newChannel.GetName(),newChannel.ListOfClients()) + \
         RPL_ENDOFNAMES(GetClient(fd)->GetNickname(),newChannel.GetName()),fd);
 }
@@ -105,13 +105,16 @@ void	Server::JoinCommand(std::vector<std::string> &splited_cmd, int &fd)
     }
     for (size_t i = 0; i < token.size(); i++)
     {
-        if (this->_channels[j].GetName() == token[i].first)
-        {
-            ExistCh(token, i, j, fd);
-            flag = true;
-            break;
-        }
+		for (size_t j = 0; j < this->_channels.size(); j++)
+		{
+			if (this->_channels[j].GetName() == token[i].first)
+			{
+				ExistCh(token, i, j, fd);
+				flag = true;
+				break;
+			}
+		}
+		if (!flag)
+			NotExistCh(token, i, fd);
     }
-    if (!flag)
-        NotExistCh(token, i, fd);
 }
