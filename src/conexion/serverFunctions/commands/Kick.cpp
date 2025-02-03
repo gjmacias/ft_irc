@@ -29,7 +29,7 @@ void	Server::KickCommand(std::vector<std::string> &splited_cmd, int &fd)
 			Channel *Channel = GetChannel(tmp[i]);
 			if (!Channel->GetClient(fd) && !Channel->GetAdmin(fd))  // check if the client is in the channel
 			{
-				SendErrorV2(442, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), "#" + tmp[i], GetClient(fd)->GetFd(), " :You're not on that channel\r\n");
+				SendErrorV2(442, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), "#" + tmp[i], " :You're not on that channel\r\n");
 				continue ; 
 			}
 			if (Channel->GetAdmin(fd)) // check if the client is admin
@@ -41,7 +41,7 @@ void	Server::KickCommand(std::vector<std::string> &splited_cmd, int &fd)
 						ss << " :" << reason << "\r\n";
 					else
 						ss << "\r\n";
-					Channel->sentTo_all(ss.str());
+					Channel->SendEveryone(ss.str());
 					if (Channel->GetAdmin(Channel->IsClientInChannel(user)->GetFd()))
 						Channel->RemoveAdmin(Channel->IsClientInChannel(user)->GetFd());
 					else
@@ -51,18 +51,18 @@ void	Server::KickCommand(std::vector<std::string> &splited_cmd, int &fd)
 				}
 				else // if the client to kick is not in the channel
 				{
-					SendErrorV2(441, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), "#" + tmp[i], GetClient(fd)->GetFd(), " :They are not in the channel\r\n");
+					SendErrorV2(441, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), "#" + tmp[i], " :They are not in the channel\r\n");
 					continue ;
 				}
 			}
 			else // if the client is not admin
 			{
-				SendErrorV2(482, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), "#" + tmp[i], GetClient(fd)->GetFd(), " :You are not channel operator\r\n");
+				SendErrorV2(482, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), "#" + tmp[i], " :You are not channel operator\r\n");
 				continue ;
 			}
 		}
 		else // if the channel doesn't exist
-			SendErrorV2(403, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), "#" + tmp[i], GetClient(fd)->GetFd(), " :No such channel\r\n");
+			SendErrorV2(403, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), "#" + tmp[i], " :No such channel\r\n");
 
 	}
 }
