@@ -33,4 +33,3 @@ void	Server::SendErrorV2(int fd, int code, std::string clientname, std::string c
 	if(send(fd, response.c_str(), response.size(), 0) == -1)
 		std::cerr << "send() faild" << std::endl;
 }
-
