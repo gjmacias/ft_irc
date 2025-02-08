@@ -32,7 +32,7 @@ void	Server::ParseAndExecute(std::string &cmd, int fd)
 		else if (UpperCase(splited_cmd[0]) == "JOIN")
 			JoinCommand(splited_cmd, fd);
 		else if (UpperCase(splited_cmd[0]) == "KICK")
-			KickCommand(splited_cmd, fd);
+			KickCommand(cmd, fd);
 		else if (UpperCase(splited_cmd[0]) == "MODE")
 			ModeCommand(splited_cmd, fd);
 		else if (UpperCase(splited_cmd[0]) == "PART")

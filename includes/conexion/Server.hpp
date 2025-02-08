@@ -128,8 +128,8 @@ public:
 	void		PartCommand(std::vector<std::string> &splited_cmd, int &fd);
 
 		//		PRIVATE_MESSAGE
-	void		PrivateMessageCommand(std::vector<std::string> &splited_cmd, int &fd);
-
+	void		PrivateMessageCommand(std::string cmd, int &fd);
+	void		CheckForChannels_Clients(std::vector<std::string> &tmp, int fd);
 		//		QUIT
 	void		QuitCommand(std::vector<std::string> &splited_cmd, int &fd);
 
