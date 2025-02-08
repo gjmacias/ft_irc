@@ -27,6 +27,7 @@
 # include "Errors.hpp"
 # include "Information.hpp"
 # include "AllFunctions.h"
+# include "ColorsDefinitions.h"
 
 class Channel;
 
@@ -131,7 +132,7 @@ public:
 	void		PrivateMessageCommand(std::string cmd, int &fd);
 	void		CheckForChannels_Clients(std::vector<std::string> &tmp, int fd);
 		//		QUIT
-	void		QuitCommand(std::vector<std::string> &splited_cmd, int &fd);
+	void		QuitCommand(std::vector<std::string> &splited_cmd, int &fd, std::string &name);
 
 		//		TOPIC
 	void		TopicCommand(std::vector<std::string> &splited_cmd, int &fd);

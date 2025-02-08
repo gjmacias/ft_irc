@@ -38,7 +38,7 @@ void	Server::ParseAndExecute(std::string &cmd, int fd)
 		else if (UpperCase(splited_cmd[0]) == "PART")
 			PartCommand(splited_cmd, fd);
 		else if (UpperCase(splited_cmd[0]) == "PRIVMSG")
-			PrivateMessageCommand(splited_cmd, fd);
+			PrivateMessageCommand(cmd, fd);
 		else if (UpperCase(splited_cmd[0]) == "TOPIC")
 			TopicCommand(splited_cmd, fd);
 		else if (splited_cmd.size())

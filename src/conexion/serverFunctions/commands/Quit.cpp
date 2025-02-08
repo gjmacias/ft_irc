@@ -6,38 +6,45 @@
 ###############################################################################
 */
 
-void	Server::QuitCommand(std::vector<std::string> &splited_cmd, int &fd)
+void	Server::QuitCommand(std::vector<std::string> &splited_cmd, int &fd, std::string &name)
 {
 	std::string	rpl;
 	size_t		i;
 
-	for (i = 0; i <channels.size(); i++)
+	std::string joined_cmd = "";
+	for (size_t j = 0; j < splited_cmd.size(); j++)
 	{
-		if (channels[i].GetClient(fd))
+		joined_cmd += splited_cmd[j];
+		if (j != splited_cmd.size() - 1) // Agregar espacios entre palabras
+			joined_cmd += " ";
+	}
+	for (i = 0; i <_channels.size(); i++)
+	{
+		if (_channels[i].GetClient(fd))
 		{
-			channels[i].RemoveClient(fd);
-			if (channels[i].CountAllClients() == 0)
-				channels.erase(channels.begin() + i);
+			_channels[i].RemoveClient(fd);
+			if (_channels[i].CountAllClients() == 0)
+				_channels.erase(_channels.begin() + i);
 			else
 			{
-				rpl = ":" + GetClient(fd)->GetNickName() + "!~" + GetClient(fd)->GetUserName() + "@localhost QUIT " + splited_cmd + "\r\n";
-				channels[i].SendEveryone(rpl);
+				rpl = ":" + GetClient(fd)->GetNickname() + "!~" + GetClient(fd)->GetUsername() + "@localhost QUIT " + joined_cmd + "\r\n";
+				_channels[i].SendEveryone(rpl);
 			}
 		}
-		else if (channels[i].GetAdmin(fd))
+		else if (_channels[i].GetAdmin(fd))
 		{
-			channels[i].RemoveAdmin(fd);
-			if (channels[i].CountAllClients() == 0) //Buscar equivalente
-				channels.erase(channels.begin() + i);
+			_channels[i].RemoveAdmin(fd);
+			if (_channels[i].CountAllClients() == 0) //Buscar equivalente
+				_channels.erase(_channels.begin() + i);
 			else
 			{
-				rpl = ":" + GetClient(fd)->GetNickName() + "!~" + GetClient(fd)->GetUserName() + "@localhost QUIT " + splited_cmd +"\r\n";
-				channels[i].SendEveryone(rpl);
+				rpl = ":" + GetClient(fd)->GetNickname() + "!~" + GetClient(fd)->GetUsername() + "@localhost QUIT " + joined_cmd +"\r\n";
+				_channels[i].SendEveryone(rpl);
 			}
 		}
 	}
 	std::cout << RED << "Client <" << fd << "> Disconnected" << WHITE << std::endl;
-	RemoveChannel(fd);
+	RemoveChannel(name);
 	RemoveClient(fd);
 	RemoveFd(fd);
 	close(fd);
