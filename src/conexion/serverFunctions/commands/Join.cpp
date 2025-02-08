@@ -65,7 +65,7 @@ void	Server::ExistCh(std::vector<std::pair<std::string, std::string> >&token, in
 	Client	*Client = GetClient(fd);
 	this->_channels[j].AddClient(Client);
 	if(_channels[j].GetTopicName().empty())
-		SendResponse(RPL_JOINMSG(GetClient(fd)->GetHostname(),GetClient(fd)->GetIPaddress(),token[i].first) + \
+		SendResponse(RPL_JOINMSG(GetClient(fd)->GetHostname(), GetClient(fd)->GetIPaddress(),token[i].first) + \
 			RPL_NAMREPLY(GetClient(fd)->GetNickname(),_channels[j].GetName(),_channels[j].ListOfClients()) + \
 			RPL_ENDOFNAMES(GetClient(fd)->GetNickname(),_channels[j].GetName()),fd);
 	else
