@@ -116,7 +116,10 @@ public:
 	int			SearchForClients(std::string nickname);
 
 		//		KICK
-	void		KickCommand(std::vector<std::string> &splited_cmd, int &fd);
+	void			KickCommand(std::string cmd, int &fd);
+	std::string		SplitCmdKick(std::string cmd, std::vector<std::string> &tmp, std::string &user, int fd);
+	std::string		SplitCmdK(std::string &cmd, std::vector<std::string> &tmp);
+	void 			FindK(std::string cmd, std::string tofind, std::string &str);
 
 		//		MODE
 	void		ModeCommand(std::vector<std::string> &splited_cmd, int &fd);

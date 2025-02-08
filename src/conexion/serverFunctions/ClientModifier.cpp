@@ -22,7 +22,7 @@ void Server::ClientAuthentification(std::string cmd, int fd)
 	cmd = cmd.substr(position);
 	position = cmd.find_first_not_of("\t\v ");
 	if(cmd[0] == ':')
-		cmd.erase(cmd.begin());	
+		cmd.erase(cmd.begin());
 	else if(position != std::string::npos)
 	{
 		SendResponse(ERR_NOTENOUGHPARAM(std::string("*")), fd);
