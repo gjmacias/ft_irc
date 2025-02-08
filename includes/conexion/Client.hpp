@@ -37,10 +37,11 @@ public:
 	int			GetFd();
 	bool		GetIsRegistered();
 	bool		GetIsLogedInServer();
-	std::string GetIPaddress();
+	std::string	GetIPaddress();
 	std::string	GetNickname();
 	std::string	GetUsername();
 	std::string	GetBuffer();
+	std::string	GetHostname();
 
 		// MAIN FUNCTIONS
 	void		ClearBuffer();

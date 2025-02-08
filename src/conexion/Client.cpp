@@ -64,6 +64,10 @@ std::string Client::GetIPaddress(){return this->_IPaddress;}
 std::string Client::GetNickname(){return this->_nickname;}
 std::string Client::GetUsername(){return this->_username;}
 std::string Client::GetBuffer(){return this->_buffer;}
+std::string Client::getHostname(){
+	std::string _hostname = this->GetNickName() + "!" + this->GetUserName();
+	return _hostname;
+}
 
 /*
 ###############################################################################
