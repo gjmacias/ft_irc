@@ -48,7 +48,6 @@ void Client::SetFd(int fd){this->_fd = fd;}
 void Client::SetIsRegistered(bool selector){this->_isRegistered = selector;}
 void Client::SetIsLogedInServer(bool selector){this->_isLogedInServer = selector;}
 void Client::SetIPaddress(std::string IPaddress){this->_IPaddress = IPaddress;}
-void Client::SetHostname(std::string hostname){this->_hostname = hostname;}
 void Client::SetNickname(std::string nickname){this->_nickname = nickname;}
 void Client::SetUsername(std::string username){this->_username = username;}
 void Client::SetBuffer(std::string recived){this->_buffer += recived;}
