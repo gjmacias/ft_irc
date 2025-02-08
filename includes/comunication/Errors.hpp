@@ -20,3 +20,4 @@
 #define ERR_CMDNOTFOUND(nickname, command) (": 421 " + nickname + " " + command + " :Unknown command" + ENDLINE)
 
 #endif
+

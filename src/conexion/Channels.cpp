@@ -147,3 +147,4 @@ std::string	Channel::ListOfClients()
 	}
 	return (list);
 }
+

@@ -11,7 +11,6 @@ Client::Client()
 	this->_isRegistered = false;
 	this->_isLogedInServer = false;
 	this->_IPaddress = "";
-	this->_hostname = "";
 	this->_nickname = "";
 	this->_username = "";
 	this->_buffer = "";
@@ -33,7 +32,6 @@ Client &Client::operator=(Client const &src)
 		this->_isRegistered = src._isRegistered;
 		this->_isLogedInServer = src._isLogedInServer;
 		this->_IPaddress = src._IPaddress;
-		this->_hostname = src._hostname;
 		this->_nickname = src._nickname;
 		this->_username = src._username;
 		this->_buffer = src._buffer;
@@ -64,12 +62,12 @@ int			Client::GetFd(){return this->_fd;}
 bool		Client::GetIsRegistered(){return this->_isRegistered;}
 bool		Client::GetIsLogedInServer(){return this->_isLogedInServer;}
 std::string Client::GetIPaddress(){return this->_IPaddress;}
-std::string Client::GetHostname(){return this->_hostname;}
 std::string Client::GetNickname(){return this->_nickname;}
 std::string Client::GetUsername(){return this->_username;}
 std::string Client::GetBuffer(){return this->_buffer;}
-std::string Client::getHostname(){
-	std::string _hostname = this->GetNickName() + "!" + this->GetUserName();
+std::string Client::GetHostname()
+{
+	std::string _hostname = this->GetNickname() + "!" + this->GetUsername();
 	return _hostname;
 }
 
@@ -89,3 +87,4 @@ void Client::ClearUsedBuffer()
 	else
 		this->_buffer.clear();
 }
+

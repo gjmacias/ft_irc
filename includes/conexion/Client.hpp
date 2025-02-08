@@ -11,7 +11,6 @@ private:
 	bool						_isRegistered;		//When the password is correct
 	bool						_isLogedInServer;	//When is Registered AND have: name and nick
 	std::string					_IPaddress;
-	std::string					_hostname;
 	std::string					_nickname;
 	std::string					_username;
 	std::string					_buffer;
@@ -30,7 +29,6 @@ public:
 	void		SetIsRegistered(bool selector);
 	void		SetIsLogedInServer(bool selector);
 	void		SetIPaddress(std::string ipadd);
-	void		SetHostname(std::string hostname);
 	void		SetNickname(std::string nickname);
 	void		SetUsername(std::string username);
 	void		SetBuffer(std::string recived);
@@ -62,3 +60,4 @@ public:
 //	##########################################################
 };
 #endif
+

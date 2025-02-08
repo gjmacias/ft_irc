@@ -17,3 +17,4 @@ std::vector<std::string>	split_cmd(std::string& cmd);
 std::string					UpperCase(const std::string& str);
 
 #endif
+
