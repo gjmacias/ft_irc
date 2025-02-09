@@ -122,8 +122,18 @@ public:
 	void 			FindK(std::string cmd, std::string tofind, std::string &str);
 
 		//		MODE
-	void		ModeCommand(std::vector<std::string> &splited_cmd, int &fd);
-	
+	void		ModeCommand(std::string &cmd, int &fd);
+	std::string	ModeInviteOnly(Channel *channel, char opera, std::string chain);
+	std::string ModeTopicRestriction(Channel *channel ,char opera, std::string chain);
+	std::string ModeChannelKey(std::vector<std::string> tokens, Channel *channel, size_t &pos, char opera, int fd, std::string chain, std::string &arguments);
+	std::string ModeOperatorPrivilege(std::vector<std::string> tokens, Channel *channel, size_t& pos, int fd, char opera, std::string chain, std::string& arguments);
+	std::string ModeLimit(std::vector<std::string> tokens,  Channel *channel, size_t &pos, char opera, int fd, std::string chain, std::string& arguments);
+	std::string ModeToAppend(std::string chain, char opera, char mode);
+	void		GetCmdArguments(std::string cmd,std::string& name, std::string& modeset ,std::string &params);
+	std::vector<std::string>	SplitParameters(std::string parameters);
+	bool		IsPasswordValid(std::string password);
+	bool		IsLimitValid(std::string& limit);
+
 		//		PART
 	void		PartCommand(std::vector<std::string> &splited_cmd, int &fd);
 
@@ -139,4 +149,3 @@ public:
 };
 
 # endif
-
