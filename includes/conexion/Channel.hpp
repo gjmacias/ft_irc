@@ -1,6 +1,8 @@
 #ifndef CHANNEL_HPP
 #define CHANNEL_HPP
 
+#include <ctime>
+
 #include "Client.hpp"
 #include "Server.hpp"
 
@@ -9,6 +11,8 @@ class Client;
 class Channel
 {
 private:
+	std::string							_time_creation;
+
 	std::vector<std::pair<char, bool> >	_modes;
 
 	unsigned int						_mode_limit_numberOfClients;
@@ -43,6 +47,8 @@ public:
 	void		SetModeAtindex(size_t index, bool mode);
 
 		//		GETTERS
+	std::string	GetModesTimeCreation();
+
 	bool		GetModesInvitOnly();
 	bool		GetModesTopicRestriction();
 	bool		GetModesChannelKey();

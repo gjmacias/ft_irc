@@ -7,7 +7,13 @@
 */
 Channel::Channel()
 {
-	char modes[5] = {'i', 't', 'k', 'o', 'l'};
+	std::time_t			time = std::time(NULL);
+	std::ostringstream	oss;
+	char				modes[5] = {'i', 't', 'k', 'o', 'l'};
+
+	oss << time;
+	this->_time_creation = oss.str();
+
 	for(int i = 0; i < 5; i++)
 		this->_modes.push_back(std::make_pair(modes[i], false));
 
@@ -25,6 +31,8 @@ Channel &Channel::operator=(Channel const &src)
 {
 	if (this != &src)
 	{
+		this->_time_creation = src._time_creation;
+
 		this->_modes = src._modes;
 		for(size_t i = 0; i < this->_modes.size(); i++)
 			this->_modes[i].second = src._modes[i].second;
@@ -64,12 +72,14 @@ void	Channel::SetModeAtindex(size_t index, bool mode){this->_modes[index].second
 #									GETTERS									  #
 ###############################################################################
 */
-bool	Channel::GetModesInvitOnly(){return this->_modes[0].second;}
-bool	Channel::GetModesTopicRestriction(){return this->_modes[1].second;}
-bool	Channel::GetModesChannelKey(){return this->_modes[2].second;}
-bool	Channel::GetModesOperatorPrivilege(){return this->_modes[3].second;}
-bool	Channel::GetModesLimit(){return this->_modes[4].second;}
-bool	Channel::GetModesLimitNumber(){return this->_mode_limit_numberOfClients;}
+std::string	Channel::GetModesTimeCreation(){return this->_time_creation;}
+
+bool		Channel::GetModesInvitOnly(){return this->_modes[0].second;}
+bool		Channel::GetModesTopicRestriction(){return this->_modes[1].second;}
+bool		Channel::GetModesChannelKey(){return this->_modes[2].second;}
+bool		Channel::GetModesOperatorPrivilege(){return this->_modes[3].second;}
+bool		Channel::GetModesLimit(){return this->_modes[4].second;}
+bool		Channel::GetModesLimitNumber(){return this->_mode_limit_numberOfClients;}
 
 std::string	Channel::GetName(){return this->_name;}
 std::string	Channel::GetPassword(){return this->_password;}

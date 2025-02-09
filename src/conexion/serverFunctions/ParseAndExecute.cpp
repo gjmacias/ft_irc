@@ -14,7 +14,6 @@ void	Server::ParseAndExecute(std::string &cmd, int fd)
 
 	if(splited_cmd.size() == 0)
 		return ;
-	
 	if(UpperCase(splited_cmd[0]) == "BONG")
 		return;
 	else if(UpperCase(splited_cmd[0]) == "PASS")
@@ -34,7 +33,7 @@ void	Server::ParseAndExecute(std::string &cmd, int fd)
 		else if (UpperCase(splited_cmd[0]) == "KICK")
 			KickCommand(cmd, fd);
 		else if (UpperCase(splited_cmd[0]) == "MODE")
-			ModeCommand(splited_cmd, fd);
+			ModeCommand(cmd.substr(4, cmd.size() - 4), fd);
 		else if (UpperCase(splited_cmd[0]) == "PART")
 			PartCommand(splited_cmd, fd);
 		else if (UpperCase(splited_cmd[0]) == "PRIVMSG")
