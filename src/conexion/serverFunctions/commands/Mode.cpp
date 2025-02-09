@@ -6,7 +6,7 @@
 ###############################################################################
 */
 
-void	Server::ModeCommand(std::string &cmd, int &fd)
+void	Server::ModeCommand(std::string cmd, int &fd)
 {
 	std::stringstream	modeChain;
 	std::string			channelName;

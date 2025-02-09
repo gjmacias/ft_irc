@@ -123,7 +123,7 @@ public:
 	void 			FindK(std::string cmd, std::string tofind, std::string &str);
 
 		//		MODE
-	void		ModeCommand(std::string &cmd, int &fd);
+	void		ModeCommand(std::string cmd, int &fd);
 	std::string	ModeInviteOnly(Channel *channel, char opera, std::string chain);
 	std::string ModeTopicRestriction(Channel *channel ,char opera, std::string chain);
 	std::string ModeChannelKey(std::vector<std::string> tokens, Channel *channel, size_t &pos, char opera, int fd, std::string chain, std::string &arguments);
