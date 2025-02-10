@@ -106,7 +106,7 @@ void	Server::TopicCommand(std::vector<std::string> &splited_cmd, std::string &cm
 		} // ERR_CHANOPRIVSNEEDED (482) if the client is not a channel operator
 		else if (GetChannel(namechannel)->GetModesTopicRestriction() && GetChannel(namechannel)->GetAdmin(fd))
 		{
-			GetChannel(namechannel)->SetTime(TimeTopic());
+			//GetChannel(namechannel)->SetTime(TimeTopic());
 			GetChannel(namechannel)->SetTopicName(tmp[2]);
 			std::string rpl;
 			size_t pos = tmp[2].find(":");
@@ -122,7 +122,7 @@ void	Server::TopicCommand(std::vector<std::string> &splited_cmd, std::string &cm
 			size_t pos = tmp[2].find(":");
 			if (pos == std::string::npos)
 			{
-				GetChannel(namechannel)->SetTime(TimeTopic());
+				//GetChannel(namechannel)->SetTime(TimeTopic());
 				GetChannel(namechannel)->SetTopicName(tmp[2]);
 				rpl = ":" + GetClient(fd)->GetNickname() + "!" + GetClient(fd)->GetUsername() + "@localhost TOPIC #" + namechannel + " " + GetChannel(namechannel)->GetTopicName() + "\r\n"; // RPL_TOPIC (332) if the topic is set
 			}
@@ -133,7 +133,7 @@ void	Server::TopicCommand(std::vector<std::string> &splited_cmd, std::string &cm
 				if (poss == std::string::npos && tmp[2][0] == ':' && tmp[2][1] != ':')
 					tmp[2] = tmp[2].substr(1);
 				GetChannel(namechannel)->SetTopicName(tmp[2]);
-				GetChannel(namechannel)->SetTime(TimeTopic());
+				//GetChannel(namechannel)->SetTime(TimeTopic());
 				rpl = ":" + GetClient(fd)->GetNickname() + "!" + GetClient(fd)->GetUsername() + "@localhost TOPIC #" + namechannel + " " + GetChannel(namechannel)->GetTopicName() + "\r\n"; // RPL_TOPIC (332) if the topic is set
 			}
 			GetChannel(namechannel)->SendEveryone(rpl);

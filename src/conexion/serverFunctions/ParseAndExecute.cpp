@@ -39,7 +39,7 @@ void	Server::ParseAndExecute(std::string &cmd, int fd, std::string &name)
 		else if (UpperCase(splited_cmd[0]) == "PRIVMSG")
 			PrivateMessageCommand(cmd, fd);
 		else if (UpperCase(splited_cmd[0]) == "TOPIC")
-			TopicCommand(splited_cmd, fd);
+			TopicCommand(splited_cmd, cmd, fd);
 		else if (splited_cmd.size())
 			SendResponse(ERR_CMDNOTFOUND(GetClient(fd)->GetNickname(), splited_cmd[0]), fd);
 	}

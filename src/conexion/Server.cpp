@@ -177,6 +177,7 @@ void Server::AcceptNewClient()
 void Server::ReceiveNewData(int fd)
 {
 	char						buffer[1024];
+	std::string					name;
 	std::vector<std::string>	cmd;
 	ssize_t						bytes;
 	Client						*client = GetClient(fd);
@@ -200,7 +201,7 @@ void Server::ReceiveNewData(int fd)
 			return;
 		cmd = split_recivedBuffer(client->GetBuffer());
 		for(size_t i = 0; i < cmd.size(); i++)
-			ParseAndExecute(cmd[i], fd);
+			ParseAndExecute(cmd[i], fd, name);
 		if (GetClient(fd)) 
 			GetClient(fd)->ClearUsedBuffer();
  	}
