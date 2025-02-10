@@ -32,7 +32,7 @@ int Server::GetPos(std::string &cmd)
 	return (-1);
 }
 
-void	Server::TopicCommand(std::vector<std::string> &splited_cmd, int &fd)
+void	Server::TopicCommand(std::vector<std::string> &splited_cmd, std::string &cmd, int &fd)
 {
 	size_t						pos;
 	std::vector<std::string>	tmp;
@@ -114,7 +114,7 @@ void	Server::TopicCommand(std::vector<std::string> &splited_cmd, int &fd)
 				rpl = ":" + GetClient(fd)->GetNickname() + "!" + GetClient(fd)->GetUsername() + "@localhost TOPIC #" + namechannel + " :" + GetChannel(namechannel)->GetTopicName() + "\r\n"; // RPL_TOPIC (332) if the topic is set
 			else
 				rpl = ":" + GetClient(fd)->GetNickname() + "!" + GetClient(fd)->GetUsername() + "@localhost TOPIC #" + namechannel + " " + GetChannel(namechannel)->GetTopicName() + "\r\n"; // RPL_TOPIC (332) if the topic is set
-			GetChannel(namechannel)->sendTo_all(rpl);
+			GetChannel(namechannel)->SendEveryone(rpl);
 		}
 		else
 		{
@@ -122,7 +122,7 @@ void	Server::TopicCommand(std::vector<std::string> &splited_cmd, int &fd)
 			size_t pos = tmp[2].find(":");
 			if (pos == std::string::npos)
 			{
-				GetChannel(namechannel)->SetTime(tTopic());
+				GetChannel(namechannel)->SetTime(TimeTopic());
 				GetChannel(namechannel)->SetTopicName(tmp[2]);
 				rpl = ":" + GetClient(fd)->GetNickname() + "!" + GetClient(fd)->GetUsername() + "@localhost TOPIC #" + namechannel + " " + GetChannel(namechannel)->GetTopicName() + "\r\n"; // RPL_TOPIC (332) if the topic is set
 			}

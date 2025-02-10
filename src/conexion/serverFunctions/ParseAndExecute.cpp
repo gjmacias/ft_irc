@@ -5,7 +5,7 @@
 #									PARSE									  #
 ###############################################################################
 */
-void	Server::ParseAndExecute(std::string &cmd, int fd)
+void	Server::ParseAndExecute(std::string &cmd, int fd, std::string &name)
 {
 	if(cmd.empty())
 		return ;
@@ -23,7 +23,7 @@ void	Server::ParseAndExecute(std::string &cmd, int fd)
 	else if(UpperCase(splited_cmd[0]) == "USER")
 		ClientUsername(splited_cmd, fd);
 	else if (UpperCase(splited_cmd[0]) == "QUIT")
-		QuitCommand(splited_cmd, fd);
+		QuitCommand(splited_cmd, fd, name);
 	else if(IsRegisteredAndLoged(fd))
 	{
 		if (UpperCase(splited_cmd[0]) == "INVITE")

@@ -83,7 +83,7 @@ public:
 	void		ClientUsername(std::vector<std::string> &splited_cmd, int fd);
 
 		//		Parse and execute
-	void		ParseAndExecute(std::string &cmd, int fd);
+	void		ParseAndExecute(std::string &cmd, int fd, std::string &name);
 
 		//		Removers Server
 	void		RemoveFd(int fd);
@@ -117,10 +117,10 @@ public:
 	int			SearchForClients(std::string nickname);
 
 		//		KICK
-	void			KickCommand(std::string cmd, int &fd);
-	std::string		SplitCmdKick(std::string cmd, std::vector<std::string> &tmp, std::string &user, int fd);
-	std::string		SplitCmdK(std::string &cmd, std::vector<std::string> &tmp);
-	void 			FindK(std::string cmd, std::string tofind, std::string &str);
+	void		KickCommand(std::string cmd, int &fd);
+	std::string	SplitCmdKick(std::string cmd, std::vector<std::string> &tmp, std::string &user, int fd);
+	std::string	SplitCmdK(std::string &cmd, std::vector<std::string> &tmp);
+	void 		FindK(std::string cmd, std::string tofind, std::string &str);
 
 		//		MODE
 	void		ModeCommand(std::string cmd, int &fd);
@@ -145,7 +145,10 @@ public:
 	void		QuitCommand(std::vector<std::string> &splited_cmd, int &fd, std::string &name);
 
 		//		TOPIC
-	void		TopicCommand(std::vector<std::string> &splited_cmd, int &fd);
+	void		TopicCommand(std::vector<std::string> &splited_cmd,std::string &cmd, int &fd);
+	std::string TimeTopic();
+	std::string GetTopic(std::string &input);
+	int			GetPos(std::string &cmd);
 //	##########################################################
 };
 
