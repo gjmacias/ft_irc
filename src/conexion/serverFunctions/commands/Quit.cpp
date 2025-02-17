@@ -49,3 +49,4 @@ void	Server::QuitCommand(std::vector<std::string> &splited_cmd, int &fd, std::st
 	RemoveFd(fd);
 	close(fd);
 }
+

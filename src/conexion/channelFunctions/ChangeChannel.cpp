@@ -44,3 +44,4 @@ bool Channel::ChangeAdminToClient(std::string nickname)
 	return false;
 
 }
+

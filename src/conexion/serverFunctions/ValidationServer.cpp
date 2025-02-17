@@ -44,3 +44,4 @@ bool Server::IsNickNameInUse(std::string& nickname)
 	}
 	return false;
 }
+

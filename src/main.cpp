@@ -32,3 +32,4 @@ int	main(int words, char **arguments)
 	}
 	std::cout << CYAN << "The Server Closed!" << WHITE << std::endl;
 }
+

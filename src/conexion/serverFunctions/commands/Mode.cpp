@@ -307,3 +307,4 @@ bool Server::IsLimitValid(std::string& limit)
 {
 	return (!(limit.find_first_not_of("0123456789") != std::string::npos) && std::atoi(limit.c_str()) > 0);
 }
+

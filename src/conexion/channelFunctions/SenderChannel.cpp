@@ -38,3 +38,4 @@ void Channel::SendMeToAll(int fd, std::string message)
 		}
 	}
 }
+
