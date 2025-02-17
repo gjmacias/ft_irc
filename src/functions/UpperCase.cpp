@@ -10,3 +10,4 @@ std::string	UpperCase(const std::string& str)
 	std::transform(result.begin(), result.end(), result.begin(), ::toupper);
 	return (result);
 }
+

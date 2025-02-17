@@ -45,3 +45,4 @@ void	Server::PartCommand(std::vector<std::string> &splited_cmd, int &fd)
 			SendErrorV2(403, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), "#" + splited_cmd[i], " :No such channel\r\n");
 	}
 }
+

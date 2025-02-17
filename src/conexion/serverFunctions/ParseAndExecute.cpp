@@ -46,3 +46,4 @@ void	Server::ParseAndExecute(std::string &cmd, int fd, std::string &name)
 	else if (!IsRegisteredAndLoged(fd))
 		SendResponse(ERR_NOTREGISTERED(std::string("*")), fd);
 }
+

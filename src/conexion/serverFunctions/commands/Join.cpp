@@ -118,3 +118,4 @@ void	Server::JoinCommand(std::vector<std::string> &splited_cmd, int &fd)
 			NotExistCh(token, i, fd);
     }
 }
+

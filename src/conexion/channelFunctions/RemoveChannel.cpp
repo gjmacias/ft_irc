@@ -28,3 +28,4 @@ void Channel::RemoveAdmin(int fd)
 		}
 	}
 }
+

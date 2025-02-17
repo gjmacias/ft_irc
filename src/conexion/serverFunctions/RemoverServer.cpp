@@ -72,3 +72,4 @@ void Server::RemoveChannel(std::string name)
 		}
 	}
 }
+

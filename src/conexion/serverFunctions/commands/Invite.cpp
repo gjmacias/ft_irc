@@ -56,3 +56,4 @@ void	Server::InviteCommand(std::vector<std::string> &splited_cmd, int &fd)
 	std::string rep2 = ":" + Client->GetIPaddress() + " INVITE " + Client->GetNickname() + " " + splited_cmd[2] + "\r\n";
 	SendResponse(rep2, Client->GetFd());
 }
+

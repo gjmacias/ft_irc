@@ -122,3 +122,4 @@ void	Server::ClientUsername(std::vector<std::string> &splited_cmd, int fd)
 		SendResponse(RPL_CONNECTED(client->GetNickname()), fd);
 	}
 }
+

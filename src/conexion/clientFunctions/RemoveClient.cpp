@@ -16,3 +16,4 @@ void Client::RmFromMyChannels(std::string &channel_name)
 		}
 	}
 }
+

@@ -1,7 +1,7 @@
 #ifndef SERVER_HPP_
 # define SERVER_HPP_
 
-// Estandar Libraries
+// Standar Libraries
 # include <iostream>
 # include <vector>
 
@@ -21,7 +21,7 @@
 # include <cstring>
 # include <cerrno>
 
-// Proyect Libraries
+// Project Libraries
 # include "Client.hpp"
 # include "Channel.hpp"
 # include "Errors.hpp"
@@ -99,8 +99,8 @@ public:
 		//		Validations Server
 	bool		IsRegisteredAndLoged(int fd);
 	bool		IsOnlyRegistered(Client *client);
-	bool		IsValidNickname(std::string& nickname);
-	bool		IsNickNameInUse(std::string& nickname);
+	bool		IsValidNickname(std::string &nickname);
+	bool		IsNickNameInUse(std::string &nickname);
 //	##########################################################
 
 
@@ -111,8 +111,8 @@ public:
 
 		//		JOIN
 	void		JoinCommand(std::vector<std::string> &splited_cmd, int &fd);
-	void		NotExistCh(std::vector<std::pair<std::string, std::string> >&token, int i, int fd);
-	void		ExistCh(std::vector<std::pair<std::string, std::string> >&token, int i, int j, int fd);
+	void		NotExistCh(std::vector<std::pair<std::string, std::string> > &token, int i, int fd);
+	void		ExistCh(std::vector<std::pair<std::string, std::string> > &token, int i, int j, int fd);
 	bool 		IsInvited(Client *cli, std::string ChName, int flag);
 	int			SearchForClients(std::string nickname);
 
@@ -153,3 +153,4 @@ public:
 };
 
 # endif
+

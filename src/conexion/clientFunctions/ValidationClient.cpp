@@ -15,3 +15,4 @@ bool Client::ImInChannel(std::string &channel_name)
 	}
 	return false;
 }
+

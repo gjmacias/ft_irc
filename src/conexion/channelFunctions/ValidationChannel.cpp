@@ -30,3 +30,4 @@ bool	Channel::IsClientInChannel(std::string nickname)
 	}
 	return false;
 }
+

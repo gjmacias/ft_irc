@@ -8,7 +8,7 @@ F_STANDARDS		=	-std=c++98
 F_WARNINGS		=	-Wall -Wextra -Werror -pedantic
 F_DEBUG			=	-g3
 F_DEPENDENCY	=	-MMD
-F_SANITIZERS	=	-fsanitize=address
+F_SANITIZERS	=	#-fsanitize=address
 
 ###############################################################################
 #									SRC										  #
