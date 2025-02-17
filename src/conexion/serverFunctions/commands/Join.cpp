@@ -20,7 +20,7 @@ int	Server::SearchForClients(std::string nickname)
 	return (count);
 }
 
-bool IsInvited(Client *client, std::string channelname, int flag)
+bool Server::IsInvited(Client *client, std::string channelname, int flag)
 {
 	if (client->ImInChannel(channelname))
 	{

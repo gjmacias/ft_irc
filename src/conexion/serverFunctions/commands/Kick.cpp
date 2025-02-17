@@ -6,7 +6,7 @@
 ###############################################################################
 */
 
-void FindK(std::string cmd, std::string tofind, std::string &str)
+void Server::FindK(std::string cmd, std::string tofind, std::string &str)
 {
 	size_t 		i = 0;
 	std::string tmp;
@@ -27,7 +27,7 @@ void FindK(std::string cmd, std::string tofind, std::string &str)
 	str = str.substr(i);
 }
 
-std::string SplitCmdK(std::string &cmd, std::vector<std::string> &tmp)
+std::string Server::SplitCmdK(std::string &cmd, std::vector<std::string> &tmp)
 {
 	std::stringstream 	ss(cmd);
 	std::string 		str; 
