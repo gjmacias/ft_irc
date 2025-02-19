@@ -12,31 +12,43 @@ void Server::ClientAuthentification(std::string cmd, int fd)
 	Client		*client = GetClient(fd);
 	size_t		position;
 
-	cmd = cmd.substr(4);
-	position = cmd.find_first_not_of("\t\v ");
-	if(position == std::string::npos)
+	// Verificar que el comando tenga suficientes caracteres
+	if (cmd.length() <= 5) // "PASS " son al menos 5 caracteres
 	{
 		SendResponse(ERR_NOTENOUGHPARAM(std::string("*")), fd);
 		return;
 	}
-	cmd = cmd.substr(position);
+
+	cmd = cmd.substr(5); // Eliminar "PASS "
 	position = cmd.find_first_not_of("\t\v ");
-	if(cmd[0] == ':')
+	if (position == std::string::npos) // Si no hay más caracteres, es un error
+	{
+		SendResponse(ERR_NOTENOUGHPARAM(std::string("*")), fd);
+		return;
+	}
+	
+	cmd = cmd.substr(position); // Eliminar espacios iniciales
+
+	// Verificación segura antes de acceder a cmd[0]
+	if (!cmd.empty() && cmd[0] == ':')
 		cmd.erase(cmd.begin());
-	else if(position != std::string::npos)
+
+	if (cmd.empty()) // Si después de todo, cmd está vacío, es un error
 	{
 		SendResponse(ERR_NOTENOUGHPARAM(std::string("*")), fd);
 		return;
 	}
-	if(!client->GetIsRegistered())
+
+	// Comprobar si el cliente ya está registrado
+	if (!client->GetIsRegistered())
 	{
-		if(cmd == this->_password)
+		if (cmd == this->_password)
 			client->SetIsRegistered(true);
 		else
 			SendResponse(ERR_INCORPASS(std::string("*")), fd);
 	}
 	else
-		SendResponse(ERR_ALREADYREGISTERED(GetClient(fd)->GetNickname()), fd);
+		SendResponse(ERR_ALREADYREGISTERED(client->GetNickname()), fd);
 }
 
 void Server::ClientNickname(std::string cmd, int fd)
