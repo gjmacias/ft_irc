@@ -59,5 +59,6 @@ public:
 	bool		ImInChannel(std::string &channel_name);
 //	##########################################################
 };
+
 #endif
 
