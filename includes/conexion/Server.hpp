@@ -24,10 +24,11 @@
 // Project Libraries
 # include "Client.hpp"
 # include "Channel.hpp"
-# include "Errors.hpp"
-# include "Information.hpp"
-# include "AllFunctions.h"
-# include "ColorsDefinitions.h"
+# include "../comunication/Errors.hpp"
+# include "../comunication/Information.hpp"
+# include "../functions/AllFunctions.h"
+# include "../functions/ColorsDefinitions.h"
+
 
 class Channel;
 

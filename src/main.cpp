@@ -1,6 +1,4 @@
-#include "ColorsDefinitions.h"
-#include "AllFunctions.h"
-#include "Server.hpp"
+#include "../includes/conexion/Server.hpp"
 
 int	main(int words, char **arguments)
 {
