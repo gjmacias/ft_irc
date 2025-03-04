@@ -9,3 +9,4 @@
 # Ignorar archivos específicos de compilación
 *.out
 *.exe
+ircserv
