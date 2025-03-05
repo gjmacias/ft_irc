@@ -196,10 +196,12 @@ void	Server::ClientUsername(std::vector<std::string> &splited_cmd, int fd)
 	}
 	// Asignar el nuevo nombre de usuario
 	client->SetUsername(splited_cmd[1]);
+	std::cout << YELLOW << "[DEBUG] Asignado nuevo nombre de usuario!" << WHITE << std::endl;
 
 	if(IsOnlyRegistered(client))
 	{
 		client->SetIsLogedInServer(true);
+		std::cout << YELLOW << "[DEBUG] Aqui ocurre algo más" << WHITE << std::endl;
 		SendResponse(RPL_CONNECTED(client->GetNickname()), fd);
 	}
 }

@@ -15,7 +15,7 @@ void	Server::ParseAndExecute(std::string &cmd, int fd, std::string &name)
 	if(splited_cmd.size() == 0)
 		return ;
 	if(UpperCase(splited_cmd[0]) == "BONG")
-		return;
+		return ;
 	else if(UpperCase(splited_cmd[0]) == "PASS")
 		ClientAuthentification(cmd, fd);
 	else if (UpperCase(splited_cmd[0]) == "NICK")
@@ -29,7 +29,10 @@ void	Server::ParseAndExecute(std::string &cmd, int fd, std::string &name)
 		if (UpperCase(splited_cmd[0]) == "INVITE")
 			InviteCommand(splited_cmd, fd);
 		else if (UpperCase(splited_cmd[0]) == "JOIN")
+		{
+			std::cout << YELLOW << "[DEBUG] VA a entrar en JOIN" << WHITE << std::endl;
 			JoinCommand(splited_cmd, fd);
+		}
 		else if (UpperCase(splited_cmd[0]) == "KICK")
 			KickCommand(cmd, fd);
 		else if (UpperCase(splited_cmd[0]) == "MODE")

@@ -87,7 +87,7 @@ void	Server::NotExistCh(std::vector<std::pair<std::string, std::string> >&token,
 	newChannel.SetName(token[i].first);
 	newChannel.AddAdmin(GetClient(fd));
 	this->_channels.push_back(newChannel);
-	//notify taht the clientent join the channel
+	//notify taht the client join the channel
 	SendResponse(RPL_JOINMSG(GetClient(fd)->GetHostname(),GetClient(fd)->GetIPaddress(),newChannel.GetName()) + \
         RPL_NAMREPLY(GetClient(fd)->GetNickname(),newChannel.GetName(),newChannel.ListOfClients()) + \
         RPL_ENDOFNAMES(GetClient(fd)->GetNickname(),newChannel.GetName()),fd);
@@ -97,7 +97,8 @@ void	Server::JoinCommand(std::vector<std::string> &splited_cmd, int &fd)
 {
     (void)splited_cmd;
 	bool	flag = false;
-	std::vector < std::pair < std::string, std::string > > token;
+	std::vector<std::pair<std::string, std::string> > token;
+	std::cout << YELLOW << "[DEBUG] Ha entrado en Join!" << WHITE << std::endl;
     if (token.size() > 10)
     {
         SendError(407, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), " :Too many _channels\r\n");
