@@ -6,7 +6,7 @@ FLAGS			=	$(F_STANDARDS) $(F_WARNINGS) $(F_DEBUG) $(F_DEPENDENCY) $(F_SANITIZERS
 
 F_STANDARDS		=	-std=c++98
 F_WARNINGS		=	-Wall -Wextra -Werror -pedantic
-F_DEBUG			=	-g3
+F_DEBUG			=	-g3 -O0
 F_DEPENDENCY	=	-MMD
 F_SANITIZERS	=	#-fsanitize=address
 
@@ -141,9 +141,13 @@ fclean: clean
 	
 re:	clean all
 
+
 ###############################################################################
 #									OTHERS									  #
 ###############################################################################
 
 -include $(DEPS)
 .PHONY: all clean fclean re		make_dir
+
+debug: $(NAME)
+	gdb ./$(NAME)

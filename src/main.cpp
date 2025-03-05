@@ -23,6 +23,7 @@ int	main(int words, char **arguments)
 			return (1);
 		}
 		myServer.ServerInit(atoi(arguments[1]), arguments[2]);
+		std::cout << YELLOW << "[DEBUG] The Server Initiated!" << WHITE << std::endl;
 		myServer.ServerLoop();
 	}
 	catch(const std::exception &e)
