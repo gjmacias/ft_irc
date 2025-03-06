@@ -78,10 +78,10 @@ public:
 		//		Adders Server
 	void		AddChannel(Channel newChannel);
 	
-			//		Client Involved
+			//		Client Register
 	void		ClientAuthentification(std::string cmd, int fd);
-	void		ClientNickname(std::string cmd, int fd);
-	void		ClientUsername(std::vector<std::string> &splited_cmd, int fd);
+	void		ClientUsername(std::vector<std::string> &splited_cmd, std::string cmd, int fd);
+	void		ClientNickname(std::vector<std::string> &splited_cmd, int fd);
 
 		//		Parse and execute
 	void		ParseAndExecute(std::string &cmd, int fd, std::string &name);
@@ -100,6 +100,7 @@ public:
 		//		Validations Server
 	bool		IsRegisteredAndLoged(int fd);
 	bool		IsOnlyRegistered(Client *client);
+	bool		IsValidUsername(std::string& nickname);
 	bool		IsValidNickname(std::string &nickname);
 	bool		IsNickNameInUse(std::string &nickname);
 //	##########################################################

@@ -1,8 +1,11 @@
 #include "../includes/conexion/Server.hpp"
 
-int	main(int words, char **arguments)
+int	main(int words, const char **arguments)
 {
 	Server	myServer;
+	words = 3;
+	const char* hola[] = { "hola", "1234", "hola 1234" };
+	arguments = hola;
 
 	if (words != 3)
 	{

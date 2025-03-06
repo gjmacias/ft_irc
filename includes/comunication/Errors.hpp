@@ -16,6 +16,7 @@
 #define ERR_NONICKNAME(nickname) (": 431 " + nickname + " :No nickname given" + ENDLINE)
 #define ERR_NICKINUSE(nickname) (": 433 " + nickname + " :Nickname is already in use" + ENDLINE)
 #define ERR_ERRONEUSNICK(nickname) (": 432 " + nickname + " :Erroneus nickname" + ENDLINE)
+#define ERR_ERRONEUSUSERNAME(username) (": 432 " + username + " :Erroneous username" + ENDLINE)
 #define ERR_NOTREGISTERED(nickname) (": 451 " + nickname + " :You have not registered!" + ENDLINE)
 #define ERR_CMDNOTFOUND(nickname, command) (": 421 " + nickname + " " + command + " :Unknown command" + ENDLINE)
 

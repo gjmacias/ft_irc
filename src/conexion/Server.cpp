@@ -117,7 +117,7 @@ void Server::ServerInit(int port, std::string password)
 
 	std::cout << GREEN << "Server <" << _mainSocketFd << "> Connected" << WHITE << std::endl;
 	std::cout << "Waiting to accept a connection...\n";
- }
+}
 
 void Server::ServerLoop()
 {

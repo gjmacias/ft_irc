@@ -19,9 +19,9 @@ void	Server::ParseAndExecute(std::string &cmd, int fd, std::string &name)
 	else if(UpperCase(splited_cmd[0]) == "PASS")
 		ClientAuthentification(cmd, fd);
 	else if (UpperCase(splited_cmd[0]) == "NICK")
-		ClientNickname(cmd, fd);
+		ClientNickname(splited_cmd, fd);
 	else if(UpperCase(splited_cmd[0]) == "USER")
-		ClientUsername(splited_cmd, fd);
+		ClientUsername(splited_cmd, cmd, fd);
 	else if (UpperCase(splited_cmd[0]) == "QUIT")
 		QuitCommand(splited_cmd, fd, name);
 	else if(IsRegisteredAndLoged(fd))

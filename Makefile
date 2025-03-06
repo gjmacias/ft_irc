@@ -31,7 +31,7 @@ SRC			=	main.cpp \
 				conexion/clientFunctions/ValidationClient.cpp \
 				\
 				conexion/serverFunctions/AddServer.cpp \
-				conexion/serverFunctions/ClientModifier.cpp \
+				conexion/serverFunctions/ClientRegister.cpp \
 				conexion/serverFunctions/ParseAndExecute.cpp \
 				conexion/serverFunctions/RemoverServer.cpp \
 				conexion/serverFunctions/SenderServer.cpp \
