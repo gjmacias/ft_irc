@@ -11,7 +11,7 @@ Client::Client()
 	this->_isRegistered = false;
 	this->_isLogedInServer = false;
 	this->_IPaddress = "";
-	this->_nickname = "*";
+	this->_nickname = "";
 	this->_username = "";
 	this->_buffer = "";
 }

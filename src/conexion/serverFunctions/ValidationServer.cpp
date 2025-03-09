@@ -23,31 +23,35 @@ bool	Server::IsOnlyRegistered(Client *client)
 
 bool Server::IsValidUsername(std::string& nickname)
 {
+	int	i = 0;
+
 	if (nickname.empty() || std::isdigit(nickname[0]))
 		return false;
-
-	for(size_t i = 1; i < nickname.size(); i++)
+	while (i < nickname.size())
 	{
 		if(!(std::isalnum(nickname[i])) && nickname[i] != ' ' && nickname[i] != '_' && nickname[i] != '-')
 			return false;
-		if (i > 19)
-			return false;
+		i++;
 	}
+	if (i > 20 || i < 3)
+		return false;
 	return true;
 }
 
 bool Server::IsValidNickname(std::string& nickname)
 {
+	int	i = 0;
+
 	if (nickname.empty() || std::isdigit(nickname[0]))
 		return false;
-
-	for(size_t i = 1; i < nickname.size(); i++)
+	while (i < nickname.size())
 	{
 		if(!(std::isalnum(nickname[i])) && nickname[i] != '_' && nickname[i] != '-')
 			return false;
-		if (i > 14)
-			return false;
+		i++;
 	}
+	if (i > 15 || i < 3)
+		return false;
 	return true;
 }
 
