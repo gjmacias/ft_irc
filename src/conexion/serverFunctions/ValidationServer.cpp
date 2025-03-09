@@ -23,7 +23,7 @@ bool	Server::IsOnlyRegistered(Client *client)
 
 bool Server::IsValidUsername(std::string& nickname)
 {
-	int	i = 0;
+	long unsigned int	i = 0;
 
 	if (nickname.empty() || std::isdigit(nickname[0]))
 		return false;
@@ -40,7 +40,7 @@ bool Server::IsValidUsername(std::string& nickname)
 
 bool Server::IsValidNickname(std::string& nickname)
 {
-	int	i = 0;
+	long unsigned int	i = 0;
 
 	if (nickname.empty() || std::isdigit(nickname[0]))
 		return false;
