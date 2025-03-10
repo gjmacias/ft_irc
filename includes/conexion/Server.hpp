@@ -100,7 +100,8 @@ public:
 		//		Validations Server
 	bool		IsRegisteredAndLoged(int fd);
 	bool		IsOnlyRegistered(Client *client);
-	bool		IsValidUsername(std::string& nickname);
+	bool		IsValidChannelname(std::string &channelname);
+	bool		IsValidUsername(std::string &username);
 	bool		IsValidNickname(std::string &nickname);
 	bool		IsNickNameInUse(std::string &nickname);
 //	##########################################################
@@ -113,8 +114,8 @@ public:
 
 		//		JOIN
 	void		JoinCommand(std::vector<std::string> &splited_cmd, int &fd);
-	void		NotExistCh(std::vector<std::pair<std::string, std::string> > &token, int i, int fd);
-	void		ExistCh(std::vector<std::pair<std::string, std::string> > &token, int i, int j, int fd);
+	void		NotExistCh(std::string channelname, std::string password, int fd);
+	void		ExistCh(std::string &channelname, std::string &password, int j, int fd);
 	bool 		IsInvited(Client *cli, std::string ChName, int flag);
 	int			SearchForClients(std::string nickname);
 

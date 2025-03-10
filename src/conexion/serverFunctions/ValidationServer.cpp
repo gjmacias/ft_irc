@@ -38,6 +38,24 @@ bool Server::IsValidUsername(std::string& nickname)
 	return true;
 }
 
+bool Server::IsValidChannelname(std::string& channelname)
+{
+	long unsigned int	i = 0;
+
+	if (channelname.empty())
+		return false;
+	while (i < channelname.size())
+	{
+		if(!(std::isalnum(channelname[i])) && channelname[i] != ' ' && channelname[i] != '_'
+				&& channelname[i] != '-' && channelname[i] != '.')
+			return false;
+		i++;
+	}
+	if (i > 200 || i < 2)
+		return false;
+	return true;
+}
+
 bool Server::IsValidNickname(std::string& nickname)
 {
 	long unsigned int	i = 0;

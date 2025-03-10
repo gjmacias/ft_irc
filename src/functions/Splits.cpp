@@ -36,3 +36,15 @@ std::vector<std::string>	split_cmd(std::string& cmd)
 	return splited_cmd;
 }
 
+std::vector<std::string>	split_delimeter(std::string& cmd, char c)
+{
+	std::vector<std::string>	splited_cmd;
+	std::istringstream			stm(cmd);
+	std::string					temp;
+
+	while (std::getline(stm, temp, c))
+	{
+		splited_cmd.push_back(temp);
+	}
+	return splited_cmd;
+}
