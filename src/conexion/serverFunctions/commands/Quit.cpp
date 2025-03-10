@@ -6,7 +6,7 @@
 ###############################################################################
 */
 
-void	Server::QuitCommand(std::vector<std::string> &splited_cmd, int &fd, std::string &name)
+void	Server::QuitCommand(std::vector<std::string> &splited_cmd, int &fd)
 {
 	std::string	rpl;
 	size_t		i;
@@ -44,7 +44,6 @@ void	Server::QuitCommand(std::vector<std::string> &splited_cmd, int &fd, std::st
 		}
 	}
 	std::cout << RED << "Client <" << fd << "> Disconnected" << WHITE << std::endl;
-	RemoveChannel(name);
 	RemoveClient(fd);
 	RemoveFd(fd);
 	close(fd);

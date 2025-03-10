@@ -6,11 +6,12 @@
 ###############################################################################
 */
 
-void	Server::PartCommand(std::vector<std::string> &splited_cmd, int &fd)
+void	Server::PartCommand(std::vector<std::string> &splited_cmd, std::string cmd_reason, int &fd)
 {
-	bool						flag;
+	bool						flag = false;
+	int							it = 0;
+	size_t						position = 0;
 	std::stringstream			ss;
-	std::string					reason;
 	std::vector<std::string>	list_channels;
 
 	if (splited_cmd.size() < 2)
@@ -19,25 +20,36 @@ void	Server::PartCommand(std::vector<std::string> &splited_cmd, int &fd)
 		return ;
 	}
 	list_channels = split_delimeter(splited_cmd[1], ',');
-	for (size_t i = 0; i < splited_cmd.size(); i++)
+	while (it < 2)
+	{
+		position = cmd_reason.find(splited_cmd[it]);
+		cmd_reason = cmd_reason.substr(position + splited_cmd[it].size());
+		if (position != std::string::npos)
+			position = cmd_reason.find_first_not_of("\t\v ");
+		else
+			cmd_reason.clear();
+		it++;
+	}
+	for (size_t i = 0; i < list_channels.size(); i++)
 	{
 		flag = false;
 
-		if (!splited_cmd.empty() && splited_cmd[1 + i] == '#')
-			splited_cmd.erase(splited_cmd.begin());
-		for (size_t j = 0; i < splited_cmd.size(); j++)
+		if (!list_channels.empty() && list_channels[i][0] == '#')
+			list_channels[i].erase(list_channels[i].begin());
+		for (size_t j = 0; j < this->_channels.size(); j++)
 		{
-			if (this->_channels[j].GetName() == splited_cmd[1 + i])
+			if (this->_channels[j].GetName() == list_channels[i])
 			{
 				flag = true;
 				if (!_channels[j].GetClient(fd) && !_channels[j].GetAdmin(fd))
 				{
-					SendErrorV2(442, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), "#" + splited_cmd[1 + i], " :You are not on that channel\r\n");
+					SendErrorV2(442, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), "#" + list_channels[i], " :You are not on that channel\r\n");
 					continue ;
 				}
-				ss << ":" << GetClient(fd)->GetNickname() << "!~" << GetClient(fd)->GetUsername() << "@" << "localhost" << " PART #" << splited_cmd[1 + i];
-				if (!reason.empty())
-					ss << " :" << reason << "\r\n";
+				ss.clear();
+				ss << ":" << GetClient(fd)->GetNickname() << "!~" << GetClient(fd)->GetUsername() << "@" << "localhost" << " PART #" << list_channels[i];
+				if (!cmd_reason.empty())
+					ss << " :" << cmd_reason << "\r\n";
 				else
 					ss << "\r\n";
 				_channels[j].SendEveryone(ss.str());
@@ -50,7 +62,7 @@ void	Server::PartCommand(std::vector<std::string> &splited_cmd, int &fd)
 			}
 		}
 		if (!flag) // if the channel doesn't exist
-			SendErrorV2(403, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), "#" + splited_cmd[1 + i], " :No such channel\r\n");
+			SendErrorV2(403, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), "#" + list_channels[i], " :No such channel\r\n");
 	}
 }
 

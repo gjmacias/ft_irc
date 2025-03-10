@@ -84,7 +84,7 @@ public:
 	void		ClientNickname(std::vector<std::string> &splited_cmd, int fd);
 
 		//		Parse and execute
-	void		ParseAndExecute(std::string &cmd, int fd, std::string &name);
+	void		ParseAndExecute(std::string &cmd, int fd);
 
 		//		Removers Server
 	void		RemoveFd(int fd);
@@ -139,13 +139,13 @@ public:
 	bool		IsLimitValid(std::string& limit);
 
 		//		PART
-	void		PartCommand(std::vector<std::string> &splited_cmd, int &fd);
+	void		PartCommand(std::vector<std::string> &splited_cmd, std::string cmd_reason, int &fd);
 
 		//		PRIVATE_MESSAGE
 	void		PrivateMessageCommand(std::string cmd, int &fd);
 	void		CheckForChannels_Clients(std::vector<std::string> &tmp, int fd);
 		//		QUIT
-	void		QuitCommand(std::vector<std::string> &splited_cmd, int &fd, std::string &name);
+	void		QuitCommand(std::vector<std::string> &splited_cmd, int &fd);
 
 		//		TOPIC
 	void		TopicCommand(std::vector<std::string> &splited_cmd,std::string &cmd, int &fd);

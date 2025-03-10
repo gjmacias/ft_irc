@@ -94,7 +94,10 @@ void	Server::ClientUsername(std::vector<std::string> &splited_cmd, std::string c
 			position = cmd.find(splited_cmd[i]);
 			cmd = cmd.substr(position + splited_cmd[i].size());
 			position = cmd.find_first_not_of("\t\v ");
-			cmd = cmd.substr(position);
+			if (position != std::string::npos)
+				cmd = cmd.substr(position);
+			else
+				cmd.clear();
 			i++;
 		}
 		cmd.erase(cmd.begin());

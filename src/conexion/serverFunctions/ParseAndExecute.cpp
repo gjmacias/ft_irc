@@ -5,7 +5,7 @@
 #									PARSE									  #
 ###############################################################################
 */
-void	Server::ParseAndExecute(std::string &cmd, int fd, std::string &name)
+void	Server::ParseAndExecute(std::string &cmd, int fd)
 {
 	if(cmd.empty())
 		return ;
@@ -23,7 +23,7 @@ void	Server::ParseAndExecute(std::string &cmd, int fd, std::string &name)
 	else if(UpperCase(splited_cmd[0]) == "USER")
 		ClientUsername(splited_cmd, cmd, fd);
 	else if (UpperCase(splited_cmd[0]) == "QUIT")
-		QuitCommand(splited_cmd, fd, name);
+		QuitCommand(splited_cmd, fd);
 	else if(IsRegisteredAndLoged(fd))
 	{
 		if (UpperCase(splited_cmd[0]) == "INVITE")
@@ -35,7 +35,7 @@ void	Server::ParseAndExecute(std::string &cmd, int fd, std::string &name)
 		else if (UpperCase(splited_cmd[0]) == "MODE")
 			ModeCommand(cmd.substr(4, cmd.size() - 4), fd);
 		else if (UpperCase(splited_cmd[0]) == "PART")
-			PartCommand(splited_cmd, fd);
+			PartCommand(splited_cmd, cmd, fd);
 		else if (UpperCase(splited_cmd[0]) == "PRIVMSG")
 			PrivateMessageCommand(cmd, fd);
 		else if (UpperCase(splited_cmd[0]) == "TOPIC")
