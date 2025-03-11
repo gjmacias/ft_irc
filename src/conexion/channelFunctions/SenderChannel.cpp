@@ -25,7 +25,7 @@ void Channel::SendMeToAll(int fd, std::string message)
 	{
 		if(this->_admins[i]->GetFd() != fd)
 		{
-			if(send(this->_admins[i]->GetFd(), message.c_str(), message.size(),0) == -1)
+			if(send(this->_admins[i]->GetFd(), message.c_str(), message.size(), 0) == -1)
 				std::cerr << "send() faild" << std::endl;
 		}
 	}

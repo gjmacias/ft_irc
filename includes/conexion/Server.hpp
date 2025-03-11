@@ -94,8 +94,8 @@ public:
 
 		//		Sender Server
 	void		SendResponse(std::string response, int fd);
-	void		SendErrorV2(int fd, int code, std::string clientname, std::string channelname, std::string msg);
-	void		SendError(int fd, int code, std::string clientname, std::string msg);
+	void		SendErrorV2(int code, int fd, std::string clientname, std::string channelname, std::string msg);
+	void		SendError(int code, int fd, std::string clientname, std::string msg);
 
 		//		Validations Server
 	bool		IsRegisteredAndLoged(int fd);
@@ -120,10 +120,7 @@ public:
 	int			SearchForClients(std::string nickname);
 
 		//		KICK
-	void		KickCommand(std::string cmd, int &fd);
-	std::string	SplitCmdKick(std::string cmd, std::vector<std::string> &tmp, std::string &user, int fd);
-	std::string	SplitCmdK(std::string &cmd, std::vector<std::string> &tmp);
-	void 		FindK(std::string cmd, std::string tofind, std::string &str);
+	void		KickCommand(std::vector<std::string>& splited_cmd, std::string cmd_reason, int& fd);
 
 		//		MODE
 	void		ModeCommand(std::string cmd, int &fd);
@@ -142,8 +139,8 @@ public:
 	void		PartCommand(std::vector<std::string> &splited_cmd, std::string cmd_reason, int &fd);
 
 		//		PRIVATE_MESSAGE
-	void		PrivateMessageCommand(std::string cmd, int &fd);
-	void		CheckForChannels_Clients(std::vector<std::string> &tmp, int fd);
+	void		PrivateMessageCommand(std::vector<std::string>& splited_cmd, std::string cmd_reason, int& fd);
+
 		//		QUIT
 	void		QuitCommand(std::vector<std::string> &splited_cmd, int &fd);
 

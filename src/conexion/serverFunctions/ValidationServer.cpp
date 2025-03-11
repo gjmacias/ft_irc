@@ -42,8 +42,9 @@ bool Server::IsValidChannelname(std::string& channelname)
 {
 	long unsigned int	i = 0;
 
-	if (channelname.empty())
+	if (channelname.empty() || channelname[i] != '#')
 		return false;
+	i++;
 	while (i < channelname.size())
 	{
 		if(!(std::isalnum(channelname[i])) && channelname[i] != ' ' && channelname[i] != '_'
@@ -51,7 +52,7 @@ bool Server::IsValidChannelname(std::string& channelname)
 			return false;
 		i++;
 	}
-	if (i > 200 || i < 2)
+	if (i > 200 || i < 3)
 		return false;
 	return true;
 }

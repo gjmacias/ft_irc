@@ -39,7 +39,7 @@ void	Server::ExistCh(std::string &channelname, std::string &password, int j, int
 	{
 		if (!IsInvited(GetClient(fd), channelname, 0))
 		{
-			SendErrorV2(475, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), '#' + channelname, " :Cannot join channel (+k) - bad key\r\n");
+			SendErrorV2(475, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), channelname, " :Cannot join channel (+k) - bad key\r\n");
 			return ;
 		}
 	}
@@ -47,13 +47,13 @@ void	Server::ExistCh(std::string &channelname, std::string &password, int j, int
 	{
 		if (!IsInvited(GetClient(fd), channelname, 1))
 		{
-			SendErrorV2(473, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), '#' + channelname, " :Cannot join channel (+i)\r\n");
+			SendErrorV2(473, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), channelname, " :Cannot join channel (+i)\r\n");
 			return ;
 		}
 	}
 	if (this->_channels[j].GetModesLimit() && this->_channels[j].CountAllClients() >= this->_channels[j].GetModesLimitNumber())
 	{
-		SendErrorV2(471, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), '#' + channelname, " :Cannot join channel (+1)\r\n");
+		SendErrorV2(471, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), channelname, " :Cannot join channel (+1)\r\n");
 		return ;
 	}
 	//add Client to the channel
@@ -73,11 +73,8 @@ void	Server::ExistCh(std::string &channelname, std::string &password, int j, int
 
 void	Server::NotExistCh(std::string channelname, std::string password, int fd)
 {
-
 	Channel	newChannel;
 
-	if (!channelname.empty() && channelname[0] == '#')
-		channelname.erase(channelname.begin());
 	if (!IsValidChannelname(channelname))
 		return ;
 	newChannel.SetName(channelname);
@@ -103,7 +100,7 @@ void	Server::JoinCommand(std::vector<std::string> &splited_cmd, int &fd)
 
 	if (splited_cmd.size() < 2)
 	{
-		ERR_NOTENOUGHPARAM(GetClient(fd)->GetNickname());
+		SendResponse(ERR_NOTENOUGHPARAM(GetClient(fd)->GetNickname()), fd);
 		return ;
 	}
 	list_channels = split_delimeter(splited_cmd[1], ',');
@@ -111,7 +108,7 @@ void	Server::JoinCommand(std::vector<std::string> &splited_cmd, int &fd)
 		list_passwords = split_delimeter(splited_cmd[2], ',');
     if (list_channels.size() > 10)
     {
-        SendError(407, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), " :Too many _channels\r\n");
+        SendError(GetClient(fd)->GetFd(), 407, GetClient(fd)->GetNickname(), " :Too many _channels\r\n");
         return ;
     }
     for (size_t i = 0; i < list_channels.size(); i++)

@@ -112,7 +112,7 @@ void	Server::ClientUsername(std::vector<std::string> &splited_cmd, std::string c
     if (IsOnlyRegistered(client))
     {
         client->SetIsLogedInServer(true);
-        SendResponse(RPL_CONNECTED(client->GetUsername()), fd);
+        SendResponse(RPL_CONNECTED(client->GetNickname()), fd);
     }
 }
 

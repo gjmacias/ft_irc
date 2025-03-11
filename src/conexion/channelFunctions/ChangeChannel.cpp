@@ -8,40 +8,29 @@
 
 bool Channel::ChangeClientToAdmin(std::string nickname)
 {
-	size_t i = 0;
-
-	while (i < this->_clients.size())
+	for (std::vector<Client*>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
 	{
-		if(this->_clients[i]->GetNickname() == nickname)
-			break;
-		i++;
-	}
-	if( i < this->_clients.size())
-	{
-		this->_admins.push_back(this->_clients[i]);
-		this->_clients.erase(this->_clients.begin() + i);
-		return true;
+		if ((*it)->GetNickname() == nickname)
+		{
+			this->_admins.push_back(*it);
+			this->_clients.erase(it);
+			return true;
+		}
 	}
 	return false;
 }
 
 bool Channel::ChangeAdminToClient(std::string nickname)
 {
-	size_t i = 0;
-
-	while (i < this->_admins.size())
+	for (std::vector<Client*>::iterator it = this->_admins.begin(); it != this->_admins.end(); ++it)
 	{
-		if(this->_admins[i]->GetNickname() == nickname)
-			break;
-		i++;
-	}
-	if(i < this->_admins.size())
-	{
-		this->_clients.push_back(this->_admins[i]);
-		this->_admins.erase(this->_admins.begin() + i);
-		return true;
+		if ((*it)->GetNickname() == nickname)
+		{
+			this->_clients.push_back(*it);
+			this->_admins.erase(it);
+			return true;
+		}
 	}
 	return false;
-
 }
 

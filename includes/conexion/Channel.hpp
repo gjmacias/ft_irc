@@ -64,9 +64,12 @@ public:
 	Client		*GetClient(int fd);
 	Client		*GetAdmin(int fd);
 	Client		*GetClientByNickname(std::string nickname);
+	Client		*GetObligatedAdmin();
 
 		// MAIN FUNCTIONS
 	int			CountAllClients();
+	int			CountAdmins();
+	int			CountClients();
 	std::string ListOfClients();
 //	##########################################################
 

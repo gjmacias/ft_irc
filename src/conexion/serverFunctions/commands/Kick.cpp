@@ -6,148 +6,79 @@
 ###############################################################################
 */
 
-void Server::FindK(std::string cmd, std::string tofind, std::string &str)
+
+void	Server::KickCommand(std::vector<std::string>& splited_cmd, std::string cmd_reason, int& fd)
 {
-	size_t 		i = 0;
-	std::string tmp;
-
-	for (; i < cmd.size(); i++)
-	{
-		if (cmd[i] != ' ')
-		{
-			for (; i < cmd.size() && cmd[i] != ' '; i++)
-				tmp += cmd[i];
-			if (tmp == tofind) break;
-			else tmp.clear();
-		}
-	}
-	if (i < cmd.size()) str = cmd.substr(i);
-	i = 0;
-	for (; i < str.size() && str[i] == ' '; i++);
-	str = str.substr(i);
-}
-
-std::string Server::SplitCmdK(std::string &cmd, std::vector<std::string> &tmp)
-{
-	std::stringstream 	ss(cmd);
-	std::string 		str; 
-	std::string			reason;
-	int count = 3;
-
-	while (ss >> str && count--)
-		tmp.push_back(str);
-	if(tmp.size() != 3) return std::string("");
-	FindK(cmd, tmp[2], reason);
-	return (reason);
-}
-
-std::string Server::SplitCmdKick(std::string cmd, std::vector<std::string> &tmp, std::string &user, int fd)
-{
-	std::string reason = SplitCmdK(cmd, tmp);
-	std::string str;
-	std::string str1;
-	if (tmp.size() < 3) // check if the client send the channel name and the client to kick
-		return std::string("");
-	tmp.erase(tmp.begin());
-	str = tmp[0];
-	user = tmp[1]; tmp.clear();
-	for (size_t i = 0; i < str.size(); i++)
-	{//split the first string by ',' to get the channels names
-		if (str[i] == ',')
-		{
-			tmp.push_back(str1);
-			str1.clear();
-		}
-		else str1 += str[i];
-	}
-	tmp.push_back(str1);
-	for (size_t i = 0; i < tmp.size(); i++)//erase the empty strings
-	{
-		if (tmp[i].empty())
-			tmp.erase(tmp.begin() + i--);
-	}
-	if (reason[0] == ':') 
-		reason.erase(reason.begin());
-	else //shrink to the first space
-	{
-		for (size_t i = 0; i < reason.size(); i++)
-		{
-			if (reason[i] == ' ')
-			{
-				reason = reason.substr(0, i);
-				break;
-			}
-		}
-	}
-	for (size_t i = 0; i < tmp.size(); i++)
-	{// erase the '#' from the channel name and check if the channel valid
-		if (*(tmp[i].begin()) == '#')
-				tmp[i].erase(tmp[i].begin());
-		else
-		{
-			SendErrorV2(403, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), tmp[i], " :No such channel\r\n"); 
-			tmp.erase(tmp.begin() + i--);
-		}
-	}
-	return (reason);
-}
-
-void	Server::KickCommand(std::string cmd, int &fd)
-{
-	std::vector<std::string>	tmp;
-	std::string					reason;
-	std::string					user;
+	size_t						it = 0;
+	size_t						position = 0;
 	std::stringstream			ss;
-	size_t						i;
+	std::string					channel;
+	std::vector<std::string>	list_users;
 
-	reason = SplitCmdKick(cmd, tmp, user, fd);
-	if (user.empty())
+	if (splited_cmd.size() < 3)
 	{
-		SendError(461, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), " :Not enough parameters\r\n");
-		return ;
+		SendResponse(ERR_NOTENOUGHPARAM(GetClient(fd)->GetNickname()), fd);
+		return;
 	}
-	for (i = 0; i > tmp.size(); i++) // search for the channel
+	channel = splited_cmd[1];
+	list_users = split_delimeter(splited_cmd[2], ',');
+	while (it < 3)
 	{
-		if (GetChannel(tmp[i])) // check if the channel exist
+		position = cmd_reason.find(splited_cmd[it]);
+		cmd_reason = cmd_reason.substr(position + splited_cmd[it].size());
+		position = cmd_reason.find_first_not_of("\t\v ");
+		if (position != std::string::npos)
+			cmd_reason = cmd_reason.substr(position);
+		else
+			cmd_reason.clear();
+		it++;
+	}
+	if (GetChannel(channel))
+	{
+		Channel* Channel = GetChannel(channel);
+
+		for (it = 0; this->_channels[it].GetName() != channel; it++)
+			continue;
+		if (!Channel->GetClient(fd) && !Channel->GetAdmin(fd)) // ISNOT in th channel
+			SendErrorV2(442, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), channel, " :You're not on that channel\r\n");
+		if (Channel->GetAdmin(fd))
 		{
-			Channel *Channel = GetChannel(tmp[i]);
-			if (!Channel->GetClient(fd) && !Channel->GetAdmin(fd))  // check if the client is in the channel
+			for (position = 0; position < list_users.size(); position++)
 			{
-				SendErrorV2(442, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), "#" + tmp[i], " :You're not on that channel\r\n");
-				continue ; 
-			}
-			if (Channel->GetAdmin(fd)) // check if the client is admin
-			{
-				if (Channel->IsClientInChannel(user)) // check if the client to kick is in the channel
+				if (Channel->IsClientInChannel(list_users[position])) // check if the client to kick is in the channel
 				{
-					ss << ":" << GetClient(fd)->GetNickname() << "!~" << GetClient(fd)->GetUsername() << "@" << "localhost" << " KICK #" << tmp[i] << " " << user;
-					if (!reason.empty())
-						ss << " :" << reason << "\r\n";
+					ss << ":" << GetClient(fd)->GetNickname() << "!~" << GetClient(fd)->GetUsername() << "@" << "localhost" << " KICK " << channel << " " << list_users[position];
+					if (!cmd_reason.empty())
+					{
+						ss << " ";
+						if (cmd_reason[0] == ':')
+							ss << cmd_reason << "\r\n";
+						else
+							ss << splited_cmd[3] << "\r\n";
+					}
 					else
 						ss << "\r\n";
 					Channel->SendEveryone(ss.str());
-					if (Channel->IsClientInChannel(user) && Channel->GetAdmin(Channel->GetClientByNickname(user)->GetFd()))
-						Channel->RemoveAdmin(Channel->GetClientByNickname(user)->GetFd());
+					if (Channel->IsClientInChannel(list_users[position]) && Channel->GetAdmin(Channel->GetClientByNickname(list_users[position])->GetFd()))
+						Channel->RemoveAdmin(Channel->GetClientByNickname(list_users[position])->GetFd());
 					else
-						Channel->RemoveClient(Channel->GetClientByNickname(user)->GetFd());
+						Channel->RemoveClient(Channel->GetClientByNickname(list_users[position])->GetFd());
 					if (Channel->CountAllClients() == 0)
-						_channels.erase(_channels.begin() + i);
+						_channels.erase(_channels.begin() + it);
+					if (Channel->CountAdmins() == 0)
+						Channel->ChangeClientToAdmin((Channel->GetObligatedAdmin())->GetNickname());
 				}
 				else // if the client to kick is not in the channel
 				{
-					SendErrorV2(441, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), "#" + tmp[i], " :They are not in the channel\r\n");
-					continue ;
+					SendErrorV2(441, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), channel, " :They are not in the channel\r\n");
+					continue;
 				}
 			}
-			else // if the client is not admin
-			{
-				SendErrorV2(482, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), "#" + tmp[i], " :You are not channel operator\r\n");
-				continue ;
-			}
 		}
-		else // if the channel doesn't exist
-			SendErrorV2(403, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), "#" + tmp[i], " :No such channel\r\n");
-
+		else // if the client is not admin
+			SendErrorV2(482, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), channel, " :You are not channel operator\r\n");
 	}
+	else // if the channel doesn't exist
+		SendErrorV2(403, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), channel, " :No such channel\r\n");
 }
 

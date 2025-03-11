@@ -116,7 +116,7 @@ Client	*Channel::GetAdmin(int fd)
 	}
 	return NULL;
 }
-Client* Channel::GetClientByNickname(std::string nickname)
+Client	*Channel::GetClientByNickname(std::string nickname)
 {
 	for (std::vector<Client *>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it){
 		if ((*it)->GetNickname() == nickname)
@@ -128,6 +128,7 @@ Client* Channel::GetClientByNickname(std::string nickname)
 	}
 	return NULL;
 }
+Client	*Channel::GetObligatedAdmin() { return this->_clients[0]; }
 
 /*
 ###############################################################################
@@ -135,7 +136,9 @@ Client* Channel::GetClientByNickname(std::string nickname)
 ###############################################################################
 */
 
-int	Channel::CountAllClients(){return this->_clients.size() + this->_admins.size();}
+int	Channel::CountAllClients() { return this->_clients.size() + this->_admins.size(); }
+int	Channel::CountAdmins() { return this->_admins.size(); }
+int	Channel::CountClients() { return this->_clients.size(); }
 
 std::string	Channel::ListOfClients()
 {
