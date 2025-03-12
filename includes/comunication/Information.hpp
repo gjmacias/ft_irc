@@ -7,7 +7,7 @@
 #define RPL_UMODEIS(hostname, channelname, mode, user)  (":" + hostname + " MODE " + channelname + " " + mode + " " + user + ENDLINE)
 #define RPL_CREATIONTIME(nickname, channelname, creationtime) (": 329 " + nickname + " " + channelname + " " + creationtime + ENDLINE)
 #define RPL_CHANNELMODES(nickname, channelname, modes) (": 324 " + nickname + " " + channelname + " " + modes + ENDLINE)
-#define RPL_CHANGEMODE(hostname, channelname, mode, arguments) (":" + hostname + " MODE " + channelname + " " + mode + " " + arguments + ENDLINE)
+#define RPL_CHANGEMODE(hostname, channelname, modesandarguments) (":" + hostname + " MODE " + channelname + " " + modesandarguments + ENDLINE)
 #define RPL_NICKCHANGE(oldnickname, nickname) (":" + oldnickname + " NICK " + nickname + ENDLINE)
 #define RPL_JOINMSG(hostname, ipaddress, channelname) (":" + hostname + "@" + ipaddress + " JOIN " + channelname + ENDLINE)
 #define RPL_NAMREPLY(nickname, channelname, clientslist) (": 353 " + nickname + " @ " + channelname + " :" + clientslist + ENDLINE)

@@ -4,6 +4,7 @@ int	main(int words, const char **arguments)
 {
 	Server	myServer;
 	words = 3;
+
 	const char* hola[] = { "ircserv", "6667", "1" };
 	arguments = hola;
 

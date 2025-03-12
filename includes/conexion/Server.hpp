@@ -103,7 +103,10 @@ public:
 	bool		IsValidChannelname(std::string &channelname);
 	bool		IsValidUsername(std::string &username);
 	bool		IsValidNickname(std::string &nickname);
-	bool		IsNickNameInUse(std::string &nickname);
+	bool		IsPasswordValid(std::string password);
+	bool		IsLimitValid(std::string& limit);
+	bool		IsNickNameInUse(std::string& nickname);
+
 //	##########################################################
 
 
@@ -123,17 +126,18 @@ public:
 	void		KickCommand(std::vector<std::string>& splited_cmd, std::string cmd_reason, int& fd);
 
 		//		MODE
-	void		ModeCommand(std::string cmd, int &fd);
-	std::string	ModeInviteOnly(Channel *channel, char opera, std::string chain);
-	std::string ModeTopicRestriction(Channel *channel ,char opera, std::string chain);
-	std::string ModeChannelKey(std::vector<std::string> tokens, Channel *channel, size_t &pos, char opera, int fd, std::string chain, std::string &arguments);
-	std::string ModeOperatorPrivilege(std::vector<std::string> tokens, Channel *channel, size_t& pos, int fd, char opera, std::string chain, std::string& arguments);
-	std::string ModeLimit(std::vector<std::string> tokens,  Channel *channel, size_t &pos, char opera, int fd, std::string chain, std::string& arguments);
-	std::string ModeToAppend(std::string chain, char opera, char mode);
-	void		GetCmdArguments(std::string cmd,std::string& name, std::string& modeset ,std::string &params);
-	std::vector<std::string>	SplitParameters(std::string parameters);
-	bool		IsPasswordValid(std::string password);
-	bool		IsLimitValid(std::string& limit);
+	void		ModeCommand(std::vector<std::string>& splited_cmd, int& fd);
+	void		ModeExecute(Channel* channel, std::vector<std::pair<char, bool> > list_modes, std::vector<std::string> list_parameters, int& fd);
+			//	5 modes
+	bool		ModeInviteOnly(Channel* channel, bool flag);
+	bool		ModeTopicRestriction(Channel* channel, bool flag);
+	bool		ModeChannelKey(Channel* channel, bool flag, std::string& password, int fd);
+	bool		ModeOperatorPrivilege(Channel* channel, bool flag, std::string& user, int fd);
+	bool		ModeLimit(Channel* channel, bool flag, std::string& limit, int fd);
+			//	utils
+	void		PrepareModeResponse(std::vector<std::string>& response, std::pair<char, bool> mode, std::string parameter);
+	void		SendModeResponse(std::vector<std::string> response, Channel* channel, int fd);
+	void		OrderModes(std::vector<std::pair<char, bool> >& list_modes, std::string arraymodes);
 
 		//		PART
 	void		PartCommand(std::vector<std::string> &splited_cmd, std::string cmd_reason, int &fd);
