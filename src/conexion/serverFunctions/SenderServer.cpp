@@ -7,20 +7,18 @@
 */
 void	Server::SendResponse(std::string response, int fd)
 {
-	//if(send(fd, response.c_str(), response.size(), 0) == -1)
-	//	std::cerr << "Response send() failed" << std::endl;
+    struct pollfd   pfd;
+    int             ret;
+    ssize_t         bytes_sent;
+
 	if (fd < 0)
     {
         std::cerr << "Response send() failed: Invalid socket fd" << std::endl;
         return;
     }
-
-    struct pollfd pfd;
     pfd.fd = fd;
     pfd.events = POLLOUT; // Esperamos hasta que el socket esté listo para escribir
-
-    int ret = poll(&pfd, 1, 1000); // Esperamos hasta 1 segundo para escribir
-
+    ret = poll(&pfd, 1, 1000); // Esperamos hasta 1 segundo para escribir
     if (ret == -1)
     {
         std::cerr << "Poll failed: " << strerror(errno) << std::endl;
@@ -31,9 +29,7 @@ void	Server::SendResponse(std::string response, int fd)
         std::cerr << "Timeout: No se pudo escribir en el socket" << std::endl;
         return;
     }
-
-    ssize_t bytes_sent = send(fd, response.c_str(), response.size(), 0);
-
+    bytes_sent = send(fd, response.c_str(), response.size(), 0);
     if (bytes_sent == -1)
     {
         if (errno == EAGAIN || errno == EWOULDBLOCK)
