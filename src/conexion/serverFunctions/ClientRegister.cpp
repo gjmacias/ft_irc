@@ -61,6 +61,13 @@ void Server::ClientAuthentification(std::string cmd, int fd)
 void	Server::ClientUsername(std::vector<std::string> &splited_cmd, std::string cmd, int fd)
 {
     Client		*client = GetClient(fd);
+
+	// Verifica si el cliente es NULL (no encontrado)
+    if (client == NULL) {
+        std::cerr << "Error: Client with fd " << fd << " not found!" << std::endl;
+        return; // Termina la ejecución si no se encuentra el cliente
+    }
+
 	std::string	response = client->GetNickname();
 	size_t		position = 0;
 	size_t		i = 0;
@@ -118,7 +125,15 @@ void	Server::ClientUsername(std::vector<std::string> &splited_cmd, std::string c
 
 void	Server::ClientNickname(std::vector<std::string> &splited_cmd, int fd)
 {
-	Client		*client = GetClient(fd); 
+	Client		*client = GetClient(fd);
+
+	// Verifica si el cliente es NULL (no encontrado)
+	if (client == NULL)
+	{
+		std::cerr << "Error: Client with fd " << fd << " not found!" << std::endl;
+		return;  // Termina la ejecución si no se encuentra el cliente
+	}
+	
 	std::string	oldnick = client->GetNickname();
 	std::string	response = client->GetNickname();
 
@@ -153,7 +168,7 @@ void	Server::ClientNickname(std::vector<std::string> &splited_cmd, int fd)
 	if (!(oldnick.empty()))
     	SendResponse(RPL_NICKCHANGE(oldnick, splited_cmd[1]), fd);
 
-	if(IsOnlyRegistered(client))
+		if (client->GetUsername() != "" && !client->GetIsRegistered())
 	{
 		client->SetIsLogedInServer(true);
 		SendResponse(RPL_CONNECTED(client->GetNickname()), fd);

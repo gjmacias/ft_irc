@@ -12,10 +12,13 @@ void Server::RemoveFd(int fd)
 	{
 		if (this->_pollSocketFds[i].fd == fd)
 		{
+			std::cout << "Removing fd: " << fd << " from poll list." << std::endl;
 			this->_pollSocketFds.erase(this->_pollSocketFds.begin() + i); 
+			std::cout << "Poll list size after removal: " << _pollSocketFds.size() << std::endl;
 			return;
 		}
 	}
+	std::cerr << "Warning: Tried to remove fd " << fd << " but it was not found in _pollSocketFds." << std::endl;
 }
 
 void Server::RemoveClient(int fd)
@@ -37,6 +40,7 @@ void	Server::RemoveClientFromChannels(int fd)
 	for (size_t i = 0; i < this->_channels.size(); i++)
 	{
 		int flag = 0;
+		
 		if (this->_channels[i].GetClient(fd))
 		{
 			this->_channels[i].RemoveClient(fd);
@@ -55,9 +59,15 @@ void	Server::RemoveClientFromChannels(int fd)
 		}
 		if (flag)
 		{
-			response = ":" + GetClient(fd)->GetNickname() + "!~" + GetClient(fd)->GetUsername() + "@localhost QUIT Quit\r\n";
-			this->_channels[i].SendEveryone(response);
-		}
+			Client *client = GetClient(fd);
+    		if (client)
+			{
+        		response = ":" + client->GetNickname() + "!~" + client->GetUsername() + "@localhost QUIT Quit\r\n";
+        		this->_channels[i].SendEveryone(response);
+    		} 
+			else
+        		std::cerr << "Warning: Client fd " << fd << " was removed before sending QUIT message." << std::endl;
+    	}
 	}
 }
 
