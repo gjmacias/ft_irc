@@ -74,6 +74,23 @@ bool Server::IsValidNickname(std::string& nickname)
 	return true;
 }
 
+bool Server::IsPasswordValid(std::string password)
+{
+	if (password.empty())
+		return false;
+	for (size_t i = 0; i < password.size(); i++)
+	{
+		if (!std::isalnum(password[i]) && password[i] != '_')
+			return false;
+	}
+	return true;
+}
+
+bool Server::IsLimitValid(std::string& limit)
+{
+	return (!(limit.find_first_not_of("0123456789") != std::string::npos) && std::atoi(limit.c_str()) > 0);
+}
+
 bool Server::IsNickNameInUse(std::string& nickname)
 {
 	for (size_t i = 0; i < this->_clients.size(); i++)
