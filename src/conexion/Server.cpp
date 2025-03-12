@@ -98,24 +98,24 @@ void Server::ServerInit(int port, std::string password)
 
 	_mainSocketFd = socket(AF_INET, SOCK_STREAM, 0);
 	if(_mainSocketFd == -1)
-		throw(std::runtime_error("faild to create socket"));
+		throw(std::runtime_error("failed to create socket"));
 
 	int enabled = 1;
 	if(setsockopt(_mainSocketFd, SOL_SOCKET, SO_REUSEADDR, &enabled, sizeof(enabled)) == -1) 
-			throw(std::runtime_error("faild to set option (SO_REUSEADDR) on socket"));
+			throw(std::runtime_error("failed to set option (SO_REUSEADDR) on socket"));
 	if (fcntl(_mainSocketFd, F_SETFL, O_NONBLOCK) == -1)
-		throw(std::runtime_error("faild to set option (O_NONBLOCK) on socket"));
+		throw(std::runtime_error("failed to set option (O_NONBLOCK) on socket"));
 	if (bind(_mainSocketFd, (struct sockaddr *)&socketAddress, sizeof(socketAddress)) == -1)
-		throw(std::runtime_error("faild to bind socket"));
+		throw(std::runtime_error("failed to bind socket"));
 	if (listen(_mainSocketFd, SOMAXCONN) == -1)
-		throw(std::runtime_error("listen() faild"));
+		throw(std::runtime_error("listen() failed"));
 
 	newPoll.fd = _mainSocketFd;
 	newPoll.events = POLLIN;
 	newPoll.revents = 0;
 	_pollSocketFds.push_back(newPoll);
 
-	std::cout << GREEN << "Server <" << _mainSocketFd << "> Connected" << WHITE << std::endl;
+	std::cout << GREEN << "Server <" << _mainSocketFd - 3 << "> Connected" << WHITE << std::endl;
 	std::cout << "Waiting to accept a connection...\n";
 }
 
@@ -124,7 +124,7 @@ void Server::ServerLoop()
 	while (Server::_signal == false)
 	{
 		if((poll(&_pollSocketFds[0], _pollSocketFds.size(), -1) == -1) && Server::_signal == false)
-			throw(std::runtime_error("poll() faild"));
+			throw(std::runtime_error("poll() failed"));
 
 		for (size_t i = 0; i < _pollSocketFds.size(); i++)
 		{
@@ -169,7 +169,7 @@ void Server::AcceptNewClient()
 	_clients.push_back(newClient);
 	_pollSocketFds.push_back(NewPoll);
 
-	std::cout << GREEN << "Client <" << clientFd << "> Connected" << WHITE << std::endl;
+	std::cout << GREEN << "Client <" << clientFd - 3 << "> Connected" << WHITE << std::endl;
 }
 
 void Server::ReceiveNewData(int fd)
@@ -185,7 +185,7 @@ void Server::ReceiveNewData(int fd)
 	{
 		if (bytes < 0)
 			std::cout << RED << "Error receiving data from: <" << fd << ">" << WHITE << std::endl;
-		std::cout << RED << "Client <" << fd << "> Disconnected" << WHITE << std::endl;
+		std::cout << RED << "Client <" << fd - 3 << "> Disconnected" << WHITE << std::endl;
 		RemoveClientFromChannels(fd);
 		RemoveClient(fd);
 		RemoveFd(fd);
@@ -208,12 +208,12 @@ void Server::CloseFds()
 {
 	for(size_t i = 0; i < _clients.size(); i++)
 	{ 
-		std::cout << RED << "Client <" << _clients[i].GetFd() << "> Disconnected" << WHITE << std::endl;
+		std::cout << RED << "Client <" << _clients[i].GetFd() - 3 << "> Disconnected" << WHITE << std::endl;
 		close(_clients[i].GetFd());
 	}
 	if (_mainSocketFd != -1)
 	{
-		std::cout << RED << "Server <" << _mainSocketFd << "> Disconnected" << WHITE << std::endl;
+		std::cout << RED << "Server <" << _mainSocketFd - 3 << "> Disconnected" << WHITE << std::endl;
 		close(_mainSocketFd);
 	}
 }
