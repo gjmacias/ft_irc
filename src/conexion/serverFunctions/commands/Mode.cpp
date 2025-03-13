@@ -23,7 +23,7 @@ void	Server::ModeCommand(std::vector<std::string> &splited_cmd, int &fd)
 		SendResponse(ERR_CHANNELNOTFOUND((this->GetClient(fd))->GetNickname(), splited_cmd[1]), fd);
 		return ;
 	}
-	else if (!channel->GetClient(fd))
+	else if (!channel->GetAdmin(fd) && !channel->GetClient(fd))
 	{
 		SendErrorV2(442, fd, (this->GetClient(fd))->GetNickname(), channel->GetName(), " :You're not on that channel\r\n");
 		return ;
@@ -60,7 +60,7 @@ void	Server::ModeExecute(Channel* channel, std::vector<std::pair<char, bool> > l
 	for (i = 0; i < list_modes.size(); i++)
 	{
 		if (j < list_parameters.size())
-			parameter = list_parameters[0];
+			parameter = list_parameters[j];
 		else
 			parameter = "";
 		if (list_modes[i].first == 'i')//invite mode
@@ -68,11 +68,20 @@ void	Server::ModeExecute(Channel* channel, std::vector<std::pair<char, bool> > l
 		else if (list_modes[i].first == 't') //topic restriction mode
 			flag_response = ModeTopicRestriction(channel, list_modes[i].second);
 		else if (list_modes[i].first == 'k') //password set/remove
+		{
 			flag_response = ModeChannelKey(channel, list_modes[i].second, parameter, fd);
+			j++;
+		}
 		else if (list_modes[i].first == 'o') //set/remove user operator privilege
+		{
 			flag_response = ModeOperatorPrivilege(channel, list_modes[i].second, parameter, fd);
+			j++;
+		}
 		else if (list_modes[i].first == 'l') //set/remove channel limits
+		{
 			flag_response = ModeLimit(channel, list_modes[i].second, parameter, fd);
+			j++;
+		}
 		else
 		{
 			SendResponse(ERR_UNKNOWNMODE((this->GetClient(fd))->GetNickname(), channel->GetName(), list_modes[i].first), fd);
@@ -105,16 +114,19 @@ bool	Server::ModeTopicRestriction(Channel *channel, bool flag)
 
 bool	Server::ModeChannelKey(Channel* channel, bool flag, std::string & password, int fd)
 {
-	if(!IsPasswordValid(password))
-	{
-		SendResponse(ERR_INVALIDMODEPARM(channel->GetName(),std::string("(k)")), fd);
-		return false;
-	}
-	channel->SetModesChannelKey(flag);
+
 	if(flag)
+	{
+		if (!IsPasswordValid(password))
+		{
+			SendResponse(ERR_INVALIDMODEPARM(channel->GetName(), std::string("(k)")), fd);
+			return false;
+		}
 		channel->SetPassword(password);
+	}
 	else 
 		channel->SetPassword("");
+	channel->SetModesChannelKey(flag);
 	return true;
 }
 
@@ -134,16 +146,18 @@ bool	Server::ModeOperatorPrivilege(Channel* channel, bool flag, std::string& use
 
 bool	Server::ModeLimit(Channel* channel, bool flag, std::string& limit, int fd)
 {
-	if(!IsLimitValid(limit))
-	{
-		SendResponse(ERR_INVALIDMODEPARM(channel->GetName(),"(l)"), fd);
-		return false;
-	}
-	channel->SetModesLimit(flag);
 	if (flag)
+	{
+		if (!IsLimitValid(limit))
+		{
+			SendResponse(ERR_INVALIDMODEPARM(channel->GetName(), "(l)"), fd);
+			return false;
+		}
 		channel->SetModesLimitNumber(std::atoi(limit.c_str()));
+	}
 	else
 		channel->SetModesLimitNumber(0);
+	channel->SetModesLimit(flag);
 	return true;
 }
 
@@ -171,6 +185,8 @@ void	Server::SendModeResponse(std::vector<std::string> response, Channel* channe
 	std::string	result;
 	size_t		i = 0;
 
+	if (response.size() == 0)
+		return;
 	while (i < response.size())
 	{
 		result += response[i];

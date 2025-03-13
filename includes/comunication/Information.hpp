@@ -3,7 +3,7 @@
 
 #include "Endline.hpp"
 
-#define RPL_CONNECTED(nickname) (": 001 " + nickname + " : Welcome to the IRC server!" + ENDLINE)
+#define RPL_CONNECTED(nickname) (": 001 " + nickname + " :Welcome to the IRC server!" + ENDLINE)
 #define RPL_UMODEIS(hostname, channelname, mode, user)  (":" + hostname + " MODE " + channelname + " " + mode + " " + user + ENDLINE)
 #define RPL_CREATIONTIME(nickname, channelname, creationtime) (": 329 " + nickname + " " + channelname + " " + creationtime + ENDLINE)
 #define RPL_CHANNELMODES(nickname, channelname, modes) (": 324 " + nickname + " " + channelname + " " + modes + ENDLINE)

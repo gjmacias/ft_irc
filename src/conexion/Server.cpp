@@ -123,7 +123,6 @@ void Server::ServerLoop()
 {
 	while (Server::_signal == false)
 	{
-        std::cout << std::endl;
 		if((poll(&_pollSocketFds[0], _pollSocketFds.size(), -1) == -1) && Server::_signal == false)
 			throw(std::runtime_error("poll() failed"));
 
