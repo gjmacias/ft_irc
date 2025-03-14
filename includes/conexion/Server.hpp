@@ -76,7 +76,7 @@ public:
 
 //	##################	SERVER_FUNCTIONS	##################
 		//		Adders Server
-	void		AddChannel(Channel newChannel);
+	void		AddChannel(Channel &newChannel);
 	
 			//		Client Register
 	void		ClientAuthentification(std::string cmd, int fd);
@@ -93,7 +93,6 @@ public:
 	void		RemoveChannel(std::string name);
 
 		//		Sender Server
-	void		SendResponse(std::string response, int fd);
 	void		SendErrorV2(int code, int fd, std::string clientname, std::string channelname, std::string msg);
 	void		SendError(int code, int fd, std::string clientname, std::string msg);
 
@@ -113,21 +112,20 @@ public:
 
 //	##################	SERVER_FUNCTIONS/COMMANDS	##################
 		//		INVITE
-	void		InviteCommand(std::vector<std::string> &splited_cmd, int &fd);
+	void		InviteCommand(std::vector<std::string> &splited_cmd, int fd);
 
 		//		JOIN
-	void		JoinCommand(std::vector<std::string> &splited_cmd, int &fd);
+	void		JoinCommand(std::vector<std::string> &splited_cmd, int fd);
 	void		NotExistCh(std::string channelname, std::string password, int fd);
 	void		ExistCh(std::string &channelname, std::string &password, int j, int fd);
-	bool 		IsInvited(Client *cli, std::string ChName, int flag);
 	int			SearchForClients(std::string nickname);
 
 		//		KICK
-	void		KickCommand(std::vector<std::string>& splited_cmd, std::string cmd_reason, int& fd);
+	void		KickCommand(std::vector<std::string>& splited_cmd, std::string cmd_reason, int fd);
 
 		//		MODE
-	void		ModeCommand(std::vector<std::string>& splited_cmd, int& fd);
-	void		ModeExecute(Channel* channel, std::vector<std::pair<char, bool> > list_modes, std::vector<std::string> list_parameters, int& fd);
+	void		ModeCommand(std::vector<std::string>& splited_cmd, int fd);
+	void		ModeExecute(Channel* channel, std::vector<std::pair<char, bool> > list_modes, std::vector<std::string> list_parameters, int fd);
 			//	5 modes
 	bool		ModeInviteOnly(Channel* channel, bool flag);
 	bool		ModeTopicRestriction(Channel* channel, bool flag);
@@ -140,19 +138,19 @@ public:
 	void		OrderModes(std::vector<std::pair<char, bool> >& list_modes, std::string arraymodes);
 
 		//		PART
-	void		PartCommand(std::vector<std::string> &splited_cmd, std::string cmd_reason, int &fd);
+	void		PartCommand(std::vector<std::string> &splited_cmd, std::string cmd_reason, int fd);
 
 		//		PRIVATE_MESSAGE
-	void		PrivateMessageCommand(std::vector<std::string>& splited_cmd, std::string cmd_reason, int& fd);
+	void		PrivateMessageCommand(std::vector<std::string>& splited_cmd, std::string cmd_reason, int fd);
 
 		//		QUIT
-	void		QuitCommand(std::vector<std::string> &splited_cmd, int &fd);
+	void		QuitCommand(std::vector<std::string>& splited_cmd, std::string cmd_reason, int fd);
 
 		//		TOPIC
-	void		TopicCommand(std::vector<std::string> &splited_cmd,std::string &cmd, int &fd);
-	std::string TimeTopic();
-	std::string GetTopic(std::string &input);
-	int			GetPos(std::string &cmd);
+	void		TopicCommand(std::vector<std::string>& splited_cmd, std::string cmd_reason, int fd);
+	void		TopicExecute(std::string channel, std::vector<std::string>& splited_cmd, std::string cmd_reason, int fd);
+	std::string TopicTime();
+
 //	##########################################################
 };
 

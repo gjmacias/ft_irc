@@ -6,7 +6,7 @@
 ###############################################################################
 */
 
-void	Server::ModeCommand(std::vector<std::string> &splited_cmd, int &fd)
+void	Server::ModeCommand(std::vector<std::string> &splited_cmd, int fd)
 {
 	std::vector<std::pair<char, bool> >	list_modes;
 	std::vector<std::string>			list_parameters;
@@ -49,7 +49,7 @@ void	Server::ModeCommand(std::vector<std::string> &splited_cmd, int &fd)
 	ModeExecute(channel, list_modes, list_parameters, fd);
 }
 
-void	Server::ModeExecute(Channel* channel, std::vector<std::pair<char, bool> > list_modes, std::vector<std::string> list_parameters, int& fd)
+void	Server::ModeExecute(Channel* channel, std::vector<std::pair<char, bool> > list_modes, std::vector<std::string> list_parameters, int fd)
 {
 	size_t						i = 0;
 	size_t						j = 0;
@@ -153,10 +153,10 @@ bool	Server::ModeLimit(Channel* channel, bool flag, std::string& limit, int fd)
 			SendResponse(ERR_INVALIDMODEPARM(channel->GetName(), "(l)"), fd);
 			return false;
 		}
-		channel->SetModesLimitNumber(std::atoi(limit.c_str()));
+		channel->SetLimitNumber(std::atoi(limit.c_str()));
 	}
 	else
-		channel->SetModesLimitNumber(0);
+		channel->SetLimitNumber(0);
 	channel->SetModesLimit(flag);
 	return true;
 }

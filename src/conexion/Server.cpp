@@ -180,8 +180,8 @@ void Server::AcceptNewClient()
 
 	std::cout << GREEN << "Client <" << clientFd - 3 << "> Connected" << WHITE << std::endl;
 
-	std::string welcomeMsg = ":myIRC 001 " + newClient.GetIPaddress() + " :Welcome to MyIRC\r\n";
-    send(clientFd, welcomeMsg.c_str(), welcomeMsg.size(), 0);
+	std::string welcomeMsg = ":ircserv 001 " + newClient.GetIPaddress() + " :Welcome to MyIRC\r\n";
+	SendResponse(welcomeMsg, clientFd);
 }
 
 void Server::ReceiveNewData(int fd)
@@ -193,7 +193,7 @@ void Server::ReceiveNewData(int fd)
 
 	if (client == NULL) 
 	{
-        std::cerr << "Client with fd " << fd << " not found!" << std::endl;
+        std::cerr << "Client with fd " << fd - 3 << " not found!" << std::endl;
         return;  // O maneja el error de alguna forma
     }
 
@@ -205,12 +205,12 @@ void Server::ReceiveNewData(int fd)
 		RemoveClientFromChannels(fd);
 		RemoveClient(fd);
 		RemoveFd(fd);
-		CloseFds();
+		close(fd);
 		return;
 	}
 	else if (bytes < 0)
 	{
-		std::cout << RED << "Error receiving data from: <" << fd << ">" << WHITE << std::endl;
+		std::cout << RED << "Error receiving data from: <" << fd - 3 << ">" << WHITE << std::endl;
 		return ;
 	}	
 	// Añadimos el contenido al buffer del cliente

@@ -6,7 +6,7 @@
 ###############################################################################
 */
 
-void	Server::PartCommand(std::vector<std::string> &splited_cmd, std::string cmd_reason, int &fd)
+void	Server::PartCommand(std::vector<std::string> &splited_cmd, std::string cmd_reason, int fd)
 {
 	bool						flag = false;
 	int							it = 0;

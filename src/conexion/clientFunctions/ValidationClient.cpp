@@ -6,11 +6,11 @@
 ###############################################################################
 */
 
-bool Client::ImInChannel(std::string &channel_name)
+bool Client::ImInvitedInChannel(std::string channel_name)
 {
-	for (size_t i = 0; i < this->_myChannels.size(); i++)
+	for (size_t i = 0; i < this->_myInviteChannels.size(); i++)
 	{
-		if (this->_myChannels[i] == channel_name)
+		if (this->_myInviteChannels[i] == channel_name)
 			return true;
 	}
 	return false;

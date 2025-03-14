@@ -7,7 +7,7 @@
 */
 
 
-void	Server::KickCommand(std::vector<std::string>& splited_cmd, std::string cmd_reason, int& fd)
+void	Server::KickCommand(std::vector<std::string>& splited_cmd, std::string cmd_reason, int fd)
 {
 	size_t						it = 0;
 	size_t						position = 0;

@@ -6,18 +6,20 @@
 ###############################################################################
 */
 
-void	Server::QuitCommand(std::vector<std::string> &splited_cmd, int &fd)
+void	Server::QuitCommand(std::vector<std::string> &splited_cmd, std::string cmd_reason, int fd)
 {
-	std::string	rpl;
 	size_t		i;
+	std::string response;
 
-	std::string joined_cmd = "";
-	for (size_t j = 0; j < splited_cmd.size(); j++)
-	{
-		joined_cmd += splited_cmd[j];
-		if (j != splited_cmd.size() - 1) // Agregar espacios entre palabras
-			joined_cmd += " ";
-	}
+	i = cmd_reason.find(splited_cmd[0]);
+	cmd_reason = cmd_reason.substr(i + splited_cmd[0].size());
+	i = cmd_reason.find_first_not_of("\t\v ");
+	if (i != std::string::npos)
+		cmd_reason = cmd_reason.substr(i);
+	else
+		cmd_reason.clear();
+	if (splited_cmd.size() > 1 && cmd_reason[0] != ':')
+			cmd_reason = splited_cmd[2];
 	for (i = 0; i <_channels.size(); i++)
 	{
 		if (_channels[i].GetClient(fd))
@@ -27,8 +29,8 @@ void	Server::QuitCommand(std::vector<std::string> &splited_cmd, int &fd)
 				_channels.erase(_channels.begin() + i);
 			else
 			{
-				rpl = ":" + GetClient(fd)->GetNickname() + "!~" + GetClient(fd)->GetUsername() + "@localhost QUIT " + joined_cmd + "\r\n";
-				_channels[i].SendEveryone(rpl);
+				response = ":" + GetClient(fd)->GetNickname() + "!~" + GetClient(fd)->GetUsername() + "@localhost QUIT " + cmd_reason + "\r\n";
+				_channels[i].SendEveryone(response);
 			}
 		}
 		else if (_channels[i].GetAdmin(fd))
@@ -38,8 +40,8 @@ void	Server::QuitCommand(std::vector<std::string> &splited_cmd, int &fd)
 				_channels.erase(_channels.begin() + i);
 			else
 			{
-				rpl = ":" + GetClient(fd)->GetNickname() + "!~" + GetClient(fd)->GetUsername() + "@localhost QUIT " + joined_cmd +"\r\n";
-				_channels[i].SendEveryone(rpl);
+				response = ":" + GetClient(fd)->GetNickname() + "!~" + GetClient(fd)->GetUsername() + "@localhost QUIT " + cmd_reason +"\r\n";
+				_channels[i].SendEveryone(response);
 			}
 		}
 	}

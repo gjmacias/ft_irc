@@ -6,5 +6,5 @@
 ###############################################################################
 */
 
-void Server::AddChannel(Channel newChannel){this->_channels.push_back(newChannel);}
+void Server::AddChannel(Channel &newChannel){this->_channels.push_back(newChannel);}
 

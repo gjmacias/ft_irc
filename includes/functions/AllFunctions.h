@@ -6,6 +6,9 @@
 # include <sstream>
 # include <cstdlib>
 
+//		sendRespose
+void    SendResponse(std::string response, int fd);
+
 //		Validations
 bool 						isPortValid(std::string port);
 

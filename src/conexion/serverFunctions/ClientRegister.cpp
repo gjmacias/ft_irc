@@ -150,7 +150,7 @@ void	Server::ClientNickname(std::vector<std::string> &splited_cmd, int fd)
 		SendResponse(ERR_NOTENOUGHPARAM(response), fd);
 		return; 
 	}
-	if (IsNickNameInUse(splited_cmd[1]))
+	if (IsNickNameInUse(splited_cmd[1]) && GetClient(fd)->GetNickname() != splited_cmd[1])
     {
         SendResponse(ERR_NICKINUSE(response), fd);
         return;
@@ -167,8 +167,7 @@ void	Server::ClientNickname(std::vector<std::string> &splited_cmd, int fd)
 
 	if (!(oldnick.empty()))
     	SendResponse(RPL_NICKCHANGE(oldnick, splited_cmd[1]), fd);
-
-		if (client->GetUsername() != "" && !client->GetIsRegistered())
+	if (IsOnlyRegistered(client))
 	{
 		client->SetIsLogedInServer(true);
 		SendResponse(RPL_CONNECTED(client->GetNickname()), fd);
