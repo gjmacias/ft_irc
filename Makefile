@@ -46,6 +46,7 @@ SRC			=	main.cpp \
 				conexion/serverFunctions/commands/Quit.cpp \
 				conexion/serverFunctions/commands/Topic.cpp \
 				\
+				functions/SendResponse.cpp \
 				functions/Splits.cpp \
 				functions/UpperCase.cpp \
 				functions/Validations.cpp \

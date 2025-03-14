@@ -5,5 +5,9 @@
 #									ADDERS									  #
 ###############################################################################
 */
-void Client::AddToMyChannels(std::string channel_name) { _myChannels.push_back(channel_name); }
+void Client::AddToMyInvitedChannels(std::string channel_name)
+{
+	if (!ImInvitedInChannel(channel_name))
+	_myInviteChannels.push_back(channel_name);
+}
 

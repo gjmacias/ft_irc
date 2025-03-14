@@ -14,7 +14,7 @@ private:
 	std::string					_nickname;
 	std::string					_username;
 	std::string					_buffer;
-	std::vector<std::string>	_myChannels;
+	std::vector<std::string>	_myInviteChannels;
 public:
 //	##################		CHANNEL.CPP		##################
 		//		CONSTRUCTOR
@@ -50,13 +50,13 @@ public:
 
 //	##################	CLIENT_FUNCTIONS	##################
 		//		Add Client
-	void		AddToMyChannels(std::string channel_name);
+	void		AddToMyInvitedChannels(std::string channel_name);
 
 		//		Removers Client
-	void		RmFromMyChannels(std::string &channel_name);
+	void		RmFromMyInvitedChannels(std::string channel_name);
 
 		//		Validations Client
-	bool		ImInChannel(std::string &channel_name);
+	bool		ImInvitedInChannel(std::string channel_name);
 //	##########################################################
 };
 

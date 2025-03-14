@@ -44,7 +44,6 @@ Client	*Server::GetClient(int fd)
 {
 	for (size_t i = 0; i < this->_clients.size(); i++)
 	{
-		std::cout << "Checking client with fd: " << this->_clients[i].GetFd() << std::endl;
 		if (this->_clients[i].GetFd() == fd)
 			return &this->_clients[i];
 	}
@@ -124,12 +123,6 @@ void Server::ServerLoop()
 {
 	while (Server::_signal == false)
 	{
-		std::cout << "Waiting for poll event... Current poll fds: ";
-        for (size_t i = 0; i < _pollSocketFds.size(); i++)
-        {
-            std::cout << _pollSocketFds[i].fd << " ";
-        }
-        std::cout << std::endl;
 		if((poll(&_pollSocketFds[0], _pollSocketFds.size(), -1) == -1) && Server::_signal == false)
 			throw(std::runtime_error("poll() failed"));
 
@@ -137,7 +130,6 @@ void Server::ServerLoop()
 		{
 			if (_pollSocketFds[i].revents & POLLIN)
 			{
-				std::cout << "Handling POLLIN event for fd: " << _pollSocketFds[i].fd << std::endl;
 				if (_pollSocketFds[i].fd == _mainSocketFd)
 					AcceptNewClient();
 				else
@@ -180,22 +172,16 @@ void Server::AcceptNewClient()
 	NewPoll.events = POLLIN;
 	NewPoll.revents = 0;
 
-	// Verificación antes de agregar el cliente
-    std::cout << "Adding client with fd: " << clientFd << std::endl;
-
 	newClient.SetFd(clientFd);
 	newClient.SetIPaddress(inet_ntoa(clientAddress.sin_addr));
-
-	// Verifica que el cliente realmente se agrega a la lista
-    std::cout << "Client IP: " << newClient.GetIPaddress() << std::endl;
 
 	_clients.push_back(newClient);
 	_pollSocketFds.push_back(NewPoll);
 
 	std::cout << GREEN << "Client <" << clientFd - 3 << "> Connected" << WHITE << std::endl;
 
-	std::string welcomeMsg = ":myIRC 001 " + newClient.GetIPaddress() + " :Welcome to MyIRC\r\n";
-    send(clientFd, welcomeMsg.c_str(), welcomeMsg.size(), 0);
+	std::string welcomeMsg = ":ircserv 001 " + newClient.GetIPaddress() + " :Welcome to MyIRC\r\n";
+	SendResponse(welcomeMsg, clientFd);
 }
 
 void Server::ReceiveNewData(int fd)
@@ -207,7 +193,7 @@ void Server::ReceiveNewData(int fd)
 
 	if (client == NULL) 
 	{
-        std::cerr << "Client with fd " << fd << " not found!" << std::endl;
+        std::cerr << "Client with fd " << fd - 3 << " not found!" << std::endl;
         return;  // O maneja el error de alguna forma
     }
 
@@ -219,17 +205,14 @@ void Server::ReceiveNewData(int fd)
 		RemoveClientFromChannels(fd);
 		RemoveClient(fd);
 		RemoveFd(fd);
-		CloseFds();
+		close(fd);
 		return;
 	}
 	else if (bytes < 0)
 	{
-		std::cout << RED << "Error receiving data from: <" << fd << ">" << WHITE << std::endl;
+		std::cout << RED << "Error receiving data from: <" << fd - 3 << ">" << WHITE << std::endl;
 		return ;
-	}
-	// 🔹 Depuración: Mostrar lo que envía Irssi
-    std::cout << "Received " << bytes << " bytes from client " << fd << ": " << buffer << std::endl;
-	
+	}	
 	// Añadimos el contenido al buffer del cliente
 	client->SetBuffer(buffer);
 	if (client->GetBuffer().find_first_of("\r\n") == std::string::npos)

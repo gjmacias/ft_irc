@@ -61,17 +61,17 @@ void Server::ClientAuthentification(std::string cmd, int fd)
 void	Server::ClientUsername(std::vector<std::string> &splited_cmd, std::string cmd, int fd)
 {
     Client		*client = GetClient(fd);
-
-	// Verifica si el cliente es NULL (no encontrado)
-    if (client == NULL) {
-        std::cerr << "Error: Client with fd " << fd << " not found!" << std::endl;
-        return; // Termina la ejecución si no se encuentra el cliente
-    }
-
-	std::string	response = client->GetNickname();
 	size_t		position = 0;
 	size_t		i = 0;
+	std::string	response;
 
+	// Verifica si el cliente es NULL (no encontrado)
+	if (client == NULL)
+	{
+		std::cerr << "Error: Client with fd " << fd << " not found!" << std::endl;
+		return;
+	}
+	response = client->GetNickname();
 	if (response.empty())
 		response = "*";
 	if (!(client->GetIsRegistered()))
@@ -125,18 +125,18 @@ void	Server::ClientUsername(std::vector<std::string> &splited_cmd, std::string c
 
 void	Server::ClientNickname(std::vector<std::string> &splited_cmd, int fd)
 {
-	Client		*client = GetClient(fd);
+	Client		*client = GetClient(fd);	
+	std::string	oldnick;
+	std::string	response;
 
 	// Verifica si el cliente es NULL (no encontrado)
 	if (client == NULL)
 	{
 		std::cerr << "Error: Client with fd " << fd << " not found!" << std::endl;
-		return;  // Termina la ejecución si no se encuentra el cliente
+		return ;
 	}
-	
-	std::string	oldnick = client->GetNickname();
-	std::string	response = client->GetNickname();
-
+	oldnick = client->GetNickname();
+	response = client->GetNickname();
 	if (response.empty())
 		response = "*";
     if (!(client->GetIsRegistered()))
@@ -150,7 +150,7 @@ void	Server::ClientNickname(std::vector<std::string> &splited_cmd, int fd)
 		SendResponse(ERR_NOTENOUGHPARAM(response), fd);
 		return; 
 	}
-	if (IsNickNameInUse(splited_cmd[1]))
+	if (IsNickNameInUse(splited_cmd[1]) && GetClient(fd)->GetNickname() != splited_cmd[1])
     {
         SendResponse(ERR_NICKINUSE(response), fd);
         return;
@@ -167,8 +167,7 @@ void	Server::ClientNickname(std::vector<std::string> &splited_cmd, int fd)
 
 	if (!(oldnick.empty()))
     	SendResponse(RPL_NICKCHANGE(oldnick, splited_cmd[1]), fd);
-
-		if (client->GetUsername() != "" && !client->GetIsRegistered())
+	if (IsOnlyRegistered(client))
 	{
 		client->SetIsLogedInServer(true);
 		SendResponse(RPL_CONNECTED(client->GetNickname()), fd);

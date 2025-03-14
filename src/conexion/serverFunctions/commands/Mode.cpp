@@ -6,48 +6,32 @@
 ###############################################################################
 */
 
-void	Server::ModeCommand(std::string cmd, int &fd)
+void	Server::ModeCommand(std::vector<std::string> &splited_cmd, int fd)
 {
-	std::stringstream	modeChain;
-	std::string			channelName;
-	std::string			parameters;
-	std::string			modeset;
-	std::string			arguments;
-	Channel				*channel;
-	Client				*cli = GetClient(fd);
-	char				opera = '\0';
-	size_t				found = cmd.find_first_not_of("MODEmode \t\v");
+	std::vector<std::pair<char, bool> >	list_modes;
+	std::vector<std::string>			list_parameters;
+	Channel								*channel;
+	size_t								i = 0;
 
-	modeChain.clear();
-	if(found != std::string::npos)
-		cmd = cmd.substr(found);
-	else
+	if (splited_cmd.size() < 2)
 	{
-		SendResponse(ERR_NOTENOUGHPARAM(cli->GetNickname()), fd); 
+		SendResponse(ERR_NOTENOUGHPARAM(GetClient(fd)->GetNickname()), fd);
+		return;
+	}
+	if (!(channel = GetChannel(splited_cmd[1])))
+	{
+		SendResponse(ERR_CHANNELNOTFOUND((this->GetClient(fd))->GetNickname(), splited_cmd[1]), fd);
 		return ;
 	}
-
-
-
-	GetCmdArguments(cmd ,channelName, modeset ,parameters);
-	std::vector<std::string> tokens = SplitParameters(parameters);
-
-
-
-	if(channelName[0] != '#' || !(channel = GetChannel(channelName.substr(1))))
+	else if (!channel->GetAdmin(fd) && !channel->GetClient(fd))
 	{
-		SendResponse(ERR_CHANNELNOTFOUND(cli->GetUsername(),channelName), fd);
+		SendErrorV2(442, fd, (this->GetClient(fd))->GetNickname(), channel->GetName(), " :You're not on that channel\r\n");
 		return ;
 	}
-	else if (!channel->GetClient(fd) && !channel->GetAdmin(fd))
+	else if (splited_cmd.size() == 2) // response with the channel modes (MODE #channel)
 	{
-		SendErrorV2(442, fd, cli->GetNickname(), channel->GetName(), " :You're not on that channel\r\n");
-		return ;
-	}
-	else if (modeset.empty()) // response with the channel modes (MODE #channel)
-	{
-		SendResponse(RPL_CHANNELMODES(cli->GetNickname(), channel->GetName(), channel->GetModes()) + \
-		RPL_CREATIONTIME(cli->GetNickname(), channel->GetName(),channel->GetModesTimeCreation()),fd);
+		SendResponse(RPL_CHANNELMODES((this->GetClient(fd))->GetNickname(), channel->GetName(), channel->GetModes()) + \
+		RPL_CREATIONTIME((this->GetClient(fd))->GetNickname(), channel->GetName(),channel->GetModesTimeCreation()),fd);
 		return ;
 	}
 	else if (!channel->GetAdmin(fd)) // client is not channel operator
@@ -55,35 +39,60 @@ void	Server::ModeCommand(std::string cmd, int &fd)
 		SendResponse(ERR_NOTOPERATOR(channel->GetName()), fd);
 		return ;
 	}
-	else if(channel)
+	for (i = 2; i < splited_cmd.size(); i++)
 	{
-		size_t pos = 0;
-		for(size_t i = 0; i < modeset.size(); i++)
-		{
-			if(modeset[i] == '+' || modeset[i] == '-')
-				opera = modeset[i];
-			else
-			{
-				if(modeset[i] == 'i')//invite mode
-					modeChain << ModeInviteOnly(channel , opera, modeChain.str());
-				else if (modeset[i] == 't') //topic restriction mode
-					modeChain << ModeTopicRestriction(channel, opera, modeChain.str());
-				else if (modeset[i] == 'k') //password set/remove
-					modeChain <<  ModeChannelKey(tokens, channel, pos, opera, fd, modeChain.str(), arguments);
-				else if (modeset[i] == 'o') //set/remove user operator privilege
-						modeChain << ModeOperatorPrivilege(tokens, channel, pos, fd, opera, modeChain.str(), arguments);
-				else if (modeset[i] == 'l') //set/remove channel limits
-					modeChain << ModeLimit(tokens, channel, pos, opera, fd, modeChain.str(), arguments);
-				else
-					SendResponse(ERR_UNKNOWNMODE(cli->GetNickname(), channel->GetName(),modeset[i]),fd);
-			}
-		}
+		if (splited_cmd[i][0] == '-' || splited_cmd[i][0] == '+')
+			OrderModes(list_modes, splited_cmd[i]);
+		else
+			list_parameters.push_back(splited_cmd[i]);
 	}
-	std::string chain = modeChain.str();
-	if(chain.empty())
-		return ;
- 	channel->SendEveryone(RPL_CHANGEMODE(cli->GetHostname(), channel->GetName(), modeChain.str(), arguments));
+	ModeExecute(channel, list_modes, list_parameters, fd);
 }
+
+void	Server::ModeExecute(Channel* channel, std::vector<std::pair<char, bool> > list_modes, std::vector<std::string> list_parameters, int fd)
+{
+	size_t						i = 0;
+	size_t						j = 0;
+	std::vector<std::string>	response;
+	std::string					parameter;
+	bool						flag_response = true;
+
+	for (i = 0; i < list_modes.size(); i++)
+	{
+		if (j < list_parameters.size())
+			parameter = list_parameters[j];
+		else
+			parameter = "";
+		if (list_modes[i].first == 'i')//invite mode
+			flag_response = ModeInviteOnly(channel, list_modes[i].second);
+		else if (list_modes[i].first == 't') //topic restriction mode
+			flag_response = ModeTopicRestriction(channel, list_modes[i].second);
+		else if (list_modes[i].first == 'k') //password set/remove
+		{
+			flag_response = ModeChannelKey(channel, list_modes[i].second, parameter, fd);
+			j++;
+		}
+		else if (list_modes[i].first == 'o') //set/remove user operator privilege
+		{
+			flag_response = ModeOperatorPrivilege(channel, list_modes[i].second, parameter, fd);
+			j++;
+		}
+		else if (list_modes[i].first == 'l') //set/remove channel limits
+		{
+			flag_response = ModeLimit(channel, list_modes[i].second, parameter, fd);
+			j++;
+		}
+		else
+		{
+			SendResponse(ERR_UNKNOWNMODE((this->GetClient(fd))->GetNickname(), channel->GetName(), list_modes[i].first), fd);
+			flag_response = false;
+		}
+		if (flag_response)
+			PrepareModeResponse(response, list_modes[i], parameter);
+	}
+	SendModeResponse(response, channel, fd);
+}
+
 
 /*
 ###############################################################################
@@ -91,154 +100,65 @@ void	Server::ModeCommand(std::string cmd, int &fd)
 ###############################################################################
 */
 
-std::string Server::ModeInviteOnly(Channel *channel, char opera, std::string chain)
+bool	Server::ModeInviteOnly(Channel *channel, bool flag)
 {
-	std::string param;
-	if(opera == '+' && !channel->GetModesInvitOnly())
-	{
-		channel->SetModesInvitOnly(true);
-		param =  ModeToAppend(chain, opera, 'i');
-	}
-	else if (opera == '-' && channel->GetModesInvitOnly())
-	{
-		channel->SetModesInvitOnly(false);
-		param =  ModeToAppend(chain, opera, 'i');
-	}
-	return param;
+	channel->SetModesInvitOnly(flag);
+	return true;
 }
 
-std::string Server::ModeTopicRestriction(Channel *channel ,char opera, std::string chain)
+bool	Server::ModeTopicRestriction(Channel *channel, bool flag)
 {
-	std::string param;
-	if(opera == '+' && !channel->GetModesTopicRestriction())
-	{
-		channel->SetModesTopicRestriction(true);
-		param =  ModeToAppend(chain, opera, 't');
-	}
-	else if (opera == '-' && channel->GetModesTopicRestriction())
-	{
-		channel->SetModesTopicRestriction(false);
-		param =  ModeToAppend(chain, opera, 't');
-	}	
-	return param;
+	channel->SetModesTopicRestriction(flag);
+	return true;
 }
 
-std::string Server::ModeChannelKey(std::vector<std::string> tokens, Channel *channel, size_t &pos, char opera, int fd, std::string chain, std::string &arguments)
+bool	Server::ModeChannelKey(Channel* channel, bool flag, std::string & password, int fd)
 {
-	std::string param;
-	std::string pass;
 
-	if(tokens.size() > pos)
-		pass = tokens[pos++];
-	else
+	if(flag)
 	{
-		SendResponse(ERR_NEEDMODEPARM(channel->GetName(),std::string("(k)")),fd);
-		return param;
-	}
-	if(!IsPasswordValid(pass))
-	{
-		SendResponse(ERR_INVALIDMODEPARM(channel->GetName(),std::string("(k)")),fd);
-		return param;
-	}
-	if(opera == '+')
-	{
-		channel->SetModesChannelKey(true);
-		channel->SetPassword(pass);
-		if(!arguments.empty())
-			arguments += " ";
-		arguments += pass;
-		param = ModeToAppend(chain,opera, 'k');
-	}
-	else if (opera == '-' && channel->GetModesChannelKey())
-	{
-		if(pass == channel->GetPassword())
-		{		
-			channel->SetModesChannelKey(false);
-			channel->SetPassword("");
-			param = ModeToAppend(chain,opera, 'k');
+		if (!IsPasswordValid(password))
+		{
+			SendResponse(ERR_INVALIDMODEPARM(channel->GetName(), std::string("(k)")), fd);
+			return false;
 		}
-		else
-			SendResponse(ERR_KEYSET(channel->GetName()),fd);
+		channel->SetPassword(password);
 	}
-	return param;
+	else 
+		channel->SetPassword("");
+	channel->SetModesChannelKey(flag);
+	return true;
 }
 
-std::string Server::ModeOperatorPrivilege(std::vector<std::string> tokens, Channel *channel, size_t& pos, int fd, char opera, std::string chain, std::string& arguments)
+bool	Server::ModeOperatorPrivilege(Channel* channel, bool flag, std::string& user, int fd)
 {
-	std::string user;
-	std::string param;
-
-	if(tokens.size() > pos)
-		user = tokens[pos++];
-	else
-	{
-		SendResponse(ERR_NEEDMODEPARM(channel->GetName(),"(o)"),fd);
-		return param;
-	}
 	if(!channel->IsClientInChannel(user))
 	{
-		SendResponse(ERR_NOSUCHNICK(channel->GetName(), user),fd);
-		return param;
+		SendResponse(ERR_NOSUCHNICK(channel->GetName(), user), fd);
+		return false;
 	}
-	if(opera == '+')
-	{
-		channel->SetModesOperatorPrivilege(true);
-		if(channel->ChangeClientToAdmin(user))
-		{
-			param = ModeToAppend(chain, opera, 'o');
-			if(!arguments.empty())
-				arguments += " ";
-			arguments += user;
-		}
-	}
-	else if (opera == '-')
-	{
-		channel->SetModesOperatorPrivilege(false);
-		if(channel->ChangeAdminToClient(user))
-		{
-			param = ModeToAppend(chain, opera, 'o');
-				if(!arguments.empty())
-					arguments += " ";
-			arguments += user;
-		}
-	}
-	return param;
+	channel->SetModesOperatorPrivilege(flag);
+	if (flag)
+		return channel->ChangeClientToAdmin(user);
+	else
+		return channel->ChangeAdminToClient(user);
 }
 
-std::string Server::ModeLimit(std::vector<std::string> tokens,  Channel *channel, size_t &pos, char opera, int fd, std::string chain, std::string& arguments)
+bool	Server::ModeLimit(Channel* channel, bool flag, std::string& limit, int fd)
 {
-	std::string limit;
-	std::string param;
-
-	if(opera == '+')
+	if (flag)
 	{
-		if(tokens.size() > pos)
+		if (!IsLimitValid(limit))
 		{
-			limit = tokens[pos++];
-			if(!IsLimitValid(limit))
-			{
-				SendResponse(ERR_INVALIDMODEPARM(channel->GetName(),"(l)"), fd);
-			}
-			else
-			{
-				channel->SetModesLimit(true);
-				channel->SetModesLimitNumber(std::atoi(limit.c_str()));
-				if(!arguments.empty())
-					arguments += " ";
-				arguments += limit;
-				param =  ModeToAppend(chain, opera, 'l');
-			}
+			SendResponse(ERR_INVALIDMODEPARM(channel->GetName(), "(l)"), fd);
+			return false;
 		}
-		else
-			SendResponse(ERR_NEEDMODEPARM(channel->GetName(),"(l)"),fd);
+		channel->SetLimitNumber(std::atoi(limit.c_str()));
 	}
-	else if (opera == '-' && channel->GetModesLimit())
-	{
-		channel->SetModesLimit(false);
-		channel->SetModesLimitNumber(0);
-		param  = ModeToAppend(chain, opera, 'l');
-	}
-	return param;
+	else
+		channel->SetLimitNumber(0);
+	channel->SetModesLimit(flag);
+	return true;
 }
 
 /*
@@ -247,64 +167,51 @@ std::string Server::ModeLimit(std::vector<std::string> tokens,  Channel *channel
 ###############################################################################
 */
 
-std::string Server::ModeToAppend(std::string chain, char opera, char mode)
+void	Server::PrepareModeResponse(std::vector<std::string> &response, std::pair<char, bool> mode, std::string parameter)
 {
-	std::stringstream ss;
-	char last = '\0';
+	std::string	result;
 
-	for(size_t i = 0; i < chain.size(); i++)
-	{
-		if(chain[i] == '+' || chain[i] == '-')
-			last = chain[i];
-	}
-	if(last != opera)
-		ss << opera << mode;
+	if (mode.second)
+		result.push_back('+');
 	else
-		ss << mode;
-	return ss.str();
+		result.push_back('-');
+	result.push_back(mode.first);
+	response.push_back(result);
+	if (!(parameter.empty()))
+		response.push_back(parameter);
 }
-
-void Server::GetCmdArguments(std::string cmd,std::string& name, std::string& modeset ,std::string &params)
+void	Server::SendModeResponse(std::vector<std::string> response, Channel* channel, int fd)
 {
-	std::istringstream stm(cmd);
-	stm >> name;
-	stm >> modeset;
-	size_t found = cmd.find_first_not_of(name + modeset + " \t\v");
-	if(found != std::string::npos)
-		params = cmd.substr(found);
-}
+	std::string	result;
+	size_t		i = 0;
 
-
-std::vector<std::string> Server::SplitParameters(std::string parameters)
-{
-	std::vector<std::string>	tokens;
-	std::string					argument;
-	std::istringstream			stm(parameters);
-
-	if(!parameters.empty() && parameters[0] == ':')
-		parameters.erase(parameters.begin());
-	while (std::getline(stm, argument, ','))
+	if (response.size() == 0)
+		return;
+	while (i < response.size())
 	{
-		tokens.push_back(argument);
-		argument.clear();
+		result += response[i];
+		if (++i < response.size())
+			result += " ";
 	}
-	return tokens;
+	channel->SendEveryone(RPL_CHANGEMODE((this->GetClient(fd))->GetHostname(), channel->GetName(), result));
 }
 
-bool Server::IsPasswordValid(std::string password)
+void	Server::OrderModes(std::vector<std::pair<char, bool> > &list_modes, std::string arraymodes)
 {
-	if(password.empty())
-		return false;
-	for(size_t i = 0; i < password.size(); i++)
+	size_t	i = 0;
+	bool	flag = false;
+
+	while (i < arraymodes.size())
 	{
-		if(!std::isalnum(password[i]) && password[i] != '_')
-			return false;
+		if (arraymodes[i] == '+')
+			flag = true;
+		else if (arraymodes[i] == '-')
+			flag = false;
+		else if (arraymodes[i] == 'i' || arraymodes[i] == 't' || arraymodes[i] == 'k' ||
+					arraymodes[i] == 'o' || arraymodes[i] == 'l')
+			list_modes.push_back(std::make_pair(arraymodes[i], flag));
+		else
+			list_modes.push_back(std::make_pair('!', false));
+		i++;
 	}
-	return true;
 }
-
-bool Server::IsLimitValid(std::string& limit)
-{
-	return (!(limit.find_first_not_of("0123456789") != std::string::npos) && std::atoi(limit.c_str()) > 0);
-}
-

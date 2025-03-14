@@ -35,7 +35,7 @@ Client &Client::operator=(Client const &src)
 		this->_nickname = src._nickname;
 		this->_username = src._username;
 		this->_buffer = src._buffer;
-		this->_myChannels = src._myChannels;
+		this->_myInviteChannels = src._myInviteChannels;
 	}
 	return *this;
 }

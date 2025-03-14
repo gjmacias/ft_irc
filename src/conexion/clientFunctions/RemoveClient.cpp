@@ -5,13 +5,13 @@
 #									REMOVE									  #
 ###############################################################################
 */
-void Client::RmFromMyChannels(std::string &channel_name)
+void Client::RmFromMyInvitedChannels(std::string channel_name)
 {
-	for (size_t i = 0; i < this->_myChannels.size(); i++)
+	for (size_t i = 0; i < this->_myInviteChannels.size(); i++)
 	{
-		if (this->_myChannels[i] == channel_name)
+		if (this->_myInviteChannels[i] == channel_name)
 		{
-			this->_myChannels.erase(this->_myChannels.begin() + i);
+			this->_myInviteChannels.erase(this->_myInviteChannels.begin() + i);
 			return;
 		}
 	}

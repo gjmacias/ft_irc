@@ -12,9 +12,7 @@ void Server::RemoveFd(int fd)
 	{
 		if (this->_pollSocketFds[i].fd == fd)
 		{
-			std::cout << "Removing fd: " << fd << " from poll list." << std::endl;
 			this->_pollSocketFds.erase(this->_pollSocketFds.begin() + i); 
-			std::cout << "Poll list size after removal: " << _pollSocketFds.size() << std::endl;
 			return;
 		}
 	}
@@ -36,11 +34,10 @@ void Server::RemoveClient(int fd)
 void	Server::RemoveClientFromChannels(int fd)
 {
 	std::string	response;
+	int			flag = 0;
 
 	for (size_t i = 0; i < this->_channels.size(); i++)
 	{
-		int flag = 0;
-		
 		if (this->_channels[i].GetClient(fd))
 		{
 			this->_channels[i].RemoveClient(fd);
