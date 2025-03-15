@@ -103,7 +103,7 @@ public:
 	bool		IsValidChannelname(std::string &channelname);
 	bool		IsValidUsername(std::string &username);
 	bool		IsValidNickname(std::string &nickname);
-	bool		IsPasswordValid(std::string password);
+	bool		IsValidPassword(std::string password);
 	bool		IsLimitValid(std::string& limit);
 	bool		IsNickNameInUse(std::string& nickname);
 

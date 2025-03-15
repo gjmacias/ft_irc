@@ -117,7 +117,7 @@ bool	Server::ModeChannelKey(Channel* channel, bool flag, std::string & password,
 
 	if(flag)
 	{
-		if (!IsPasswordValid(password))
+		if (!IsValidPassword(password))
 		{
 			SendResponse(ERR_INVALIDMODEPARM(channel->GetName(), std::string("(k)")), fd);
 			return false;

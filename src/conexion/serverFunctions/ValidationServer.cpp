@@ -78,13 +78,15 @@ bool Server::IsValidNickname(std::string &nickname)
 	return true;
 }
 
-bool Server::IsPasswordValid(std::string password)
+bool Server::IsValidPassword(std::string password)
 {
-	if (password.empty())
+	std::string allowedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*-_+=.?";
+
+	if (password.empty() || password[0] == ':')
 		return false;
 	for (size_t i = 0; i < password.size(); i++)
 	{
-		if (!std::isalnum(password[i]) && password[i] != '_')
+		if (allowedCharacters.find(password[i]) == std::string::npos)
 			return false;
 	}
 	return true;
