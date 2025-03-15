@@ -42,6 +42,7 @@ void	Server::PrivateMessageCommand(std::vector<std::string>& splited_cmd, std::s
 	}
 	for (position = 0; position < list_recivers.size(); position++)
 	{
+		ss.str("");
 		ss << ":" << GetClient(fd)->GetNickname() << "!~" << GetClient(fd)->GetUsername() << "@localhost PRIVMSG " << list_recivers[position] << " ";
 		if (cmd_reason[0] == ':')
 			ss << cmd_reason << "\r\n";

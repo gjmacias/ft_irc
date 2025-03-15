@@ -45,7 +45,7 @@ void	Server::PartCommand(std::vector<std::string> &splited_cmd, std::string cmd_
 					SendErrorV2(442, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), list_channels[i], " :You are not on that channel\r\n");
 					continue ;
 				}
-				ss.clear();
+				ss.str("");
 				ss << ":" << GetClient(fd)->GetNickname() << "!~" << GetClient(fd)->GetUsername() << "@" << "localhost" << " PART " << list_channels[i];
 				if (!cmd_reason.empty())
 				{
@@ -63,11 +63,8 @@ void	Server::PartCommand(std::vector<std::string> &splited_cmd, std::string cmd_
 				else
 					_channels[j].RemoveClient(fd);
 				if (_channels[j].CountAllClients() == 0)
-				{
 					_channels.erase(_channels.begin() + j);
-					continue ;
-				}
-				if (_channels[j].CountAdmins() == 0)
+				else if (_channels[j].CountAdmins() == 0)
 					_channels[j].ChangeClientToAdmin((_channels[j].GetObligatedAdmin())->GetNickname());
 			}
 		}

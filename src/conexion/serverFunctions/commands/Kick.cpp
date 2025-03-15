@@ -47,6 +47,7 @@ void	Server::KickCommand(std::vector<std::string>& splited_cmd, std::string cmd_
 			{
 				if (Channel->IsClientInChannel(list_users[position])) // check if the client to kick is in the channel
 				{
+					ss.str("");  // Limpiar el contenido del stringstream
 					ss << ":" << GetClient(fd)->GetNickname() << "!~" << GetClient(fd)->GetUsername() << "@" << "localhost" << " KICK " << channel << " " << list_users[position];
 					if (!cmd_reason.empty())
 					{
@@ -65,7 +66,7 @@ void	Server::KickCommand(std::vector<std::string>& splited_cmd, std::string cmd_
 						Channel->RemoveClient(Channel->GetClientByNickname(list_users[position])->GetFd());
 					if (Channel->CountAllClients() == 0)
 						_channels.erase(_channels.begin() + it);
-					if (Channel->CountAdmins() == 0)
+					else if (Channel->CountAdmins() == 0)
 						Channel->ChangeClientToAdmin((Channel->GetObligatedAdmin())->GetNickname());
 				}
 				else // if the client to kick is not in the channel
