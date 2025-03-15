@@ -42,20 +42,21 @@ std::string	Server::GetPassword(){return this->_password;}
 
 Client	*Server::GetClient(int fd)
 {
-	for (size_t i = 0; i < this->_clients.size(); i++)
+	for (std::vector<Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
 	{
-		if (this->_clients[i].GetFd() == fd)
-			return &this->_clients[i];
+		if ((*it)->GetFd() == fd)
+			return *it;
 	}
 	return NULL;
 }
 
 Client	*Server::GetClient_Nickname(std::string nickname)
 {
-	for (size_t i = 0; i < this->_clients.size(); i++)
+
+	for (std::vector<Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
 	{
-		if (this->_clients[i].GetNickname() == nickname)
-			return &this->_clients[i];
+		if ((*it)->GetNickname() == nickname)
+			return *it;
 	}
 	return NULL;
 }
@@ -142,7 +143,6 @@ void Server::ServerLoop()
 
 void Server::AcceptNewClient()
 {
-	Client 				newClient;
 	struct sockaddr_in	clientAddress;
 	struct pollfd		NewPoll;
 	socklen_t			clientAddressLenght;
@@ -171,17 +171,11 @@ void Server::AcceptNewClient()
 	NewPoll.fd = clientFd;
 	NewPoll.events = POLLIN;
 	NewPoll.revents = 0;
-
-	newClient.SetFd(clientFd);
-	newClient.SetIPaddress(inet_ntoa(clientAddress.sin_addr));
-
-	_clients.push_back(newClient);
 	_pollSocketFds.push_back(NewPoll);
+	
+	AddClient(clientFd, inet_ntoa(clientAddress.sin_addr));
 
 	std::cout << GREEN << "Client <" << clientFd - 3 << "> Connected" << WHITE << std::endl;
-
-	std::string welcomeMsg = ":ircserv 001 " + newClient.GetIPaddress() + " :Welcome to MyIRC\r\n";
-	SendResponse(welcomeMsg, clientFd);
 }
 
 void Server::ReceiveNewData(int fd)
@@ -228,8 +222,8 @@ void Server::CloseFds()
 {
 	for(size_t i = 0; i < _clients.size(); i++)
 	{ 
-		std::cout << RED << "Client <" << _clients[i].GetFd() - 3 << "> Disconnected" << WHITE << std::endl;
-		close(_clients[i].GetFd());
+		std::cout << RED << "Client <" << _clients[i]->GetFd() - 3 << "> Disconnected" << WHITE << std::endl;
+		close(_clients[i]->GetFd());
 	}
 	if (_mainSocketFd != -1)
 	{

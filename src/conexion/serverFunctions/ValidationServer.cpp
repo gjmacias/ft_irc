@@ -95,7 +95,7 @@ bool Server::IsNickNameInUse(std::string& nickname)
 {
 	for (size_t i = 0; i < this->_clients.size(); i++)
 	{
-		if (UpperCase(this->_clients[i].GetNickname()) == UpperCase(nickname))
+		if (UpperCase(this->_clients[i]->GetNickname()) == UpperCase(nickname))
 			return true;
 	}
 	return false;

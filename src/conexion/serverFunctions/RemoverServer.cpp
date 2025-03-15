@@ -21,11 +21,12 @@ void Server::RemoveFd(int fd)
 
 void Server::RemoveClient(int fd)
 {
-	for (size_t i = 0; i < this->_clients.size(); i++)
+	for (std::vector<Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
 	{
-		if (this->_clients[i].GetFd() == fd)
+		if ((*it)->GetFd() == fd)
 		{
-			this->_clients.erase(this->_clients.begin() + i);
+			delete* it;
+			_clients.erase(it);
 			return;
 		}
 	}

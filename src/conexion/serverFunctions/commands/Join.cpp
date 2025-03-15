@@ -64,7 +64,10 @@ void	Server::NotExistCh(std::string channelname, std::string password, int fd)
 	Channel	newChannel;
 
 	if (!IsValidChannelname(channelname))
-		return ;
+	{
+		SendResponse("Bad channelname", fd);
+		return;
+	}
 	newChannel.SetName(channelname);
 	newChannel.AddAdmin(GetClient(fd));
 	if (!password.empty())
