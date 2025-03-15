@@ -114,6 +114,10 @@ public:
 		//		INVITE
 	void		InviteCommand(std::vector<std::string> &splited_cmd, int fd);
 
+		//		OTHERS
+	void		CapCommand(std::vector<std::string> &splited_cmd, int fd);
+	void		PingCommand(std::vector<std::string> &splited_cmd, int fd);
+
 		//		JOIN
 	void		JoinCommand(std::vector<std::string> &splited_cmd, int fd);
 	void		NotExistCh(std::string channelname, std::string password, int fd);

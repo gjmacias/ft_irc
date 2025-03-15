@@ -20,22 +20,48 @@ bool	Server::IsOnlyRegistered(Client *client)
 		return true;
 	return false;
 }
-
+/*
 bool Server::IsValidUsername(std::string& nickname)
 {
 	long unsigned int	i = 0;
-
+	
 	if (nickname.empty() || std::isdigit(nickname[0]))
-		return false;
+	return false;
 	while (i < nickname.size())
 	{
 		if(!(std::isalnum(nickname[i])) && nickname[i] != ' ' && nickname[i] != '_' && nickname[i] != '-')
-			return false;
+		return false;
 		i++;
 	}
-	if (i > 20 || i < 3)
-		return false;
+	if (i > 22 || i < 3)
+	return false;
 	return true;
+}
+*/
+
+bool Server::IsValidUsername(std::string& nickname)
+{
+    long unsigned int i = 0;
+
+    if (nickname.empty() || std::isdigit(nickname[0]))
+        return false;
+
+    std::string vsc = "áéíóúÁÉÍÓÚàèìòùÀÈÌÒÙâêîôûÂÊÎÔÛäëïöüÄËÏÖÜñÑçÇ";
+
+    while (i < nickname.size())
+    {
+        char c = nickname[i];
+
+        if (!(std::isalnum(c)) && c != ' ' && c != '_' && c != '-' && vsc.find(c) == std::string::npos)
+            return false;
+
+        i++;
+    }
+
+    if (i > 22 || i < 3)
+        return false;
+
+    return true;
 }
 
 bool Server::IsValidChannelname(std::string& channelname)

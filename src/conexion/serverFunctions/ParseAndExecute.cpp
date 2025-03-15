@@ -16,8 +16,14 @@ void	Server::ParseAndExecute(std::string &cmd, int fd)
 		return ;
 	if(UpperCase(splited_cmd[0]) == "BONG")
 		return;
+	if(UpperCase(splited_cmd[0]) == "WHOIS")
+		return;	
 	else if(UpperCase(splited_cmd[0]) == "PASS")
 		ClientAuthentification(cmd, fd);
+	else if(UpperCase(splited_cmd[0]) == "CAP")
+		CapCommand(splited_cmd, fd);
+	else if(UpperCase(splited_cmd[0]) == "PING")
+		PingCommand(splited_cmd, fd);
 	else if (UpperCase(splited_cmd[0]) == "NICK")
 		ClientNickname(splited_cmd, fd);
 	else if(UpperCase(splited_cmd[0]) == "USER")

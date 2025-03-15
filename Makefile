@@ -38,6 +38,7 @@ SRC			=	main.cpp \
 				conexion/serverFunctions/ValidationServer.cpp \
 				\
 				conexion/serverFunctions/commands/Invite.cpp \
+				conexion/serverFunctions/commands/Others.cpp \
 				conexion/serverFunctions/commands/Join.cpp \
 				conexion/serverFunctions/commands/Kick.cpp \
 				conexion/serverFunctions/commands/Mode.cpp \
