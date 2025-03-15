@@ -20,26 +20,8 @@ bool	Server::IsOnlyRegistered(Client *client)
 		return true;
 	return false;
 }
-/*
-bool Server::IsValidUsername(std::string& nickname)
-{
-	long unsigned int	i = 0;
-	
-	if (nickname.empty() || std::isdigit(nickname[0]))
-	return false;
-	while (i < nickname.size())
-	{
-		if(!(std::isalnum(nickname[i])) && nickname[i] != ' ' && nickname[i] != '_' && nickname[i] != '-')
-		return false;
-		i++;
-	}
-	if (i > 22 || i < 3)
-	return false;
-	return true;
-}
-*/
 
-bool Server::IsValidUsername(std::string& nickname)
+bool Server::IsValidUsername(std::string &nickname)
 {
     long unsigned int i = 0;
 
@@ -58,13 +40,13 @@ bool Server::IsValidUsername(std::string& nickname)
         i++;
     }
 
-    if (i > 22 || i < 3)
+    if (i > 23 || i < 3)
         return false;
 
     return true;
 }
 
-bool Server::IsValidChannelname(std::string& channelname)
+bool Server::IsValidChannelname(std::string &channelname)
 {
 	long unsigned int	i = 0;
 
@@ -83,7 +65,7 @@ bool Server::IsValidChannelname(std::string& channelname)
 	return true;
 }
 
-bool Server::IsValidNickname(std::string& nickname)
+bool Server::IsValidNickname(std::string &nickname)
 {
 	long unsigned int	i = 0;
 
@@ -112,12 +94,12 @@ bool Server::IsPasswordValid(std::string password)
 	return true;
 }
 
-bool Server::IsLimitValid(std::string& limit)
+bool Server::IsLimitValid(std::string &limit)
 {
 	return (!(limit.find_first_not_of("0123456789") != std::string::npos) && std::atoi(limit.c_str()) > 0);
 }
 
-bool Server::IsNickNameInUse(std::string& nickname)
+bool Server::IsNickNameInUse(std::string &nickname)
 {
 	for (size_t i = 0; i < this->_clients.size(); i++)
 	{

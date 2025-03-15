@@ -180,8 +180,8 @@ void Server::AcceptNewClient()
 
 	std::cout << GREEN << "Client <" << clientFd - 3 << "> Connected" << WHITE << std::endl;
 
-	std::string welcomeMsg = ":ircserv 001 " + newClient.GetIPaddress() + " :Welcome to MyIRC\r\n";
-	SendResponse(welcomeMsg, clientFd);
+	//std::string welcomeMsg = ":ircserv 001 " + newClient.GetIPaddress() + " :Welcome to MyIRC\r\n";
+	//SendResponse(welcomeMsg, clientFd);
 }
 
 void Server::ReceiveNewData(int fd)

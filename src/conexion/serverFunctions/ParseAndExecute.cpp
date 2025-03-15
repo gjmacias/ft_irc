@@ -17,7 +17,7 @@ void	Server::ParseAndExecute(std::string &cmd, int fd)
 	if(UpperCase(splited_cmd[0]) == "BONG")
 		return;
 	if(UpperCase(splited_cmd[0]) == "WHOIS")
-		return;	
+		WhoisCommand(splited_cmd, fd);	
 	else if(UpperCase(splited_cmd[0]) == "PASS")
 		ClientAuthentification(cmd, fd);
 	else if(UpperCase(splited_cmd[0]) == "CAP")

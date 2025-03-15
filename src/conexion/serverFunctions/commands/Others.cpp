@@ -15,3 +15,13 @@ void	Server::PingCommand(std::vector<std::string> &splited_cmd, int fd)
 		tmp = splited_cmd[1].append(ENDLINE);
 	SendResponse(pong.append(tmp), fd);
 }
+
+void	Server::WhoisCommand(std::vector<std::string> &splited_cmd, int fd)
+{
+	std::string	tmp = "\0";
+	std::string	whois = "WHOIS ";
+
+	if (splited_cmd.size() > 1)
+		tmp = splited_cmd[1].append(ENDLINE);
+	SendResponse(whois.append(tmp), fd);
+}

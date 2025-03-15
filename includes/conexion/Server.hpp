@@ -117,6 +117,7 @@ public:
 		//		OTHERS
 	void		CapCommand(std::vector<std::string> &splited_cmd, int fd);
 	void		PingCommand(std::vector<std::string> &splited_cmd, int fd);
+	void		WhoisCommand(std::vector<std::string> &splited_cmd, int fd);
 
 		//		JOIN
 	void		JoinCommand(std::vector<std::string> &splited_cmd, int fd);
