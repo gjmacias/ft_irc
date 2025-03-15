@@ -41,7 +41,7 @@ private:
 	int							_port;
 	int							_mainSocketFd;
 	std::string					_password;
-	std::vector<Client>			_clients;
+	std::vector<Client *>		_clients;
 	std::vector<Channel>		_channels;
 	std::vector<struct pollfd>	_pollSocketFds;
 public:
@@ -76,7 +76,8 @@ public:
 
 //	##################	SERVER_FUNCTIONS	##################
 		//		Adders Server
-	void		AddChannel(Channel &newChannel);
+	void		AddChannel(Channel& newChannel);
+	void		AddClient(int clientFd, std::string IPAddress);
 	
 			//		Client Register
 	void		ClientAuthentification(std::string cmd, int fd);

@@ -63,7 +63,10 @@ void	Server::PartCommand(std::vector<std::string> &splited_cmd, std::string cmd_
 				else
 					_channels[j].RemoveClient(fd);
 				if (_channels[j].CountAllClients() == 0)
+				{
 					_channels.erase(_channels.begin() + j);
+					continue ;
+				}
 				if (_channels[j].CountAdmins() == 0)
 					_channels[j].ChangeClientToAdmin((_channels[j].GetObligatedAdmin())->GetNickname());
 			}

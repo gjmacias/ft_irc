@@ -23,26 +23,22 @@ bool	Server::IsOnlyRegistered(Client *client)
 
 bool Server::IsValidUsername(std::string &nickname)
 {
-    long unsigned int i = 0;
+    long unsigned int	i = 0;
+	std::string			vsc = "áéíóúÁÉÍÓÚàèìòùÀÈÌÒÙâêîôûÂÊÎÔÛäëïöüÄËÏÖÜñÑçÇ";
+	char				c;
 
     if (nickname.empty() || std::isdigit(nickname[0]))
         return false;
-
-    std::string vsc = "áéíóúÁÉÍÓÚàèìòùÀÈÌÒÙâêîôûÂÊÎÔÛäëïöüÄËÏÖÜñÑçÇ";
-
     while (i < nickname.size())
     {
-        char c = nickname[i];
+        c = nickname[i];
 
         if (!(std::isalnum(c)) && c != ' ' && c != '_' && c != '-' && vsc.find(c) == std::string::npos)
             return false;
-
         i++;
     }
-
     if (i > 23 || i < 3)
         return false;
-
     return true;
 }
 
@@ -103,7 +99,7 @@ bool Server::IsNickNameInUse(std::string &nickname)
 {
 	for (size_t i = 0; i < this->_clients.size(); i++)
 	{
-		if (UpperCase(this->_clients[i].GetNickname()) == UpperCase(nickname))
+		if (UpperCase(this->_clients[i]->GetNickname()) == UpperCase(nickname))
 			return true;
 	}
 	return false;
