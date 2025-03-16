@@ -38,7 +38,7 @@ void	Server::TopicCommand(std::vector<std::string>& splited_cmd, std::string cmd
 	if (splited_cmd.size() == 2) // response with the channelname modes (MODE #channel)
 	{
 		if (GetChannel(channelname)->GetTopicName() == "")
-			SendResponse(": 331 " + GetClient(fd)->GetNickname() + " " + channelname + " : No topic is set\r\n", fd);
+			SendResponse(": 331 " + GetClient(fd)->GetNickname() + " " + channelname + " :No topic is set\r\n", fd);
 		else
 		{
 			SendResponse(RPL_TOPICIS(GetClient(fd)->GetNickname(), channelname, GetChannel(channelname)->GetTopicName()), fd);
@@ -86,7 +86,7 @@ void	Server::TopicExecute(std::string channelname, std::vector<std::string>& spl
 		(GetChannel(channelname))->SetTopicName("");
 		(GetChannel(channelname))->SetTopicEditor("");
 		(GetChannel(channelname))->SetTopicTime("");
-		SendResponse(": 331 " + GetClient(fd)->GetNickname() + " " + channelname + " : No topic is set\r\n", fd);
+		SendResponse(": 331 " + GetClient(fd)->GetNickname() + " " + channelname + " :No topic is set\r\n", fd);
 	}
 	else
 	{
