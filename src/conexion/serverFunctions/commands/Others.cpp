@@ -13,7 +13,7 @@ void	Server::PingCommand(std::vector<std::string> &splited_cmd, int fd)
 
 	if (splited_cmd.size() > 1)
 		tmp = splited_cmd[1].append(ENDLINE);
-	SendResponse(pong.append(tmp), fd);
+	SendResponse(pong.append(tmp) + "\r\n", fd);
 }
 
 void	Server::WhoisCommand(std::vector<std::string> &splited_cmd, int fd)
@@ -23,5 +23,5 @@ void	Server::WhoisCommand(std::vector<std::string> &splited_cmd, int fd)
 
 	if (splited_cmd.size() > 1)
 		tmp = splited_cmd[1].append(ENDLINE);
-	SendResponse(whois.append(tmp), fd);
+	SendResponse(whois.append(tmp) + "\r\n", fd);
 }
