@@ -67,7 +67,7 @@ void	Server::RemoveClientFromChannels(int fd)
 			Client *client = GetClient(fd);
     		if (client)
 			{
-        		response = ":" + client->GetNickname() + "!~" + client->GetUsername() + "@localhost QUIT Quit\r\n";
+        		response = ":" + client->GetNickname() + "!" + client->GetUsername() + "@" + GetClient(fd)->GetIPaddress() + " QUIT Quit\r\n";
         		this->_channels[i].SendEveryone(response);
     		} 
 			else

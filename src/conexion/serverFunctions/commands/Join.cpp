@@ -63,9 +63,9 @@ void	Server::NotExistCh(std::string channelname, std::string password, int fd)
 {
 	Channel	newChannel;
 
-	if (!IsValidChannelname(channelname) || !IsValidPassword(channelname))
+	if (!IsValidChannelname(channelname) || (!password.empty() && !IsValidPassword(password)))
 	{
-		SendResponse(":server 476 " + GetClient(fd)->GetNickname() + " " + channelname + " :Bad Channel Mask", fd);
+		SendResponse(":server 476 " + GetClient(fd)->GetNickname() + " " + channelname + " :Bad Channel Mask" + ENDLINE, fd);
 		return;
 	}
 	newChannel.SetName(channelname);

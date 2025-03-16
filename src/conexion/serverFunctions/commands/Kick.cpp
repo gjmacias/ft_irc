@@ -40,7 +40,10 @@ void	Server::KickCommand(std::vector<std::string>& splited_cmd, std::string cmd_
 		for (it = 0; this->_channels[it].GetName() != channel; it++)
 			continue;
 		if (!Channel->GetClient(fd) && !Channel->GetAdmin(fd)) // ISNOT in th channel
+		{
 			SendErrorV2(442, GetClient(fd)->GetFd(), GetClient(fd)->GetNickname(), channel, " :You're not on that channel\r\n");
+			return;
+		}
 		if (Channel->GetAdmin(fd))
 		{
 			for (position = 0; position < list_users.size(); position++)
@@ -48,7 +51,7 @@ void	Server::KickCommand(std::vector<std::string>& splited_cmd, std::string cmd_
 				if (Channel->IsClientInChannel(list_users[position])) // check if the client to kick is in the channel
 				{
 					ss.str("");  // Limpiar el contenido del stringstream
-					ss << ":" << GetClient(fd)->GetNickname() << "!~" << GetClient(fd)->GetUsername() << "@" << "localhost" << " KICK " << channel << " " << list_users[position];
+					ss << ":" << GetClient(fd)->GetNickname() << "!" << GetClient(fd)->GetUsername() << "@" << GetClient(fd)->GetIPaddress() << " KICK " << channel << " " << list_users[position];
 					if (!cmd_reason.empty())
 					{
 						ss << " ";
