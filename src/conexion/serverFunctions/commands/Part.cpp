@@ -46,7 +46,7 @@ void	Server::PartCommand(std::vector<std::string> &splited_cmd, std::string cmd_
 					continue ;
 				}
 				ss.str("");
-				ss << ":" << GetClient(fd)->GetNickname() << "!~" << GetClient(fd)->GetUsername() << "@" << "localhost" << " PART " << list_channels[i];
+				ss << ":" << GetClient(fd)->GetNickname() << "!" << GetClient(fd)->GetUsername() << "@" << GetClient(fd)->GetIPaddress() << " PART " << list_channels[i];
 				if (!cmd_reason.empty())
 				{
 					ss << " ";

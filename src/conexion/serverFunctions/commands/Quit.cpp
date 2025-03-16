@@ -29,7 +29,7 @@ void	Server::QuitCommand(std::vector<std::string> &splited_cmd, std::string cmd_
 				_channels.erase(_channels.begin() + i);
 			else
 			{
-				response = ":" + GetClient(fd)->GetNickname() + "!~" + GetClient(fd)->GetUsername() + "@localhost QUIT " + cmd_reason + "\r\n";
+				response = ":" + GetClient(fd)->GetNickname() + "!" + GetClient(fd)->GetUsername() + "@" + GetClient(fd)->GetIPaddress() + " QUIT " + cmd_reason + "\r\n";
 				_channels[i].SendEveryone(response);
 			}
 		}
@@ -40,7 +40,7 @@ void	Server::QuitCommand(std::vector<std::string> &splited_cmd, std::string cmd_
 				_channels.erase(_channels.begin() + i);
 			else
 			{
-				response = ":" + GetClient(fd)->GetNickname() + "!~" + GetClient(fd)->GetUsername() + "@localhost QUIT " + cmd_reason +"\r\n";
+				response = ":" + GetClient(fd)->GetNickname() + "!" + GetClient(fd)->GetUsername() + "@" + GetClient(fd)->GetIPaddress() + " QUIT " + cmd_reason +"\r\n";
 				_channels[i].SendEveryone(response);
 			}
 		}

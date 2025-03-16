@@ -53,6 +53,6 @@ void	Server::InviteCommand(std::vector<std::string> &splited_cmd, int fd)
 	}
 	user->AddToMyInvitedChannels(channel->GetName());
 	SendResponse(":irserv 341 " + GetClient(fd)->GetNickname() + " " + user->GetNickname() + " " + channel->GetName() + " :Invited to channel\r\n", user->GetFd());
-	channel->SendEveryone(RPL_INVITED(GetClient(fd)->GetNickname(), GetClient(fd)->GetHostname(), GetClient(fd)->GetIPaddress(), user->GetNickname(), channel->GetName()));
+	channel->SendEveryone(RPL_INVITED(GetClient(fd)->GetHostname(), GetClient(fd)->GetIPaddress(), user->GetNickname(), channel->GetName()));
 }
 

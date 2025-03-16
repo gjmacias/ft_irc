@@ -138,6 +138,7 @@ void Server::ServerLoop()
 			}
 		}
 	}
+	RemoveAllClients();
 	CloseFds();
 }
 
