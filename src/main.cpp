@@ -5,9 +5,6 @@ int	main(int words, const char **arguments)
 	Server	myServer;
 	words = 3;
 
-	const char* hola[] = { "ircserv", "6667", "1" };
-	arguments = hola;
-
 	if (words != 3)
 	{
 		std::cerr << "Usage: " << arguments[0] << " <port number> <password>" << std::endl;
