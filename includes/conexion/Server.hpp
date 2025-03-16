@@ -90,6 +90,7 @@ public:
 		//		Removers Server
 	void		RemoveFd(int fd);
 	void		RemoveClient(int fd);
+	void		RemoveAllClients();
 	void		RemoveClientFromChannels(int fd);
 	void		RemoveChannel(std::string name);
 

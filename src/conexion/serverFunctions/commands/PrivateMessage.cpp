@@ -43,12 +43,13 @@ void	Server::PrivateMessageCommand(std::vector<std::string>& splited_cmd, std::s
 	for (position = 0; position < list_recivers.size(); position++)
 	{
 		ss.str("");
-		ss << ":" << GetClient(fd)->GetNickname() << "!~" << GetClient(fd)->GetUsername() << "@localhost PRIVMSG " << list_recivers[position] << " ";
+		ss << ":" << GetClient(fd)->GetHostname() << "@localhost PRIVMSG " << list_recivers[position] << " ";
 		if (cmd_reason[0] == ':')
 			ss << cmd_reason << "\r\n";
 		else
 			ss << splited_cmd[2] << "\r\n";
-		if (GetChannel(list_recivers[position]))
+		if (GetChannel(list_recivers[position]) 
+			&& GetChannel(list_recivers[position])->IsClientInChannel(GetClient(fd)->GetNickname()))
 			(GetChannel(list_recivers[position]))->SendMeToAll(fd, ss.str());
 		else if (GetClient_Nickname(list_recivers[position]))
 			SendResponse(ss.str(), (GetClient_Nickname(list_recivers[position]))->GetFd());

@@ -93,6 +93,6 @@ void	Server::TopicExecute(std::string channelname, std::vector<std::string>& spl
 		(GetChannel(channelname))->SetTopicName(cmd_reason);
 		(GetChannel(channelname))->SetTopicEditor(GetClient(fd)->GetNickname());
 		(GetChannel(channelname))->SetTopicTime(TopicTime());
-		(GetChannel(channelname))->SendEveryone(RPL_TOPICIS(GetClient(fd)->GetNickname(), channelname, GetChannel(channelname)->GetTopicName()));
+		(GetChannel(channelname))->SendEveryone(RPL_TOPICSEND(GetClient(fd)->GetHostname(), GetClient(fd)->GetIPaddress(), channelname, GetChannel(channelname)->GetTopicName()));
 	}
 }
