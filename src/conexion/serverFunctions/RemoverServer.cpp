@@ -26,6 +26,7 @@ void Server::RemoveClient(int fd)
 		if ((*it)->GetFd() == fd)
 		{
 			delete* it;
+			*it = NULL;
 			_clients.erase(it);
 			return;
 		}
