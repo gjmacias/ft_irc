@@ -43,6 +43,7 @@ void	Server::RemoveClientFromChannels(int fd)
 {
 	std::string	response;
 	int			flag = 0;
+	Client *client = GetClient(fd);
 
 	for (size_t i = 0; i < this->_channels.size(); i++)
 	{
@@ -62,17 +63,13 @@ void	Server::RemoveClientFromChannels(int fd)
 			i--;
 			continue;
 		}
-		if (flag)
+		if (flag && client)
 		{
-			Client *client = GetClient(fd);
-    		if (client)
-			{
-        		response = ":" + client->GetNickname() + "!" + client->GetUsername() + "@" + GetClient(fd)->GetIPaddress() + " QUIT Quit\r\n";
-        		this->_channels[i].SendEveryone(response);
-    		} 
-			else
-        		std::cerr << "Warning: Client fd " << fd << " was removed before sending QUIT message." << std::endl;
-    	}
+			response = ":" + client->GetNickname() + "!" + client->GetUsername() + "@" + client->GetIPaddress() + " QUIT Quit\r\n";
+			this->_channels[i].SendEveryone(response);
+		} 
+		else if (flag)
+			std::cerr << "Warning: Client fd " << fd << " was removed before sending QUIT message." << std::endl;
 	}
 }
 

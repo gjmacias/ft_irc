@@ -45,7 +45,7 @@ void	Server::QuitCommand(std::vector<std::string> &splited_cmd, std::string cmd_
 			}
 		}
 	}
-	std::cout << RED << "Client <" << fd << "> Disconnected" << WHITE << std::endl;
+	std::cout << RED << "Client <" << fd - 3 << "> Disconnected" << WHITE << std::endl;
 	RemoveClient(fd);
 	RemoveFd(fd);
 	close(fd);

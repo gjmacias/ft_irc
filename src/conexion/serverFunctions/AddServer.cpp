@@ -7,7 +7,7 @@
 */
 void Server::AddClient(int clientFd, std::string IPAddress)
 {
-	Client* newClient = new Client();
+	Client *newClient = new Client();
 
 	newClient->SetFd(clientFd);
 	newClient->SetIPaddress(IPAddress);

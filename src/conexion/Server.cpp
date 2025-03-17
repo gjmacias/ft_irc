@@ -10,7 +10,7 @@ Server::Server()
 	_mainSocketFd = -1;
 }
 
-Server::~Server(){}
+Server::~Server(){ RemoveAllClients(); }
 
 Server::Server(Server const &src){*this = src;}
 
