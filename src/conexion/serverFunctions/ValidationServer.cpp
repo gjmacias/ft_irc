@@ -37,7 +37,7 @@ bool Server::IsValidUsername(std::string &nickname)
             return false;
         i++;
     }
-    if (i > 23 || i < 3)
+    if (i > 30 || i < 3)
         return false;
     return true;
 }
