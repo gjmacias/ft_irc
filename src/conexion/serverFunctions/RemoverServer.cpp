@@ -26,6 +26,7 @@ void Server::RemoveClient(int fd)
 		if ((*it)->GetFd() == fd)
 		{
 			delete* it;
+			*it = NULL;
 			_clients.erase(it);
 			return;
 		}
@@ -39,7 +40,7 @@ void Server::RemoveAllClients()
 	_clients.clear();
 }
 
-void	Server::RemoveClientFromChannels(int fd)
+void	Server::RemoveClientFromChannels(int fd, std::string reason)
 {
 	std::string	response;
 	int			flag = 0;
@@ -67,7 +68,7 @@ void	Server::RemoveClientFromChannels(int fd)
 			Client *client = GetClient(fd);
     		if (client)
 			{
-        		response = ":" + client->GetNickname() + "!" + client->GetUsername() + "@" + GetClient(fd)->GetIPaddress() + " QUIT Quit\r\n";
+        		response = ":" + client->GetNickname() + "!" + client->GetUsername() + "@" + GetClient(fd)->GetIPaddress() + " QUIT " + reason + "\r\n";
         		this->_channels[i].SendEveryone(response);
     		} 
 			else

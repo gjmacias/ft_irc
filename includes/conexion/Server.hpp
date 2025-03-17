@@ -91,7 +91,7 @@ public:
 	void		RemoveFd(int fd);
 	void		RemoveClient(int fd);
 	void		RemoveAllClients();
-	void		RemoveClientFromChannels(int fd);
+	void		RemoveClientFromChannels(int fd, std::string reason);
 	void		RemoveChannel(std::string name);
 
 		//		Sender Server
