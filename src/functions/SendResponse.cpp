@@ -12,7 +12,7 @@ void    SendResponse(std::string response, int fd)
         return;
     }
     pfd.fd = fd;
-    pfd.events = POLLOUT; // Esperamos hasta que el socket esté listo para escribir
+    pfd.events = POLLOUT; // Esperamos hasta que el socket estÃ© listo para escribir
     ret = poll(&pfd, 1, 1000); // Esperamos hasta 1 segundo para escribir
     if (ret == -1)
     {
@@ -27,11 +27,6 @@ void    SendResponse(std::string response, int fd)
     bytes_sent = send(fd, response.c_str(), response.size(), 0);
     if (bytes_sent == -1)
     {
-        if (errno == EAGAIN || errno == EWOULDBLOCK)
-            std::cerr << "Socket no está listo para escribir, reintentando más tarde..." << std::endl;
-        else if (errno == EPIPE || errno == ECONNRESET)
-            std::cerr << "Cliente desconectado" << std::endl;
-        else
-            std::cerr << "Response send() failed: " << strerror(errno) << std::endl;
+         std::cerr << "Response send() failed: " << strerror(errno) << std::endl;
     }
 }
