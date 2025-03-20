@@ -37,9 +37,9 @@ Para tu proyecto de **servidor IRC**, el índice debe reflejar los aspectos clav
    - [Estructuras y Funciones Clave](#estructuras-y-funciones-clave)
    - [Flujo de Trabajo del Servidor](#flujo-de-trabajo-del-servidor)
 3. [Comandos Básicos y de Operadores](#3-comandos-básicos-y-de-operadores)
-   - [README Comandos](#readme-comandos)
+   - [README Comandos](https://github.com/gjmacias/ft_irc/blob/main/src/conexion/serverFunctions/README.md)
 4. [Estructuras de Datos](#4-estructuras-de-datos)
-   - [README Estructura](#readme-estructura)
+   - [README Estructura](https://github.com/gjmacias/ft_irc/blob/main/includes/conexion/README.md)
 5. [Manejo de Mensajes y Errores](#5-manejo-de-mensajes-y-errores)
    - [Envío de Respuestas (`SendResponse`)](#1-envío-de-respuestas-sendresponse)
    - [Respuestas Predefinidas](#2-respuestas-predefinidas)
@@ -151,7 +151,7 @@ Este servidor IRC soporta una variedad de comandos para la autenticación, gesti
 - **`TOPIC <canal> <tema>`**: Cambia el tema de un canal.  
 - **`MODE <canal> <modo>`**: Configura modos como contraseñas, límites de usuarios o permisos.  
 
-📖 **Más detalles**: Consulta [COMANDOS.md](docs/COMANDOS.md) para una lista completa de modos y ejemplos.  
+📖 **Más detalles**: [README: Comandos Basicos](https://github.com/gjmacias/ft_irc/blob/main/src/conexion/serverFunctions/README.md)
 
 
 ## **4. Estructuras de Datos**  
@@ -183,7 +183,7 @@ El servidor IRC utiliza tres estructuras principales para gestionar usuarios, ca
   - `buffer`: Almacena datos recibidos hasta que se procesan.  
   - `myInviteChannels`: Canales a los que el usuario ha sido invitado.  
 
-📖 **Más detalles**: Consulta [ESTRUCTURAS.md](docs/ESTRUCTURAS.md) para una explicación completa de estas estructuras y su implementación. 
+📖 **Más detalles**: [README: Estructura del servidor IRC](https://github.com/gjmacias/ft_irc/blob/main/includes/conexion/README.md)
 
 
 ## **5. Manejo de Mensajes y Errores**  
