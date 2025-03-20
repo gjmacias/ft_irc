@@ -1,12 +1,10 @@
 # IRC - Oseivane && gmacias-
 
-## 1. Introducción
-
+## **1. Introducción**
 **Sumérgete en el núcleo de la comunicación en tiempo real**
 Este proyecto te desafía a construir un servidor **IRC** funcional desde cero, utilizando C++ y conceptos clave de redes. Descubre cómo gestionar múltiples usuarios, canales dinámicos y mensajes en tiempo real, ¡todo mientras dominas un protocolo histórico de Internet!
 
 ### Imágenes de Ejemplo
-
 Aquí tienes algunas imágenes del funcionamiento del server **IRC**:
 
 | ![inicio](https://github.com/user-attachments/assets/0b2a4d5e-1314-422d-9a28-e63d24056d0b) | ![mensajes](https://github.com/user-attachments/assets/a3bcb2a8-3145-455d-b567-1e42f6e589ce) |
@@ -135,8 +133,7 @@ El servidor IRC sigue un proceso estructurado para manejar conexiones y datos de
 Gracias a esta arquitectura, el servidor IRC puede manejar múltiples conexiones de manera eficiente, evitando bloqueos y optimizando el uso de los recursos del sistema.
 
 
-## **3. Comandos Básicos y de Operadores**  
-
+## **3. Comandos Básicos y de Operadores** 
 Este servidor IRC soporta una variedad de comandos para la autenticación, gestión de usuarios y canales, y privilegios especiales para operadores.  
 
 #### **Autenticación y Registro de Usuarios**  
