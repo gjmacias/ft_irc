@@ -1,4 +1,4 @@
-# MiniRT - Oseivane && gmacias-
+# IRC - Oseivane && gmacias-
 
 ## 1. Introducción
 
@@ -7,11 +7,11 @@ Este proyecto te desafía a construir un servidor **IRC** funcional desde cero, 
 
 ### Imágenes de Ejemplo
 
-Aquí tienes algunas imágenes renderizadas con **IRC**:
+Aquí tienes algunas imágenes del funcionamiento del server **IRC**:
 
-| ![Esfera y cilindro](https://github.com/gjmacias/miniRT/blob/master/README-images/examples/imagen.png) | ![5Objetos](https://github.com/gjmacias/miniRT/blob/master/README-images/examples/5obj.PNG) |
+| ![inicio](https://github.com/user-attachments/assets/0b2a4d5e-1314-422d-9a28-e63d24056d0b) | ![mensajes](https://github.com/user-attachments/assets/a3bcb2a8-3145-455d-b567-1e42f6e589ce) |
 |:------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------:|
-| ![Escenario complejo](https://github.com/gjmacias/miniRT/blob/master/README-images/examples/Brightness_Complex.PNG) | ![3Ejes](https://github.com/gjmacias/miniRT/blob/master/README-images/examples/Multi%20objetos.png) |
+| ![clientes](https://github.com/user-attachments/assets/de24c2a0-f0d6-42ab-8b66-872af7a02f24) | ![chat](https://github.com/user-attachments/assets/0ff4c807-aac1-41f1-8fa4-66891edf8a7b) |
 
 ¡Estas imágenes muestran lo que puedes lograr con el proyecto y te dan una idea de cómo se verán los resultados finales!
 
@@ -30,86 +30,112 @@ Para tu proyecto de **servidor IRC**, el índice debe reflejar los aspectos clav
 
 ## **Índice**  
 
-1. [Introducción](#introducción)  
-2. [Arquitectura del Servidor](#arquitectura-del-servidor)  
-3. [Comandos Básicos y de Operadores](#Comandos Básicos y de Operadores)  
-4. [Estructuras de Datos](#estructuras-de-datos)  
-5. [Manejo de mensajes y Errores](#manejo-de-mensajes-y-errores)  
-6. [Compilación y Ejecución](#compilación-y-ejecución)  
-7. [Pruebas y Demostración](#pruebas-y-demostración)  
+## Índice
 
-## **2.Arquitectura del Servidor**  
+1. [Introducción](#1-introduccion)
+   - [Imágenes de Ejemplo](#imagenes-de-ejemplo)
+   - [¿Qué es un servidor IRC?](#que-es-un-servidor-irc)
+2. [Arquitectura del Servidor](#2-arquitectura-del-servidor)
+   - [Estructuras y Funciones Clave](#estructuras-y-funciones-clave)
+   - [Flujo de Trabajo del Servidor](#flujo-de-trabajo-del-servidor)
+3. [Comandos Básicos y de Operadores](#3-comandos-basicos-y-de-operadores)
+   - [README Comandos](#readme-comandos)
+4. [Estructuras de Datos](#4-estructuras-de-datos)
+   - [README Estructura](#readme-estructura)
+5. [Manejo de Mensajes y Errores](#5-manejo-de-mensajes-y-errores)
+   - [Envío de Respuestas (`SendResponse`)](#1-envio-de-respuestas-sendresponse)
+   - [Respuestas Predefinidas](#2-respuestas-predefinidas)
+6. [Compilación y Ejecución](#6-compilacion-y-ejecucion)
+7. [Demostración](#7-demostracion)
 
-El servidor IRC está diseñado para manejar múltiples conexiones de clientes de manera eficiente, utilizando mecanismos como `poll()`, `fcntl()`, y estructuras como `sockaddr_in` y `pollfd`. A continuación, se explica en detalle cómo funcionan estas herramientas y por qué son esenciales para el servidor.
+## **2. Arquitectura del Servidor**  
 
-### **1. Estructuras y Funciones Clave**  
+El servidor IRC está diseñado para manejar múltiples conexiones de clientes de manera eficiente. Para lograrlo, utiliza mecanismos como `poll()`, `fcntl()` y estructuras como `sockaddr_in` y `pollfd`. Estas herramientas permiten que el servidor gestione múltiples clientes sin necesidad de crear un hilo por cada conexión, lo que optimiza el rendimiento y evita bloqueos innecesarios.
 
-##### **`sockaddr_in`**  
-- **Qué es**: Una estructura que almacena la información de una dirección de socket (familia, dirección IP y puerto).  
-- **Uso en el código**:  
-  ```cpp
-  struct sockaddr_in socketAddress;
-  socketAddress.sin_family = AF_INET;          // Familia de direcciones (IPv4)
-  socketAddress.sin_port = htons(this->_port); // Puerto en formato de red
-  socketAddress.sin_addr.s_addr = INADDR_ANY;  // Escucha en todas las interfaces
-  ```  
-- **Por qué se usa**: Para configurar el socket del servidor y especificar en qué dirección y puerto debe escuchar.  
+---
 
-##### **`pollfd`**  
-- **Qué es**: Una estructura que representa un descriptor de archivo y los eventos que se deben monitorear.  
-- **Uso en el código**:  
-  ```cpp
-  struct pollfd newPoll;
-  newPoll.fd = _mainSocket;    // Descriptor de archivo a monitorear
-  newPoll.events = POLLIN;     // Evento: datos disponibles para leer
-  newPoll.revents = 0;         // Eventos que ocurrieron (se llena automáticamente)
-  ```  
-- **Por qué se usa**: Para monitorear múltiples descriptores de archivo (sockets) en un solo hilo, evitando bloqueos.  
-##### **`poll()`**  
-- **Qué es**: Una función que monitorea múltiples descriptores de archivo para detectar eventos (como datos disponibles para leer).  
-- **Uso en el código**:  
-  ```cpp
-  poll(&_pollSocketFds[0], _pollSocketFds.size(), -1)
-  ```  
-- **Opciones clave**:  
-  - `POLLIN`: Detecta si hay datos disponibles para leer.  
-  - `POLLOUT`: Detecta si el socket está listo para escribir.  
-- **Por qué se usa**: Para manejar múltiples conexiones de clientes sin necesidad de crear un hilo por cada una.  
+### **Estructuras y Funciones Clave**  
 
-##### **`fcntl()`**  
-- **Qué es**: Una función que permite configurar opciones en un descriptor de archivo.  
-- **Uso en el código**:  
-  ```cpp
-  fcntl(_mainSocketFd, F_SETFL, O_NONBLOCK)
-  ```  
-- **Opciones clave**:  
-  - `O_NONBLOCK`: Establece el socket en modo no bloqueante.  
-- **Por qué se usa**: Para evitar que el servidor se bloquee mientras espera datos en un socket.  
+#### **`sockaddr_in` – Configuración de la dirección del servidor**  
+Cuando un servidor necesita escuchar conexiones entrantes, debe especificar en qué dirección y puerto lo hará. Aquí es donde entra `sockaddr_in`, una estructura fundamental para configurar el socket.
 
-### **2. Flujo de Trabajo del Servidor**  
+**Ejemplo de uso:**  
+```cpp
+struct sockaddr_in socketAddress;
+socketAddress.sin_family = AF_INET;          // IPv4
+socketAddress.sin_port = htons(this->_port); // Puerto en formato de red
+socketAddress.sin_addr.s_addr = INADDR_ANY;  // Escucha en todas las interfaces
+```
+**¿Por qué se usa?** Permite al servidor definir su punto de escucha en la red, asegurando que pueda recibir conexiones de los clientes.
 
-1. **Inicialización (`ServerInit`)**:
-   - Se crea un socket con `socket()`.  
-   - Se configura el socket para reutilizar la dirección (`SO_REUSEADDR`) y evitar bloqueos (`O_NONBLOCK`).  
-   - Se enlaza el socket a una dirección y puerto con `bind()`.  
-   - Se pone el socket en modo de escucha con `listen()`.  
-   - Se añade el socket a la lista de `pollfd` para ser monitoreado.  
+#### **`pollfd` – Monitoreo de múltiples conexiones**  
+El servidor IRC debe gestionar varios clientes al mismo tiempo sin bloquearse. `pollfd` permite hacerlo al monitorear múltiples descriptores de archivo.
 
-2. **Bucle Principal (`ServerLoop`)**:
-   - El servidor entra en un bucle donde llama a `poll()` para detectar actividad en los sockets.  
-   - Si hay actividad en el socket principal, se acepta una nueva conexión con `accept()`.  
-   - Si hay actividad en un socket de cliente, se leen los datos con `recv()`.  
+**Ejemplo de uso:**  
+```cpp
+struct pollfd newPoll;
+newPoll.fd = _mainSocket;    // Descriptor de archivo a monitorear
+newPoll.events = POLLIN;     // Detecta datos disponibles para leer
+newPoll.revents = 0;         // Se llena automáticamente con los eventos ocurridos
+```
+**¿Por qué se usa?** Permite al servidor reaccionar solo cuando hay actividad en los sockets, evitando ciclos innecesarios y mejorando la eficiencia.
 
-3. **Aceptación de Clientes (`AcceptNewClient`)**:
-   - Se acepta la conexión con `accept()`, que devuelve un nuevo descriptor de archivo para el cliente.  
-   - El nuevo socket se configura en modo no bloqueante y se añade a la lista de `pollfd`.  
+#### **`poll()` – Espera de eventos en los sockets**  
+En el bucle principal del servidor, `poll()` es clave para detectar actividad en los sockets de manera eficiente.
 
-4. **Recepción de Datos (`ReceiveNewData`)**:
-   - Se leen los datos del cliente con `recv()`.  
-   - Si el cliente se desconecta (`recv()` devuelve 0), se limpian sus recursos.  
-   - Si hay datos, se procesan y se ejecutan los comandos correspondientes.
+**Ejemplo de uso:**  
+```cpp
+poll(&_pollSocketFds[0], _pollSocketFds.size(), -1);
+```
+**Opciones clave:**  
+- `POLLIN`: Detecta si hay datos disponibles para leer.  
+- `POLLOUT`: Detecta si el socket está listo para escribir.  
 
-## **3.Comandos Básicos y de Operadores**  
+**¿Por qué se usa?** Permite manejar múltiples conexiones en un solo hilo, evitando la sobrecarga de procesos adicionales.
+
+#### **`fcntl()` – Configuración del socket en modo no bloqueante**  
+Si el servidor esperara datos en un socket de manera bloqueante, se detendría hasta que llegara algo, lo que no es viable en un entorno con múltiples clientes.
+
+ **Ejemplo de uso:**  
+```cpp
+fcntl(_mainSocketFd, F_SETFL, O_NONBLOCK);
+```
+**Opción clave:**  
+- `O_NONBLOCK`: Permite que el socket funcione sin bloquear la ejecución del programa.
+
+**¿Por qué se usa?** Evita que el servidor se quede atascado esperando datos, permitiendo que siga gestionando otros clientes sin interrupciones.
+
+---
+
+### **Flujo de Trabajo del Servidor**  
+
+El servidor IRC sigue un proceso estructurado para manejar conexiones y datos de manera eficiente.
+
+#### **1. Inicialización (`ServerInit`)**  
+- Se crea un socket con `socket()`.  
+- Se configura para reutilizar direcciones (`SO_REUSEADDR`) y operar sin bloqueos (`O_NONBLOCK`).  
+- Se enlaza a una dirección y puerto con `bind()`.  
+- Se pone en modo de escucha con `listen()`.  
+- Se añade el socket principal a `pollfd` para monitorear nuevas conexiones.  
+
+#### **2. Bucle Principal (`ServerLoop`)**  
+- Se ejecuta `poll()` para detectar actividad en los sockets.  
+- Si hay actividad en el socket principal, se acepta una nueva conexión con `accept()`.  
+- Si hay actividad en un cliente, se leen sus datos con `recv()`.  
+
+#### **3. Aceptación de Clientes (`AcceptNewClient`)**  
+- `accept()` recibe la conexión y devuelve un nuevo descriptor de archivo para el cliente.  
+- Se configura en modo no bloqueante y se añade a `pollfd`.  
+
+#### **4. Recepción de Datos (`ReceiveNewData`)**  
+- Se leen los datos con `recv()`.  
+- Si el cliente se desconecta (`recv()` devuelve 0), se eliminan sus recursos.  
+- Si hay datos, se procesan y ejecutan los comandos apropiados.  
+
+Gracias a esta arquitectura, el servidor IRC puede manejar múltiples conexiones de manera eficiente, evitando bloqueos y optimizando el uso de los recursos del sistema.
+
+
+## **3. Comandos Básicos y de Operadores**  
 
 Este servidor IRC soporta una variedad de comandos para la autenticación, gestión de usuarios y canales, y privilegios especiales para operadores.  
 
@@ -137,67 +163,93 @@ El servidor IRC utiliza tres estructuras principales para gestionar usuarios, ca
 #### **1. `Server`**  
 - **Propósito**: Gestiona el estado global del servidor.  
 - **Datos clave**:  
-  - `_port`: Puerto en el que escucha el servidor.  
-  - `_mainSocketFd`: Descriptor del socket principal.  
-  - `_clients`: Lista de clientes conectados.  
-  - `_channels`: Lista de canales creados.  
-  - `_pollSocketFds`: Descriptores de archivo monitoreados por `poll()`.  
+  - `port`: Puerto en el que escucha el servidor.  
+  - `mainSocketFd`: Descriptor del socket principal.  
+  - `clients`: Lista de clientes conectados.  
+  - `channels`: Lista de canales creados.  
+  - `pollSocketFds`: Descriptores de archivo monitoreados por `poll()`.  
 
 #### **2. `Channel`**  
 - **Propósito**: Representa un canal de chat.  
 - **Datos clave**:  
-  - `_name`: Nombre del canal.  
-  - `_clients`: Lista de usuarios en el canal.  
-  - `_admins`: Lista de operadores del canal.  
-  - `_modes`: Modos del canal (invite-only, contraseña, límite de usuarios, etc.).  
+  - `name`: Nombre del canal.  
+  - `clients`: Lista de usuarios en el canal.  
+  - `admins`: Lista de operadores del canal.  
+  - `modes`: Modos del canal (invite-only, contraseña, límite de usuarios, etc.).  
 
 #### **3. `Client`**  
 - **Propósito**: Representa un usuario conectado.  
 - **Datos clave**:  
-  - `_fd`: Descriptor de archivo del socket del cliente.  
-  - `_nickname` y `_username`: Identificadores del usuario.  
-  - `_buffer`: Almacena datos recibidos hasta que se procesan.  
-  - `_myInviteChannels`: Canales a los que el usuario ha sido invitado.  
+  - `fd`: Descriptor de archivo del socket del cliente.  
+  - `nickname` y `_username`: Identificadores del usuario.  
+  - `buffer`: Almacena datos recibidos hasta que se procesan.  
+  - `myInviteChannels`: Canales a los que el usuario ha sido invitado.  
 
 📖 **Más detalles**: Consulta [ESTRUCTURAS.md](docs/ESTRUCTURAS.md) para una explicación completa de estas estructuras y su implementación. 
 
 
 ## **5. Manejo de Mensajes y Errores**  
 
-El servidor IRC utiliza un sistema robusto para enviar respuestas a los clientes y manejar errores de manera eficiente. Esto garantiza que los usuarios reciban retroalimentación clara y que el servidor pueda gestionar situaciones inesperadas sin interrupciones.  
+Para que la comunicación en el servidor IRC sea clara y eficiente, es fundamental contar con un sistema robusto de envío de respuestas y manejo de errores. Esto no solo garantiza que los usuarios reciban retroalimentación inmediata, sino que también protege la estabilidad del servidor ante situaciones inesperadas.
 
-#### **1. Envío de Respuestas (`SendResponse`)**  
-La función `src/functions/SendResponse` se encarga de enviar mensajes desde el servidor a los clientes. Aquí está cómo funciona:  
+---
 
-- **Uso de `poll()`**:  
-  - Antes de enviar datos, el servidor verifica si el socket del cliente está listo para escribir usando `poll()`.  
-  - Esto evita bloqueos y asegura que el servidor no se quede esperando indefinidamente.  
+### **1. Envío de Respuestas (`SendResponse`)**  
+El servidor envía mensajes a los clientes a través de la función `SendResponse`, ubicada en `src/functions/SendResponse`. Esta función es clave para asegurar una comunicación fluida.
 
-#### **2. Respuestas Predefinidas**  
-El servidor utiliza macros en `includes/comunication/` para generar respuestas estandarizadas según el protocolo IRC. Estas respuestas incluyen:  
+**¿Cómo funciona?**
+- Antes de enviar datos, el servidor verifica si el socket del cliente está listo para escribir usando `poll()`.  
+- Esto evita bloqueos y asegura que el servidor pueda seguir procesando otras conexiones sin interrupciones.
 
-- **Respuestas de éxito (`RPL_*`)**:  
-  - `RPL_CONNECTED`: Mensaje de bienvenida al usuario.  
-  - `RPL_JOINMSG`: Notificación cuando un usuario se une a un canal.  
-  - `RPL_TOPICIS`: Envía el tema actual de un canal.  
+**Ejemplo de uso:**
+```cpp
+struct pollfd pfd;
 
-- **Errores (`ERR_*`)**:  
-  - `ERR_NICKINUSE`: Indica que el apodo ya está en uso.  
-  - `ERR_NOTOPERATOR`: Notifica que el usuario no tiene privilegios de operador.  
-  - `ERR_INCORPASS`: Indica que la contraseña es incorrecta.  
+pfd.fd = clientFd;
+pfd.events = POLLOUT;
+poll(&pfd, 1, TIMEOUT);
 
-- **Ejemplo de error**:  
-  ```cpp
-  SendResponse(ERR_NICKINUSE("Bob"), clientFd); // Envía un error de apodo en uso
-  ```  
+if (pfd.revents & POLLOUT)
+    send(clientFd, message.c_str(), message.length(), 0);
+```
+**¿Por qué se usa?**
+- **Evita bloqueos**: No se queda esperando indefinidamente a que el socket esté listo.  
+- **Mejora el rendimiento**: Permite que el servidor gestione múltiples clientes simultáneamente.  
 
-#### **3. ¿Por Qué Este Enfoque?**  
+---
 
-- **Claridad**: Las macros predefinidas hacen que el código sea más legible y fácil de mantener.  
-- **Eficiencia**: El uso de `poll()` asegura que el servidor no se bloquee al enviar datos.  
-- **Robustez**: El manejo de errores evita que el servidor falle ante situaciones inesperadas.  
+### **2. Respuestas Predefinidas**  
+Para mantener un formato estandarizado en las respuestas, el servidor utiliza macros definidas en `includes/comunication/`. Estas macros facilitan la generación de mensajes según el protocolo IRC.
 
-## **6.Compilación y Ejecución**  
+#### **Respuestas de éxito (`RPL_*`)** ✅
+Mensajes que indican acciones exitosas:
+- `RPL_CONNECTED`: Confirma la conexión del usuario al servidor.  
+- `RPL_JOINMSG`: Notifica a los usuarios cuando alguien se une a un canal.  
+- `RPL_TOPICIS`: Informa sobre el tema actual de un canal.  
+
+#### **Manejo de Errores (`ERR_*`)** ❎
+Los errores informan a los usuarios sobre problemas o restricciones:
+- `ERR_NICKINUSE`: El apodo seleccionado ya está en uso.  
+- `ERR_NOTOPERATOR`: Se intenta ejecutar un comando de operador sin los permisos necesarios.  
+- `ERR_INCORPASS`: La contraseña ingresada es incorrecta.  
+
+**Ejemplo de error en código:**
+```cpp
+SendResponse(ERR_NICKINUSE("Bob"), clientFd); // Informa que el apodo 'Bob' está en uso
+```
+**¿Por qué se usa?**
+- **Código más claro**: Las macros hacen que el código sea más fácil de leer y mantener.  
+- **Estandarización**: Todos los mensajes siguen el protocolo IRC, asegurando compatibilidad.  
+
+---
+
+El sistema de manejo de mensajes y errores del servidor IRC sigue este diseño por varias razones:
+
+**Claridad**: Las macros predefinidas permiten escribir código más limpio y fácil de entender.  
+**Eficiencia**: `poll()` optimiza el envío de datos evitando bloqueos innecesarios.  
+**Robustez**: Un buen manejo de errores previene fallos inesperados y mejora la experiencia del usuario.  
+
+## **6. Compilación y Ejecución**  
 
 Sigue estos pasos para poner en marcha el servidor IRC:  
 
@@ -228,7 +280,7 @@ Sigue estos pasos para poner en marcha el servidor IRC:
 3. Autentícate con la contraseña proporcionada.  
 
 
-## Demostración
+## 7. Demostración
 
 Para ilustrar cómo funciona el proyecto en la práctica, hemos preparado una serie de videos que muestran diferentes aspectos y funcionalidades del programa en acción. Estos videos cubren:
 
