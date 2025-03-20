@@ -153,38 +153,18 @@ Este servidor IRC soporta una variedad de comandos para la autenticación, gesti
 
 📖 **Más detalles**: [README: Comandos Basicos](https://github.com/gjmacias/ft_irc/blob/main/src/conexion/serverFunctions/README.md)
 
-
 ## **4. Estructuras de Datos**  
 
 El servidor IRC utiliza tres estructuras principales para gestionar usuarios, canales y conexiones:  
 
 #### **1. `Server`**  
 - **Propósito**: Gestiona el estado global del servidor.  
-- **Datos clave**:  
-  - `port`: Puerto en el que escucha el servidor.  
-  - `mainSocketFd`: Descriptor del socket principal.  
-  - `clients`: Lista de clientes conectados.  
-  - `channels`: Lista de canales creados.  
-  - `pollSocketFds`: Descriptores de archivo monitoreados por `poll()`.  
-
 #### **2. `Channel`**  
 - **Propósito**: Representa un canal de chat.  
-- **Datos clave**:  
-  - `name`: Nombre del canal.  
-  - `clients`: Lista de usuarios en el canal.  
-  - `admins`: Lista de operadores del canal.  
-  - `modes`: Modos del canal (invite-only, contraseña, límite de usuarios, etc.).  
-
 #### **3. `Client`**  
 - **Propósito**: Representa un usuario conectado.  
-- **Datos clave**:  
-  - `fd`: Descriptor de archivo del socket del cliente.  
-  - `nickname` y `_username`: Identificadores del usuario.  
-  - `buffer`: Almacena datos recibidos hasta que se procesan.  
-  - `myInviteChannels`: Canales a los que el usuario ha sido invitado.  
 
 📖 **Más detalles**: [README: Estructura del servidor IRC](https://github.com/gjmacias/ft_irc/blob/main/includes/conexion/README.md)
-
 
 ## **5. Manejo de Mensajes y Errores**  
 
@@ -193,7 +173,7 @@ Para que la comunicación en el servidor IRC sea clara y eficiente, es fundament
 ---
 
 ### **1. Envío de Respuestas (`SendResponse`)**  
-El servidor envía mensajes a los clientes a través de la función `SendResponse`, ubicada en `src/functions/SendResponse`. Esta función es clave para asegurar una comunicación fluida.
+El servidor envía mensajes a los clientes a través de la función [`SendResponse`](https://github.com/gjmacias/ft_irc/blob/main/src/functions/SendResponse.cpp), ubicada en [`src/functions/SendResponse`](https://github.com/gjmacias/ft_irc/blob/main/src/functions/SendResponse.cpp). Esta función es clave para asegurar una comunicación fluida.
 
 **¿Cómo funciona?**
 - Antes de enviar datos, el servidor verifica si el socket del cliente está listo para escribir usando `poll()`.  
@@ -217,15 +197,15 @@ if (pfd.revents & POLLOUT)
 ---
 
 ### **2. Respuestas Predefinidas**  
-Para mantener un formato estandarizado en las respuestas, el servidor utiliza macros definidas en `includes/comunication/`. Estas macros facilitan la generación de mensajes según el protocolo IRC.
+Para mantener un formato estandarizado en las respuestas, el servidor utiliza macros definidas en [`includes/comunication/`](https://github.com/gjmacias/ft_irc/tree/main/includes/comunication). Estas macros facilitan la generación de mensajes según el protocolo IRC.
 
-#### **Respuestas de éxito (`RPL_*`)** ✅
+#### [**Respuestas de éxito (`RPL_*`)**](https://github.com/gjmacias/ft_irc/blob/main/includes/comunication/Information.hpp) ✅
 Mensajes que indican acciones exitosas:
 - `RPL_CONNECTED`: Confirma la conexión del usuario al servidor.  
 - `RPL_JOINMSG`: Notifica a los usuarios cuando alguien se une a un canal.  
 - `RPL_TOPICIS`: Informa sobre el tema actual de un canal.  
 
-#### **Manejo de Errores (`ERR_*`)** ❎
+#### [**Manejo de Errores (`ERR_*`)**](https://github.com/gjmacias/ft_irc/blob/main/includes/comunication/Errors.hpp) ❎
 Los errores informan a los usuarios sobre problemas o restricciones:
 - `ERR_NICKINUSE`: El apodo seleccionado ya está en uso.  
 - `ERR_NOTOPERATOR`: Se intenta ejecutar un comando de operador sin los permisos necesarios.  
