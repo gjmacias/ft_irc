@@ -1,10 +1,12 @@
 # IRC - Oseivane && gmacias-
 
 ## **1. Introducción**
+
 **Sumérgete en el núcleo de la comunicación en tiempo real**
 Este proyecto te desafía a construir un servidor **IRC** funcional desde cero, utilizando C++ y conceptos clave de redes. Descubre cómo gestionar múltiples usuarios, canales dinámicos y mensajes en tiempo real, ¡todo mientras dominas un protocolo histórico de Internet!
 
 ### Imágenes de Ejemplo
+
 Aquí tienes algunas imágenes del funcionamiento del server **IRC**:
 
 | ![inicio](https://github.com/user-attachments/assets/0b2a4d5e-1314-422d-9a28-e63d24056d0b) | ![mensajes](https://github.com/user-attachments/assets/a3bcb2a8-3145-455d-b567-1e42f6e589ce) |
@@ -26,25 +28,23 @@ Continúa leyendo para descubrir cómo configurar y utilizar este servidor, incl
 
 Para tu proyecto de **servidor IRC**, el índice debe reflejar los aspectos clave del desarrollo y funcionamiento del servidor, así como los conceptos técnicos y las funcionalidades que implementaste. Aquí tienes una propuesta de índice adaptado a tu proyecto:
 
-## **Índice**  
-
 ## Índice
 
-1. [Introducción](#1-introduccion)
-   - [Imágenes de Ejemplo](#imagenes-de-ejemplo)
-   - [¿Qué es un servidor IRC?](#que-es-un-servidor-irc)
+1. [Introducción](#1-introducción)
+   - [Imágenes de Ejemplo](#imágenes-de-ejemplo)
+   - [¿Qué es un servidor IRC?](#qué-es-un-servidor-irc)
 2. [Arquitectura del Servidor](#2-arquitectura-del-servidor)
    - [Estructuras y Funciones Clave](#estructuras-y-funciones-clave)
    - [Flujo de Trabajo del Servidor](#flujo-de-trabajo-del-servidor)
-3. [Comandos Básicos y de Operadores](#3-comandos-basicos-y-de-operadores)
+3. [Comandos Básicos y de Operadores](#3-comandos-básicos-y-de-operadores)
    - [README Comandos](#readme-comandos)
 4. [Estructuras de Datos](#4-estructuras-de-datos)
    - [README Estructura](#readme-estructura)
 5. [Manejo de Mensajes y Errores](#5-manejo-de-mensajes-y-errores)
-   - [Envío de Respuestas (`SendResponse`)](#1-envio-de-respuestas-sendresponse)
+   - [Envío de Respuestas (`SendResponse`)](#1-envío-de-respuestas-sendresponse)
    - [Respuestas Predefinidas](#2-respuestas-predefinidas)
-6. [Compilación y Ejecución](#6-compilacion-y-ejecucion)
-7. [Demostración](#7-demostracion)
+6. [Compilación y Ejecución](#6-compilación-y-ejecución)
+7. [Demostración](#7-demostración)
 
 ## **2. Arquitectura del Servidor**  
 
@@ -133,7 +133,8 @@ El servidor IRC sigue un proceso estructurado para manejar conexiones y datos de
 Gracias a esta arquitectura, el servidor IRC puede manejar múltiples conexiones de manera eficiente, evitando bloqueos y optimizando el uso de los recursos del sistema.
 
 
-## **3. Comandos Básicos y de Operadores** 
+## **3. Comandos Básicos y de Operadores**
+
 Este servidor IRC soporta una variedad de comandos para la autenticación, gestión de usuarios y canales, y privilegios especiales para operadores.  
 
 #### **Autenticación y Registro de Usuarios**  
@@ -277,9 +278,10 @@ Sigue estos pasos para poner en marcha el servidor IRC:
 3. Autentícate con la contraseña proporcionada.  
 
 
-## 7. Demostración
+## **7. Demostración**
 
 Para ilustrar cómo funciona el proyecto en la práctica, hemos preparado una serie de videos que muestran diferentes aspectos y funcionalidades del programa en acción. Estos videos cubren:
+
 
 
 Estos clips te proporcionarán una visión clara de cómo utilizar el programa y lo que puedes esperar en términos de rendimiento y visualización.
