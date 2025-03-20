@@ -254,6 +254,6 @@ Si deseas contribuir al proyecto:
 
 # Contactos 📥
 
-◦ Email ffornes-: ffornes-@student.42barcelona.com
+◦ Email Oseivane: oseivane@student.42barcelona.com
 
 ◦ Email gmacias-: gmacias-@student.42barcelona.com
